@@ -5,6 +5,20 @@
 
 using namespace std;
 
+bool containsDuplicate(vector<int>& nums) {
+    if(nums.size() == 0 || nums.empty()){
+        return 0;
+    }
+
+    std::sort(nums.begin(), nums.end());
+    for(size_t a = 0; a + 1 < nums.size(); a ++){
+        if(nums[a] == nums[a+1]){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int maxProfit(vector<int>& prices) {
 	bool zero = false;
 	
