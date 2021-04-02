@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -131,12 +132,26 @@ int countMatches(vector<vector<string>>& items, string ruleKey, string ruleValue
 	return res;
 }
 
-int main() {
-	vector<vector<string>> items{ {"phone", "blue", "pixel"},{"computer", "silver", "phone"},{"phone", "gold", "iphone"} };
-	string ruleKey = "type";
-	string ruleValue = "phone";
+int nearestValidPoint(int x, int y, vector<vector<int>>& points) {
+	int res = INT_MAX;
+	size_t pos = -1;
+	for (size_t ptr = 0; ptr < points.size(); ptr++) {
+		if (x == points[ptr][0] || y == points[ptr][1]) {
+			int tmp = std::abs(points[ptr][0] - x) + std::abs(points[ptr][1] - y);
+			if (tmp < res) {
+				res = tmp;
+				pos = ptr;
+			}
+		}
+	}
+	return pos;
+}
 
-	cout << countMatches(items, ruleKey, ruleValue) << endl;
+int main() {
+	vector<vector<int>> points = { {1, 1}, {6, 2}, {1, 5}, {3, 1} };
+	int x = 5, y = 1;
+
+	cout << nearestValidPoint(x, y, points) << endl;
 
 	return 0;
 }
