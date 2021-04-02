@@ -91,13 +91,38 @@ void moveZeroes(vector<int>& nums) {
 	}
 }
 
-int main() {
-
-	
-	for (const auto& num : getRow(1)) {
-		cout << num << ' ';
+int countMatches(vector<vector<string>>& items, string ruleKey, string ruleValue) {
+	int res = 0;
+	if (ruleKey == "color") {
+		for (size_t dev = 0; dev < items.size(); dev++) {
+			if (items[dev][1] == ruleValue) {
+				res++;
+			}
+		}
 	}
-	cout << endl;
+	if (ruleKey == "type") {
+		for (size_t dev = 0; dev < items.size(); dev++) {
+			if (items[dev][0] == ruleValue) {
+				res++;
+			}
+		}
+	}
+	if (ruleKey == "name") {
+		for (size_t dev = 0; dev < items.size(); dev++) {
+			if (items[dev][2] == ruleValue) {
+				res++;
+			}
+		}
+	}
+	return res;
+}
+
+int main() {
+	vector<vector<string>> items{ {"phone", "blue", "pixel"},{"computer", "silver", "phone"},{"phone", "gold", "iphone"} };
+	string ruleKey = "type";
+	string ruleValue = "phone";
+
+	cout << countMatches(items, ruleKey, ruleValue) << endl;
 
 	return 0;
 }
