@@ -147,11 +147,52 @@ int nearestValidPoint(int x, int y, vector<vector<int>>& points) {
 	return pos;
 }
 
-int main() {
-	vector<vector<int>> points = { {1, 1}, {6, 2}, {1, 5}, {3, 1} };
-	int x = 5, y = 1;
+int minOperations(const string& s) {
+	if (s.size() == 1) {
+		return 0;
+	}
+	int ctr_s = 0;
+	int ctr_b = 0;
+	for (size_t ptr = 0; ptr + 1 < s.size(); ptr += 2) {
+		if (s[ptr] == '1') {
+			if (s[ptr + 1] == '1') {
+				ctr_s++;
+			}
+		}
+		if (s[ptr] == '0') {
+			ctr_s++;
+			if (s[ptr + 1] == '1') {
+				ctr_s++;
+			}
+		}
 
-	cout << nearestValidPoint(x, y, points) << endl;
+		if (s[ptr] == '1') {
+			ctr_b++;
+			if (s[ptr + 1] == '0') {
+				ctr_b++;
+			}
+		}
+		if (s[ptr] == '0') {
+			if (s[ptr + 1] == '0') {
+				ctr_b++;
+			}
+		}
+	}
+	if (s.size() % 2 != 0) {
+		if (s[s.size() - 1] == '1') {
+			ctr_b++;
+		}
+		if (s[s.size() - 1] == '0') {
+			ctr_s++;
+		}
+	}
+	return ctr_s < ctr_b ? ctr_s : ctr_b;
+}
+
+int main() {
+	string s = "01001";
+
+	cout << minOperations(s) << endl;
 
 	return 0;
 }
