@@ -249,10 +249,53 @@ int maximumWealth(vector<vector<int>>& accounts) {
 	return health_max;
 }
 
+vector<int> decrypt(vector<int>& code, int k) {
+	vector<int> res(code.size());
+	std::fill(res.begin(), res.end(), 0);
+	if (k == 0) {
+		return res;
+	}
+
+	if (k > 0) {
+		for (size_t ptr = 0; ptr < code.size(); ptr++) {
+			int next_elem = ptr + 1;
+			int sum = 0;
+			int pos = 0;
+			while (pos < k) {
+				sum += code[next_elem % code.size()];
+				pos++;
+				next_elem++;
+			}
+
+			res[ptr] = sum;
+		}
+	} else {
+		reverse(code.begin(), code.end());
+		k *= -1;
+		for (size_t ptr = 0; ptr < code.size(); ptr++) {
+			int next_elem = ptr + 1;
+			int sum = 0;
+			int pos = 0;
+			while (pos < k) {
+				sum += code[next_elem % code.size()];
+				pos++;
+				next_elem++;
+			}
+
+			res[ptr] = sum;
+		}
+		reverse(res.begin(), res.end());
+	}
+	return res;
+}
+
 int main() {
-	vector<vector<int>> bank_acc {{1, 5}, { 7, 3 }, { 3, 5 }};
+	vector<int> code{ 10,5,7,7,3,2,10,3,6,9,1,6 };
 
-	cout << maximumWealth(bank_acc) << endl;
+	for (auto& decoded : decrypt(code, -4)) {
+		cout << decoded << ' ';
+	}
 
+	cout << endl;
 	return 0;
 }
