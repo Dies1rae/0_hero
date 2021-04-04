@@ -3,6 +3,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <numeric>
 
 using namespace std;
 
@@ -189,10 +190,69 @@ int minOperations(const string& s) {
 	return ctr_s < ctr_b ? ctr_s : ctr_b;
 }
 
-int main() {
-	string s = "01001";
+int sumOfUnique(vector<int>& nums) {
+	map<int, int> res;
+	int ctr = 0;
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		res[nums[ptr]] += 1;
+	}
+	for (const auto& [elem, ct] : res) {
+		if (ct == 1) {
+			ctr += elem;
+		}
+	}
+	return ctr;
+}
 
-	cout << minOperations(s) << endl;
+int countBalls(int lowLimit, int highLimit) {
+	map<int, int> res;
+	int ctr = -1;
+	for (int l = lowLimit; l <= highLimit; l++) {
+		int box_num = 0;
+		int tmp_ptr = l;
+		while (tmp_ptr > 0) {
+			box_num = box_num + (tmp_ptr % 10);
+			tmp_ptr = tmp_ptr / 10;
+		}
+		res[box_num] = res[box_num] + 1;
+	}
+	for (const auto& [box_num, balls_ctr] : res) {
+		if (ctr < balls_ctr) {
+			ctr = balls_ctr;
+		}
+	}
+	return ctr;
+}
+
+int largestAltitude(vector<int>& gain) {
+	int hight = 0;
+	for (size_t ptr = 0; ptr < gain.size(); ptr++) {
+		int tmp = 0;
+		for (size_t ptr_prev = 0; ptr_prev <= ptr; ptr_prev++) {
+			tmp += gain[ptr_prev];
+		}
+		if (hight < tmp) {
+			hight = tmp;
+		}
+	}
+	return hight;
+}
+
+int maximumWealth(vector<vector<int>>& accounts) {
+	int health_max = 0;
+	for (size_t ptr = 0; ptr < accounts.size(); ptr++) {
+		int helth_tmp = std::accumulate(accounts[ptr].begin(), accounts[ptr].end(), 0);
+		if (helth_tmp > health_max) {
+			health_max = helth_tmp;
+		}
+	}
+	return health_max;
+}
+
+int main() {
+	vector<vector<int>> bank_acc {{1, 5}, { 7, 3 }, { 3, 5 }};
+
+	cout << maximumWealth(bank_acc) << endl;
 
 	return 0;
 }
