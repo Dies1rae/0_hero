@@ -338,10 +338,26 @@ bool buddyStrings(string A, string B) {
 	return 1;
 }
 
+int romanToInt(string s) {
+	if (s.empty()) {
+		return 0;
+	}
+	map<char, int> romanic{ {'I', 1}, {'V', 5}, {'X', 10},  {'L', 50},  {'C', 100},  {'D', 500},  {'M', 1000} };
+	int res = 0;
+	for (size_t ptr = 0; ptr < s.size(); ptr ++) {
+		if (romanic[s[ptr]] < romanic[s[ptr + 1]]) {
+			res += romanic[s[ptr + 1]] - romanic[s[ptr]];
+			ptr++;
+		} else {
+			res += romanic[s[ptr]];
+		}
+	}
+	return res;
+}
+
 int main() {
-	string w1 = "acccccb";
-	string w2 = "bccccca";
-	cout << buddyStrings(w1, w2) << endl;
+	string s = "IV";
+	cout << romanToInt(s) << endl;
 	return 0;
 }
 
