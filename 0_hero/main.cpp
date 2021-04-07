@@ -289,13 +289,24 @@ vector<int> decrypt(vector<int>& code, int k) {
 	return res;
 }
 
-int main() {
-	vector<int> code{ 10,5,7,7,3,2,10,3,6,9,1,6 };
-
-	for (auto& decoded : decrypt(code, -4)) {
-		cout << decoded << ' ';
+string mergeAlternately(string word1, string word2) {
+	string res;
+	auto w1_ = word1.begin(), w2_ = word2.begin();
+	while (w1_ != word1.end() || w2_ != word2.end()) {
+		if (w1_ != word1.end()) {
+			res += *w1_;
+			w1_++;
+		}
+		if (w2_ != word2.end()) {
+			res += *w2_;
+			w2_++;
+		}
 	}
+	return res;
+}
 
-	cout << endl;
+int main() {
+	string w1 = "abcd", w2 = "pq";
+	cout << mergeAlternately(w1, w2) << endl;
 	return 0;
 }
