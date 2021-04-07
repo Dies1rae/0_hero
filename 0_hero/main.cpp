@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <numeric>
+#include <string>
 
 using namespace std;
 
@@ -305,8 +306,45 @@ string mergeAlternately(string word1, string word2) {
 	return res;
 }
 
+bool buddyStrings(string A, string B) {
+	if (A.size() != B.size()) {
+		return 0;
+	}
+	string tmp_sa = A;
+	string tmp_sb = B;
+	sort(tmp_sa.begin(), tmp_sa.end());
+	sort(tmp_sb.begin(), tmp_sb.end());
+	if (tmp_sa != tmp_sb) {
+		return 0;
+	}
+	set<char> tmp_a;
+	for (auto c : A) {
+		tmp_a.insert(c);
+	}
+	if (A == B && tmp_a.size() == A.size()) {
+		return 0;
+	} else {
+		int cnt = 0;
+		for (size_t ptr = 0; ptr < A.size(); ptr++) {
+			if (A[ptr] != B[ptr]) {
+				cnt++;
+				if (cnt == 3) {
+					return 0;
+				}
+			}
+		}
+	}
+	
+	return 1;
+}
+
 int main() {
-	string w1 = "abcd", w2 = "pq";
-	cout << mergeAlternately(w1, w2) << endl;
+	string w1 = "acccccb";
+	string w2 = "bccccca";
+	cout << buddyStrings(w1, w2) << endl;
 	return 0;
 }
+
+
+//"acccccb"
+//"bccccca"
