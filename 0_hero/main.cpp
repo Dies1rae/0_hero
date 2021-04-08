@@ -5,6 +5,7 @@
 #include <set>
 #include <numeric>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -412,10 +413,85 @@ int diagonalSum(vector<vector<int>>& mat) {
 	return res;
 }
 
-int main() {
-	vector<vector<int>> array{ {5}};
+//
+//bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+//	if (nums.size() <= 1 || t < 0 || k < 0) {
+//		return 0;
+//	}
+//	map<long long, long long> hash_;
+//	size_t n = nums.size();
+//
+//	for (size_t ptr = 0; ptr <n; ptr++) {
+//		int basic = floor(1.0 * nums[ptr] / ((long long)t + 1));
+//		if (hash_.count(basic)) {
+//			return 1;
+//		} else if (hash_.count(basic + 1) && (hash_[basic + 1] - nums[ptr] <= t)) {
+//			return 1;
+//		} else if (hash_.count(basic - 1) && (-hash_[basic - 1] + nums[ptr] <= t)) {
+//			return 1;
+//		} else {
+//			hash_[basic] = nums[ptr];
+//			if (size(hash_) > k) {
+//				int tmp_bas = floor(1.0 * nums[ptr - k] / ((long long)t + 1));
+//				hash_.erase(tmp_bas);
+//			}
+//		}
+//
+//	}
+//	
+//	return 0;
+//}
 
-	cout << diagonalSum(array) << endl;
+struct cmp {
+	bool operator() (const pair<int, int>& lhs, const pair<int, int>& rhs) const {
+		return lhs.second == rhs.second;
+	}
+};
+bool containsnearbyalmostduplicate(vector<int>& nums, int k, int t) {
+	if (nums.size() <= 1 || t < 0) {
+		return 0;
+	}
+	map<int, int> hash_;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		for (size_t ptr1 = ptr + 1; ptr1 < nums.size(); ptr1++) {
+			if (nums[ptr] == nums[ptr1]) {
+				hash_[ptr] = nums[ptr];
+				hash_[ptr1] = nums[ptr];
+			}
+		}
+	}
+
+	vector<std::pair<int, int>> tmp_vec;
+	tmp_vec.reserve(hash_.size());
+	std::for_each(hash_.begin(), hash_.end(), [&tmp_vec](const std::map<int, int>::value_type& p) { tmp_vec.push_back({ p.first, p.second }); });
+	std::sort(tmp_vec.begin(), tmp_vec.end(), cmp());
+
+	auto pt_first = tmp_vec.begin();
+	auto pt_second = ++tmp_vec.begin();
+
+	while (pt_second != tmp_vec.end()) {
+		if (pt_first->second == pt_second->second) {
+			if ((std::abs(pt_second->second - pt_first->second) <= t) && (std::abs(pt_second->first - pt_first->first) <= k)) {
+				return 1;
+			}
+			pt_first++;
+			pt_second++;
+		} else {
+			pt_first++;
+			pt_second++;
+		}
+	}
+	for (const auto& [pos, elem] : tmp_vec) {
+		cout << "POSITION: " << pos << " ELEM: " << elem << endl;
+	}
+	return 0;
+}
+
+int main() {
+	int k = 1, t = 3;
+	vector<int> array{ 8,7,15,1,6,1,9,15 };
+
+	cout << containsnearbyalmostduplicate(array, k, t) << endl;
 
 	return 0;
 }
