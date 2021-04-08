@@ -391,13 +391,31 @@ vector<int> sortByBits(vector<int>& arr) {
 	return arr;
 }
 
-int main() {
-	vector<int> array{ 2,3,5,7,11,13,17,19 };
-
-	for (const auto& elem : sortByBits(array)) {
-		cout << elem << ' ';
+int diagonalSum(vector<vector<int>>& mat) {
+	if (mat.empty()) {
+		return 0;
 	}
-	cout << endl;
+	int res = 0;
+	for (size_t ptr = 0; ptr < mat.size(); ptr++) {
+		for (size_t ptr1 = 0; ptr1 < mat[ptr].size(); ptr1++) {
+			if (ptr == ptr1) {
+				res += mat[ptr][ptr1];
+				continue;
+			}
+			if (ptr + ptr1 == mat[ptr].size() - 1) {
+				res += mat[ptr][ptr1];
+				continue;
+			}
+		}
+	}
+
+	return res;
+}
+
+int main() {
+	vector<vector<int>> array{ {5}};
+
+	cout << diagonalSum(array) << endl;
 
 	return 0;
 }
