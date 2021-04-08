@@ -355,9 +355,50 @@ int romanToInt(string s) {
 	return res;
 }
 
+static string bin(unsigned n) {
+	string res;
+	unsigned i;
+	for (i = 1 << 31; i > 0; i = i / 2) {
+		(n & i) ? res += '1' : res += '0';
+	}
+	return res;
+}
+
+struct bin_comparator {
+	bool operator() (const int lhs, const int rhs) const {
+		int ctr_lhs = 0;
+		int ctr_rhs = 0;
+		for (const auto& bit : bin(lhs)) {
+			if (bit == '1') {
+				ctr_lhs++;
+			}
+		}
+		for (const auto& bit : bin(rhs)) {
+			if (bit == '1') {
+				ctr_rhs++;
+			}
+		}
+		if (ctr_lhs == ctr_rhs) {
+			return lhs < rhs;
+		} else {
+			return ctr_lhs < ctr_rhs;
+		}
+	}
+};
+
+vector<int> sortByBits(vector<int>& arr) {
+	std::sort(arr.begin(), arr.end(), bin_comparator());
+	return arr;
+}
+
 int main() {
-	string s = "IV";
-	cout << romanToInt(s) << endl;
+	vector<int> array{ 2,3,5,7,11,13,17,19 };
+
+	for (const auto& elem : sortByBits(array)) {
+		cout << elem << ' ';
+	}
+	cout << endl;
+
 	return 0;
 }
 
