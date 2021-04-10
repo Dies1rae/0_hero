@@ -502,10 +502,33 @@ int numIdenticalPairs(vector<int>& nums) {
 	return ctr;
 }
 
-int main() {
-	vector<int> code{ 1,2,3 };
+int countGoodTriplets(vector<int>& arr, int a, int b, int c) {
+	if (arr.size() < 3) {
+		return 0;
+	}
+	int ctr = 0;
+	for (size_t i = 0; i < arr.size(); i ++) {
+		for (size_t j = i + 1; j < arr.size(); j++) {
+			for (size_t k = j + 1; k < arr.size(); k++) {
+				int a_ = std::abs(arr[i] - arr[j]);
+				int b_ = std::abs(arr[j] - arr[k]);
+				int c_ = std::abs(arr[i] - arr[k]);
+				if (a_ <= a && b_ <= b && c_ <= c) {
+					ctr++;
+				}
+			}
+		}
+	}
+	return ctr;
+}
 
-	cout << numIdenticalPairs(code) << endl;
+int main() {
+	int a = 0, b = 0, c = 1;
+	vector<int> code{ 1,1,2,2,3 };
+
+	cout << countGoodTriplets(code, a, b, c) << endl;
 	cout << endl;
+
+	return 0;
 }
 
