@@ -4,6 +4,8 @@
 #include <map>
 #include <set>
 #include <numeric>
+#include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -289,6 +291,203 @@ vector<int> decrypt(vector<int>& code, int k) {
 	return res;
 }
 
+string mergeAlternately(string word1, string word2) {
+	string res;
+	auto w1_ = word1.begin(), w2_ = word2.begin();
+	while (w1_ != word1.end() || w2_ != word2.end()) {
+		if (w1_ != word1.end()) {
+			res += *w1_;
+			w1_++;
+		}
+		if (w2_ != word2.end()) {
+			res += *w2_;
+			w2_++;
+		}
+	}
+	return res;
+}
+
+bool buddyStrings(string A, string B) {
+	if (A.size() != B.size()) {
+		return 0;
+	}
+	string tmp_sa = A;
+	string tmp_sb = B;
+	sort(tmp_sa.begin(), tmp_sa.end());
+	sort(tmp_sb.begin(), tmp_sb.end());
+	if (tmp_sa != tmp_sb) {
+		return 0;
+	}
+	set<char> tmp_a;
+	for (auto c : A) {
+		tmp_a.insert(c);
+	}
+	if (A == B && tmp_a.size() == A.size()) {
+		return 0;
+	} else {
+		int cnt = 0;
+		for (size_t ptr = 0; ptr < A.size(); ptr++) {
+			if (A[ptr] != B[ptr]) {
+				cnt++;
+				if (cnt == 3) {
+					return 0;
+				}
+			}
+		}
+	}
+	
+	return 1;
+}
+
+int romanToInt(string s) {
+	if (s.empty()) {
+		return 0;
+	}
+	map<char, int> romanic{ {'I', 1}, {'V', 5}, {'X', 10},  {'L', 50},  {'C', 100},  {'D', 500},  {'M', 1000} };
+	int res = 0;
+	for (size_t ptr = 0; ptr < s.size(); ptr ++) {
+		if (romanic[s[ptr]] < romanic[s[ptr + 1]]) {
+			res += romanic[s[ptr + 1]] - romanic[s[ptr]];
+			ptr++;
+		} else {
+			res += romanic[s[ptr]];
+		}
+	}
+	return res;
+}
+
+static string bin(unsigned n) {
+	string res;
+	unsigned i;
+	for (i = 1 << 31; i > 0; i = i / 2) {
+		(n & i) ? res += '1' : res += '0';
+	}
+	return res;
+}
+
+struct bin_comparator {
+	bool operator() (const int lhs, const int rhs) const {
+		int ctr_lhs = 0;
+		int ctr_rhs = 0;
+		for (const auto& bit : bin(lhs)) {
+			if (bit == '1') {
+				ctr_lhs++;
+			}
+		}
+		for (const auto& bit : bin(rhs)) {
+			if (bit == '1') {
+				ctr_rhs++;
+			}
+		}
+		if (ctr_lhs == ctr_rhs) {
+			return lhs < rhs;
+		} else {
+			return ctr_lhs < ctr_rhs;
+		}
+	}
+};
+
+vector<int> sortByBits(vector<int>& arr) {
+	std::sort(arr.begin(), arr.end(), bin_comparator());
+	return arr;
+}
+
+int diagonalSum(vector<vector<int>>& mat) {
+	if (mat.empty()) {
+		return 0;
+	}
+	int res = 0;
+	for (size_t ptr = 0; ptr < mat.size(); ptr++) {
+		for (size_t ptr1 = 0; ptr1 < mat[ptr].size(); ptr1++) {
+			if (ptr == ptr1) {
+				res += mat[ptr][ptr1];
+				continue;
+			}
+			if (ptr + ptr1 == mat[ptr].size() - 1) {
+				res += mat[ptr][ptr1];
+				continue;
+			}
+		}
+	}
+
+	return res;
+}
+
+//
+//bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+//	if (nums.size() <= 1 || t < 0 || k < 0) {
+//		return 0;
+//	}
+//	map<long long, long long> hash_;
+//	size_t n = nums.size();
+//
+//	for (size_t ptr = 0; ptr <n; ptr++) {
+//		int basic = floor(1.0 * nums[ptr] / ((long long)t + 1));
+//		if (hash_.count(basic)) {
+//			return 1;
+//		} else if (hash_.count(basic + 1) && (hash_[basic + 1] - nums[ptr] <= t)) {
+//			return 1;
+//		} else if (hash_.count(basic - 1) && (-hash_[basic - 1] + nums[ptr] <= t)) {
+//			return 1;
+//		} else {
+//			hash_[basic] = nums[ptr];
+//			if (size(hash_) > k) {
+//				int tmp_bas = floor(1.0 * nums[ptr - k] / ((long long)t + 1));
+//				hash_.erase(tmp_bas);
+//			}
+//		}
+//
+//	}
+//	
+//	return 0;
+//}
+
+struct cmp {
+	bool operator() (const pair<int, int>& lhs, const pair<int, int>& rhs) const {
+		return lhs.second == rhs.second;
+	}
+};
+bool containsnearbyalmostduplicate(vector<int>& nums, int k, int t) {
+	if (nums.size() <= 1 || t < 0) {
+		return 0;
+	}
+	map<int, int> hash_;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		for (size_t ptr1 = ptr + 1; ptr1 < nums.size(); ptr1++) {
+			if (nums[ptr] == nums[ptr1]) {
+				hash_[ptr] = nums[ptr];
+				hash_[ptr1] = nums[ptr];
+			}
+		}
+	}
+
+	vector<std::pair<int, int>> tmp_vec;
+	tmp_vec.reserve(hash_.size());
+	std::for_each(hash_.begin(), hash_.end(), [&tmp_vec](const std::map<int, int>::value_type& p) { tmp_vec.push_back({ p.first, p.second }); });
+	std::sort(tmp_vec.begin(), tmp_vec.end(), cmp());
+
+	auto pt_first = tmp_vec.begin();
+	auto pt_second = ++tmp_vec.begin();
+
+	while (pt_second != tmp_vec.end()) {
+		if (pt_first->second == pt_second->second) {
+			if ((std::abs(pt_second->second - pt_first->second) <= t) && (std::abs(pt_second->first - pt_first->first) <= k)) {
+				return 1;
+			}
+			pt_first++;
+			pt_second++;
+		} else {
+			pt_first++;
+			pt_second++;
+		}
+	}
+	for (const auto& [pos, elem] : tmp_vec) {
+		cout << "POSITION: " << pos << " ELEM: " << elem << endl;
+	}
+	return 0;
+}
+
+
 int numIdenticalPairs(vector<int>& nums) {
 	int ctr = 0;
 	map <int, int> res;
@@ -308,5 +507,5 @@ int main() {
 
 	cout << numIdenticalPairs(code) << endl;
 	cout << endl;
-	return 0;
 }
+
