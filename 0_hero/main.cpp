@@ -289,13 +289,24 @@ vector<int> decrypt(vector<int>& code, int k) {
 	return res;
 }
 
-int main() {
-	vector<int> code{ 10,5,7,7,3,2,10,3,6,9,1,6 };
-
-	for (auto& decoded : decrypt(code, -4)) {
-		cout << decoded << ' ';
+int numIdenticalPairs(vector<int>& nums) {
+	int ctr = 0;
+	map <int, int> res;
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		res[nums[ptr]]++;
 	}
+	for (const auto& [num, ctrs] : res) {
+		if (ctrs > 1) {
+			ctr += ctrs * (ctrs - 1) / 2;
+		}
+	}
+	return ctr;
+}
 
+int main() {
+	vector<int> code{ 1,2,3 };
+
+	cout << numIdenticalPairs(code) << endl;
 	cout << endl;
 	return 0;
 }
