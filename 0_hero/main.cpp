@@ -6,7 +6,8 @@
 #include <numeric>
 #include <string>
 #include <unordered_map>
-
+#include <filesystem>
+#include <fstream>
 using namespace std;
 
 bool containsDuplicate(vector<int>& nums) {
@@ -522,12 +523,99 @@ int countGoodTriplets(vector<int>& arr, int a, int b, int c) {
 	return ctr;
 }
 
-int main() {
-	int a = 0, b = 0, c = 1;
-	vector<int> code{ 1,1,2,2,3 };
+class Solution {
+public:
+	struct ListNode {
+		int val;
+		ListNode* next;
+		ListNode(int x) : val(x), next(NULL) {}
 
-	cout << countGoodTriplets(code, a, b, c) << endl;
-	cout << endl;
+	};
+
+	Solution() :head(NULL) {}
+
+	Solution(const int val) {
+		head = new ListNode(val);
+	}
+
+	void deleteNode(ListNode* node) {
+		while (node != NULL && node->next != NULL) {
+			if (node->next == node) {
+				node->next->val = node->next->next->val;
+				node->next = node->next->next;
+				return;
+			}
+		}
+	}
+
+private:
+	ListNode* head;
+};
+
+int findKthPositive(vector<int>& arr, int k) {
+	for (int i = 0; i < arr.size(); i++) {
+		int x = arr[i] - (i + 1);
+		if (x >= k)
+			return i + k;
+	}
+	return arr.size() + k;
+}
+
+struct TreeNode {
+	TreeNode() = default;
+	TreeNode(int data) :val(data) {};
+
+	int val = 0;
+	TreeNode* l_leaf = NULL;
+	TreeNode* r_leaf = NULL;
+};
+
+TreeNode* NewNode(int data) {
+	TreeNode* res = new TreeNode(data);
+	return res;
+}
+
+TreeNode create_balanced_tree(const string& path) {
+	TreeNode res;
+	ifstream src(path, ios::binary);
+
+	while (src.good()) {
+		int val;
+		src >> val;
+
+	}
+
+	src.close();
+	return res;
+}
+
+int sumOddLengthSubarrays(vector<int>& arr) {
+	if (arr.empty()) {
+		return 0;
+	}
+	int res = 0;
+	std::count_if(arr.begin(), arr.end(), [&res](const int& val) { return res += val; });
+	if (arr.size() < 3) {
+		return res;
+	}
+	size_t ctr = 2;
+	while (ctr < arr.size()) {
+		for (size_t ptr = 0; ptr + ctr < arr.size(); ptr++) {
+			size_t tmp_iter = ptr;
+			while (tmp_iter != ptr + ctr + 1) {
+				res += arr[tmp_iter];
+				tmp_iter++;
+			}
+		}
+		ctr += 2;
+	}
+	return res;
+}
+
+
+int main() {
+	vector<int> array_{ 10, 11, 12 };
+	cout << sumOddLengthSubarrays(array_) << endl;
 
 	return 0;
 }
