@@ -612,10 +612,24 @@ int sumOddLengthSubarrays(vector<int>& arr) {
 	return res;
 }
 
+vector<string> stringMatching(vector<string>& words) {
+	set<string> res;
+	for (size_t ptr = 0; ptr< words.size(); ptr++) {
+		for (size_t ptr1 = 0; ptr1 < words.size(); ptr1++) {
+			if (words[ptr].find(words[ptr1]) != std::string::npos && words[ptr1].size() < words[ptr].size()) {
+				res.insert(words[ptr1]);
+			}
+		}
+	}
+	return {res.begin(), res.end()};
+}
 
 int main() {
-	vector<int> array_{ 10, 11, 12 };
-	cout << sumOddLengthSubarrays(array_) << endl;
+	vector<string> array_{ "leetcoder","leetcode","od","hamlet","am" };
+
+	for (const auto& r : stringMatching(array_)) {
+		cout << r << endl;
+	}
 
 	return 0;
 }
