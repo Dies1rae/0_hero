@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <filesystem>
 #include <fstream>
+
 using namespace std;
 
 bool containsDuplicate(vector<int>& nums) {
@@ -561,34 +562,6 @@ int findKthPositive(vector<int>& arr, int k) {
 	return arr.size() + k;
 }
 
-struct TreeNode {
-	TreeNode() = default;
-	TreeNode(int data) :val(data) {};
-
-	int val = 0;
-	TreeNode* l_leaf = NULL;
-	TreeNode* r_leaf = NULL;
-};
-
-TreeNode* NewNode(int data) {
-	TreeNode* res = new TreeNode(data);
-	return res;
-}
-
-TreeNode create_balanced_tree(const string& path) {
-	TreeNode res;
-	ifstream src(path, ios::binary);
-
-	while (src.good()) {
-		int val;
-		src >> val;
-
-	}
-
-	src.close();
-	return res;
-}
-
 int sumOddLengthSubarrays(vector<int>& arr) {
 	if (arr.empty()) {
 		return 0;
@@ -624,13 +597,105 @@ vector<string> stringMatching(vector<string>& words) {
 	return {res.begin(), res.end()};
 }
 
-int main() {
-	vector<string> array_{ "leetcoder","leetcode","od","hamlet","am" };
 
-	for (const auto& r : stringMatching(array_)) {
-		cout << r << endl;
+struct TreeNode {
+	TreeNode() = default;
+	TreeNode(int data) :val(data) {
+		TreeNode* l_leaf = NULL;
+		TreeNode* r_leaf = NULL;
+	};
+
+	int val = 0;
+	TreeNode* l_leaf = NULL;
+	TreeNode* r_leaf = NULL;
+};
+
+TreeNode* NewNode(int data) {
+	TreeNode* res = new TreeNode(data);
+	return res;
+}
+
+vector<TreeNode *> Create_TreeNodeSet_From_File(const string& path) {
+	ifstream src(path, ios::binary);
+	vector<TreeNode*> data;
+	while (src.good()) {
+		int val;
+		src >> val;
+		data.push_back(NewNode(val));
 	}
+	src.close();
+	return data;
+}
 
+TreeNode* create_balanced_tree(vector<TreeNode*>& nodes, int pos_start, int pos_end) {
+	if (pos_start > pos_end) {
+		return NULL;
+	}
+	int pos_mid = (pos_start + pos_end) / 2;
+	TreeNode* root = nodes[pos_mid];
+	root->l_leaf = create_balanced_tree(nodes, pos_start, pos_mid - 1);
+	root->r_leaf = create_balanced_tree(nodes, pos_mid + 1, pos_end);
+
+	return root;
+}
+
+void avl_push(int val, TreeNode** root) {
+	if ((*root) == NULL) {
+		(*root) = new TreeNode(val);
+		return;
+	}
+	if (val > (*root)->val) {
+		avl_push(val, &(*root)->r_leaf);
+		return;
+	} else {
+		avl_push(val, &(*root)->l_leaf);
+		return;
+	}
+}
+
+TreeNode* create_ideal_balanced_tree(vector<TreeNode*> nodes) {
+	if (nodes.empty()) {
+		return new TreeNode();
+	}
+	TreeNode* root = NULL;
+	for (TreeNode* node : nodes) {
+		avl_push(node->val, &root);
+	}
+	return root;
+}
+
+void PreOrder_Tree(TreeNode* root) {
+	if (root == NULL) {
+		return;
+	}
+	cout << root->val << " -> ";
+	PreOrder_Tree(root->l_leaf);
+	PreOrder_Tree(root->r_leaf);
+}
+
+void print_tree(TreeNode* node, int start = 0) {
+	if (node == NULL) {
+		return;
+	} else {
+		print_tree(node->l_leaf, ++start);
+		for (int ptr = 0; ptr < start; ptr++) {
+			cout << '|';
+		}
+		cout << node->val << endl;
+		start--;
+	}
+	print_tree(node->r_leaf, ++start);
+}
+
+int main() {
+	vector<TreeNode*> chaotic_node_data = Create_TreeNodeSet_From_File("nums.txt");
+	TreeNode balanced_tree = *create_balanced_tree(chaotic_node_data, 0, chaotic_node_data.size() - 1);
+	PreOrder_Tree(&balanced_tree);
+
+	cout << endl;
+
+	TreeNode avl_tree = *create_ideal_balanced_tree(chaotic_node_data);
+	print_tree(&avl_tree, 0);
 	return 0;
 }
 
