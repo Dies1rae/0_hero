@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <filesystem>
 #include <fstream>
+#include <random>
 
 using namespace std;
 
@@ -713,9 +714,56 @@ int floid_tortoise_hare(vector<int>& elems) {
 	return res;
 }
 
+struct point {
+	point() = default;
+	point(const double x_, const double y_) : x(x_), y(y_) {};
+	double x = 0;
+	double y = 0;
+};
+
+point create_point(double x, double y) {
+	return {x, y};
+}
+
+vector<point> generate_points(size_t size) {
+	vector<point> prescision;
+
+	for (size_t ptr = 0; ptr < size; ptr++) {
+		double x_ = ((double)rand() / (RAND_MAX));
+		double y_ = ((double)rand() / (RAND_MAX));
+		prescision.push_back(create_point(x_, y_));
+	}
+
+	return prescision;
+}
+
+double calculate_pi(vector<point> points_) {
+	int before_one = 0;
+	int total_one = 0;
+	double PI = 0.0;
+	for (const auto point : points_) {
+		if (((point.x * point.x) + (point.y * point.y)) < 1.0) {
+			before_one += 1;
+		}
+		total_one += 1;
+	}
+
+	PI = 4.0 * (before_one) / (total_one);
+	cout << before_one << " " << total_one << endl;
+	return PI;
+}
+
+
 int main() {
-	vector<int> arr{ 9, 8, 9, 7, 6, 5, 2, 4, 3, 1 };
-	cout << floid_tortoise_hare(arr) << endl;
+	size_t P_size;
+	cout << "Enter number of points: ";
+	cin >> P_size;
+
+	vector<point> circle = generate_points(P_size);
+	cout << "Generate " << P_size << " complete" << endl;
+
+	cout << "PI is  " << calculate_pi(circle) << endl;
+
 	return 0;
 }
 
