@@ -639,6 +639,7 @@ TreeNode* create_balanced_tree(vector<TreeNode*>& nodes, int pos_start, int pos_
 	return root;
 }
 
+//GOVNO NA PALKE
 void avl_push(int val, TreeNode** root) {
 	if ((*root) == NULL) {
 		(*root) = new TreeNode(val);
@@ -687,15 +688,34 @@ void print_tree(TreeNode* node, int start = 0) {
 	print_tree(node->r_leaf, ++start);
 }
 
+int floid_tortoise_hare(vector<int>& elems) {
+	int res = INT_MIN;
+	int tortoise = elems[0];
+	int hare = elems[0];
+	
+	while (true) {
+		if (tortoise > elems.size() - 1) {
+			return res;
+		}
+		tortoise = elems[tortoise];
+		hare = elems[elems[hare]];
+		if (tortoise == hare) {
+			break;
+		}
+	}
+	
+	tortoise = elems[0];
+	while (tortoise != hare) {
+		tortoise = elems[tortoise];
+		hare = elems[hare];
+	}
+	res = tortoise;
+	return res;
+}
+
 int main() {
-	vector<TreeNode*> chaotic_node_data = Create_TreeNodeSet_From_File("nums.txt");
-	TreeNode balanced_tree = *create_balanced_tree(chaotic_node_data, 0, chaotic_node_data.size() - 1);
-	PreOrder_Tree(&balanced_tree);
-
-	cout << endl;
-
-	TreeNode avl_tree = *create_ideal_balanced_tree(chaotic_node_data);
-	print_tree(&avl_tree, 0);
+	vector<int> arr{ 9, 8, 9, 7, 6, 5, 2, 4, 3, 1 };
+	cout << floid_tortoise_hare(arr) << endl;
 	return 0;
 }
 
