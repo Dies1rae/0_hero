@@ -673,7 +673,7 @@ void PreOrder_Tree(TreeNode* root) {
 	PreOrder_Tree(root->l_leaf);
 	PreOrder_Tree(root->r_leaf);
 }
-
+ 
 void print_tree(TreeNode* node, int start = 0) {
 	if (node == NULL) {
 		return;
