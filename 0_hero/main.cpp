@@ -760,12 +760,36 @@ double calculate_pi(vector<point> points_) {
 }
 
 
-int main() {
-	size_t P_size;
-	cout << "Enter number of points: ";
-	cin >> P_size;
+int compare_elem(vector<int>::iterator begin, vector<int>::iterator end) {
+	int res = *begin;
+	++begin;
+	while (begin <= end) {
+		res += *begin;
+		++ begin;
+	}
+	return res;
+}
 
-	cout << "PI is  " << calculate_pi(generate_points(P_size)) << endl;
+vector<int> runningSum(vector<int>& nums) {
+	vector<int> res;
+	auto iter_first = nums.begin();
+	auto iter_second = nums.begin();
+
+	while (iter_first < nums.end()) {
+		int elem = compare_elem(iter_second, iter_first);
+		res.push_back(elem);
+		++iter_first;
+	}
+
+	return res;
+}
+
+int main() {
+	vector<int> nums{ 3, 1, 2, 10, 1 };
+	runningSum(nums);
+	for (auto elem : runningSum(nums)) {
+		cout << elem << endl;
+	}
 
 	return 0;
 }
