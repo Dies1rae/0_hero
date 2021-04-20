@@ -800,6 +800,14 @@ int xorOperation(int n, int start) {
 	return res;
 }
 
+int maximumProduct(vector<int>& nums) {
+    std::sort(nums.begin(), nums.end());
+    int size = nums.size();
+    int first = nums[0] * nums[1] * nums[size - 1];
+    int second = nums[size - 1] * nums[size - 2] * nums[size - 3];
+    return first > second ? first : second;
+}
+
 int main() {
 	cout << xorOperation(1, 7) << endl;
 
