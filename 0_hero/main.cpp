@@ -784,12 +784,24 @@ vector<int> runningSum(vector<int>& nums) {
 	return res;
 }
 
-int main() {
-	vector<int> nums{ 3, 1, 2, 10, 1 };
-	runningSum(nums);
-	for (auto elem : runningSum(nums)) {
-		cout << elem << endl;
+int xorOperation(int n, int start) {
+	if (n == 1) {
+		return start;
 	}
+	vector<int> arr;
+	arr.resize(n);
+	for (size_t ptr = 0; ptr < n; ptr++) {
+		arr[ptr] = start + 2 * ptr;
+	}
+	int res = 0;
+	for (const auto& elem : arr) {
+		res = res ^ elem;
+	}
+	return res;
+}
+
+int main() {
+	cout << xorOperation(1, 7) << endl;
 
 	return 0;
 }
