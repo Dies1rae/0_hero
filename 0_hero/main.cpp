@@ -717,12 +717,18 @@ int floid_tortoise_hare(vector<int>& elems) {
 struct point {
 	point() = default;
 	point(const double x_, const double y_) : x(x_), y(y_) {};
+	point(double&& x_, double&& y_){
+		std::swap(this->x, x_);
+		std::swap(this->y, y_);
+	};
+
 	double x = 0;
 	double y = 0;
 };
 
 point create_point(double x, double y) {
-	return {x, y};
+	point* tmp_pnt = new point(x, y);
+	return *tmp_pnt;
 }
 
 vector<point> generate_points(size_t size) {
@@ -731,7 +737,7 @@ vector<point> generate_points(size_t size) {
 	for (size_t ptr = 0; ptr < size; ptr++) {
 		double x_ = ((double)rand() / (RAND_MAX));
 		double y_ = ((double)rand() / (RAND_MAX));
-		prescision.push_back(create_point(x_, y_));
+		prescision.push_back(create_point(std::move(x_), std::move(y_)));
 	}
 
 	return prescision;
@@ -759,10 +765,7 @@ int main() {
 	cout << "Enter number of points: ";
 	cin >> P_size;
 
-	vector<point> circle = generate_points(P_size);
-	cout << "Generate " << P_size << " complete" << endl;
-
-	cout << "PI is  " << calculate_pi(circle) << endl;
+	cout << "PI is  " << calculate_pi(generate_points(P_size)) << endl;
 
 	return 0;
 }
