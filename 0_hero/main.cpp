@@ -856,10 +856,89 @@ bool isOneBitCharacter(vector<int>& bits) {
 	return false;
 }
 
+struct freqcmp {
+	bool operator()(const pair<char, int>& lhs, const pair<char, int>& rhs) const     {
+		return lhs.second < rhs.second;
+	}
+};
+
+
+
+int getMin(map<char, int> mymap) {
+	std::pair<char, int> min = *min_element(mymap.begin(), mymap.end(), freqcmp());
+	return min.second;
+}
+
+int maxNumberOfBalloons(string text) {
+	if (text.size() < 7) {
+		return 0;
+	}
+
+	map<char, int> naebolko{ {'b', 0}, {'a', 0}, {'l', 0}, {'o', 0}, {'n', 0} };
+	for (const auto& c : text) {
+		if (naebolko.find(c) != naebolko.end()) {
+			naebolko.at(c)++;
+		}
+	}
+
+	naebolko['l'] /= 2;
+	naebolko['o'] /= 2;
+
+	return getMin(naebolko);
+}
+
+vector<string> separate_spaces(string& text) {
+	vector<string> res;
+	string word;
+	for (size_t ptr = 0; ptr < text.size(); ptr++) {
+		if (text[ptr] == 32) {
+			res.push_back(word);
+			word.clear();
+		} else {
+			word += text[ptr];
+		}
+	}
+	res.push_back(word);
+	return res;
+}
+
+vector<string> uncommonFromSentences(string A, string B) {
+	vector<string> res;
+	map<string, int> ctr_map;
+	for (auto& w : separate_spaces(A)) {
+		ctr_map[w] ++;
+	}
+	for (auto& w : separate_spaces(B)) {
+		ctr_map[w] ++;
+	}
+	for (const auto [word, ctr] : ctr_map) {
+		if (ctr == 1) {
+			res.push_back(word);
+		}
+	}
+	return res;
+}
+
+vector<string> findOcurrences(string text, string first, string second) {
+	vector<string> res;
+	vector<string> separate = separate_spaces(text);
+	for (size_t ptr = 0; ptr + 2 < separate.size(); ptr++) {
+		if (separate[ptr] == first && separate[ptr + 1] == second) {
+			res.push_back(separate[ptr + 2]);
+		}
+	}
+
+	return res;
+}
+
 int main() {
-	vector<int> bits{  1, 1, 1 };
-	
-	cout << isOneBitCharacter(bits) << endl;
+	string text = "we will we will rock you"s;
+	string first = "we"s;
+	string second = "will"s;
+
+	for (const auto& words : findOcurrences(text, first, second)) {
+		cout << words << ' ';
+	}
 
 	return 0;
 }
