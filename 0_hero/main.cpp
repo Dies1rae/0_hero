@@ -808,8 +808,58 @@ int maximumProduct(vector<int>& nums) {
     return first > second ? first : second;
 }
 
+int digits_num(int elem) {
+	int res = 0;
+	while (elem) {
+		elem /= 10;
+		res++;
+	}
+	return res;
+}
+
+int findNumbers(vector<int>& nums) {
+	int even_ctr = 0;
+	for (auto elem : nums) {
+		if (digits_num(elem) % 2 == 0 && digits_num(elem) > 0) {
+			even_ctr++;
+		}
+	}
+	return even_ctr;
+}
+
+vector<bool> kidsWithCandies(vector<int>& candies, int extraCandies) {
+	vector<bool> res(candies.size());
+	int max = *std::max_element(candies.begin(), candies.end());
+	for (size_t ptr = 0; ptr < candies.size(); ptr ++) {
+		if (candies[ptr] + extraCandies >= max) {
+			res[ptr] = true;
+		} else {
+			res[ptr] = false;
+		}
+	}
+	return res;
+}
+
+bool isOneBitCharacter(vector<int>& bits) {
+	if (bits[bits.size() - 1] == 1) {
+		return false;
+	}
+	for (size_t ptr = 0; ptr < bits.size(); ptr++) {
+		if (ptr == bits.size() - 1) {
+			return true;
+		}
+		if (bits[ptr] == 1) {
+			ptr++;
+		}
+	}
+
+	return false;
+}
+
 int main() {
-	cout << xorOperation(1, 7) << endl;
+	vector<int> bits{  1, 1, 1 };
+	
+	cout << isOneBitCharacter(bits) << endl;
 
 	return 0;
 }
