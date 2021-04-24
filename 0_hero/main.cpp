@@ -931,14 +931,103 @@ vector<string> findOcurrences(string text, string first, string second) {
 	return res;
 }
 
-int main() {
-	string text = "we will we will rock you"s;
-	string first = "we"s;
-	string second = "will"s;
+struct ListNode {
+	int val;
+	ListNode* next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
 
-	for (const auto& words : findOcurrences(text, first, second)) {
-		cout << words << ' ';
+
+// BAD DESIGN
+int getDecimalValue(ListNode* head) {
+	int res = 0;
+	vector<int>bytes;
+	while (head != nullptr) {
+		bytes.push_back(head->val);
+		head = head->next;
 	}
+
+	for (int ptr_end = bytes.size() - 1, ptr_begin = 0; ptr_end > -1; ptr_end--, ptr_begin++) {
+		res += bytes[ptr_begin] * (1 << ptr_end);
+	}
+
+	return res;
+}
+
+int getDecimalValue_2(ListNode* head) {
+	ListNode* cur = head;
+	int len = 0;
+	while (cur) {
+		len++;
+		cur = cur->next;
+	}
+
+	cur = head;
+	int res = 0;
+	len = len - 1;
+	while (cur) {
+		res += cur->val * (1 << (len--));
+		cur = cur->next;
+	}
+	return res;
+}
+//-----------
+
+int maxPower(string s) {
+	int max = 1, tmp_max = 1;
+
+	for (size_t ptr = 0; ptr + 1 < s.size(); ptr++) {
+		if (s[ptr] == s[ptr + 1]) {
+			tmp_max++;
+		}
+		if (s[ptr] != s[ptr + 1]) {
+			if (tmp_max >= max) {
+				max = tmp_max;
+			}
+			tmp_max = 1;
+		}
+	}
+
+	if (tmp_max >= max) {
+		max = tmp_max;
+	}
+
+	return max;
+}
+
+vector<string> commonChars(vector<string>& A) {
+	vector<string> res;
+	int first[26];
+	int tmp[26];
+	fill(first, first + 26, 1000);
+	for (const auto& str : A) {
+		fill(tmp, tmp + 26, 0);
+		for (size_t ptr = 0; ptr < str.size(); ptr++) {
+			tmp[str[ptr] - 'a'] += 1;
+		}
+		for (size_t ptr = 0; ptr < 26; ptr++) {
+			first[ptr] = min(first[ptr], tmp[ptr]);
+		}
+	}
+	for (size_t ptr = 0; ptr < 26; ptr++) {
+		while (first[ptr]) {
+			string tmp{ (char)('a' + ptr) };
+			res.push_back(tmp);
+			first[ptr]--;
+		}
+	}
+	return res;
+}
+
+int main() {
+	vector<string> testes{ "cool","lock","cook" };
+
+	for (const auto& str : commonChars(testes)) {
+		cout << str << ' ';
+	}
+	cout << endl;
 
 	return 0;
 }
