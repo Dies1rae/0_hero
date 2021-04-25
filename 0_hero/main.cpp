@@ -1021,13 +1021,50 @@ vector<string> commonChars(vector<string>& A) {
 	return res;
 }
 
-int main() {
-	vector<string> testes{ "cool","lock","cook" };
-
-	for (const auto& str : commonChars(testes)) {
-		cout << str << ' ';
+vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
+	vector<int>res;
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		int tmp_ctr = 0;
+		for (size_t ptr1 = 0; ptr1 < nums.size(); ptr1++) {
+			if (nums[ptr] > nums[ptr1] && ptr != ptr1) {
+				tmp_ctr++;
+			}
+		}
+		res.push_back(tmp_ctr);
 	}
-	cout << endl;
+	return res;
+}
+
+bool isHappy(int n) {
+	if (n == 1) {
+		return 1;
+	}
+	if (n == 2) {
+		return 0;
+	}
+
+	set<int> hsh;
+
+	while (n != 1) {
+		int tmp_n = 0;
+		
+		if (hsh.find(n) != hsh.end()) {
+			return 0;
+		}
+		hsh.insert(n);
+		while (n > 0) {
+			tmp_n += pow((n % 10), 2);
+			n /= 10;
+		}
+		
+		n = tmp_n;
+	}
+	return 1;
+}
+
+int main() {
+	
+	cout << isHappy(7) << endl;
 
 	return 0;
 }
