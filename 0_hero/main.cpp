@@ -856,10 +856,215 @@ bool isOneBitCharacter(vector<int>& bits) {
 	return false;
 }
 
+struct freqcmp {
+	bool operator()(const pair<char, int>& lhs, const pair<char, int>& rhs) const     {
+		return lhs.second < rhs.second;
+	}
+};
+
+
+
+int getMin(map<char, int> mymap) {
+	std::pair<char, int> min = *min_element(mymap.begin(), mymap.end(), freqcmp());
+	return min.second;
+}
+
+int maxNumberOfBalloons(string text) {
+	if (text.size() < 7) {
+		return 0;
+	}
+
+	map<char, int> naebolko{ {'b', 0}, {'a', 0}, {'l', 0}, {'o', 0}, {'n', 0} };
+	for (const auto& c : text) {
+		if (naebolko.find(c) != naebolko.end()) {
+			naebolko.at(c)++;
+		}
+	}
+
+	naebolko['l'] /= 2;
+	naebolko['o'] /= 2;
+
+	return getMin(naebolko);
+}
+
+vector<string> separate_spaces(string& text) {
+	vector<string> res;
+	string word;
+	for (size_t ptr = 0; ptr < text.size(); ptr++) {
+		if (text[ptr] == 32) {
+			res.push_back(word);
+			word.clear();
+		} else {
+			word += text[ptr];
+		}
+	}
+	res.push_back(word);
+	return res;
+}
+
+vector<string> uncommonFromSentences(string A, string B) {
+	vector<string> res;
+	map<string, int> ctr_map;
+	for (auto& w : separate_spaces(A)) {
+		ctr_map[w] ++;
+	}
+	for (auto& w : separate_spaces(B)) {
+		ctr_map[w] ++;
+	}
+	for (const auto [word, ctr] : ctr_map) {
+		if (ctr == 1) {
+			res.push_back(word);
+		}
+	}
+	return res;
+}
+
+vector<string> findOcurrences(string text, string first, string second) {
+	vector<string> res;
+	vector<string> separate = separate_spaces(text);
+	for (size_t ptr = 0; ptr + 2 < separate.size(); ptr++) {
+		if (separate[ptr] == first && separate[ptr + 1] == second) {
+			res.push_back(separate[ptr + 2]);
+		}
+	}
+
+	return res;
+}
+
+struct ListNode {
+	int val;
+	ListNode* next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
+
+
+// BAD DESIGN
+int getDecimalValue(ListNode* head) {
+	int res = 0;
+	vector<int>bytes;
+	while (head != nullptr) {
+		bytes.push_back(head->val);
+		head = head->next;
+	}
+
+	for (int ptr_end = bytes.size() - 1, ptr_begin = 0; ptr_end > -1; ptr_end--, ptr_begin++) {
+		res += bytes[ptr_begin] * (1 << ptr_end);
+	}
+
+	return res;
+}
+
+int getDecimalValue_2(ListNode* head) {
+	ListNode* cur = head;
+	int len = 0;
+	while (cur) {
+		len++;
+		cur = cur->next;
+	}
+
+	cur = head;
+	int res = 0;
+	len = len - 1;
+	while (cur) {
+		res += cur->val * (1 << (len--));
+		cur = cur->next;
+	}
+	return res;
+}
+//-----------
+
+int maxPower(string s) {
+	int max = 1, tmp_max = 1;
+
+	for (size_t ptr = 0; ptr + 1 < s.size(); ptr++) {
+		if (s[ptr] == s[ptr + 1]) {
+			tmp_max++;
+		}
+		if (s[ptr] != s[ptr + 1]) {
+			if (tmp_max >= max) {
+				max = tmp_max;
+			}
+			tmp_max = 1;
+		}
+	}
+
+	if (tmp_max >= max) {
+		max = tmp_max;
+	}
+
+	return max;
+}
+
+vector<string> commonChars(vector<string>& A) {
+	vector<string> res;
+	int first[26];
+	int tmp[26];
+	fill(first, first + 26, 1000);
+	for (const auto& str : A) {
+		fill(tmp, tmp + 26, 0);
+		for (size_t ptr = 0; ptr < str.size(); ptr++) {
+			tmp[str[ptr] - 'a'] += 1;
+		}
+		for (size_t ptr = 0; ptr < 26; ptr++) {
+			first[ptr] = min(first[ptr], tmp[ptr]);
+		}
+	}
+	for (size_t ptr = 0; ptr < 26; ptr++) {
+		while (first[ptr]) {
+			string tmp{ (char)('a' + ptr) };
+			res.push_back(tmp);
+			first[ptr]--;
+		}
+	}
+	return res;
+}
+
+vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
+	vector<int>res;
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		int tmp_ctr = 0;
+		for (size_t ptr1 = 0; ptr1 < nums.size(); ptr1++) {
+			if (nums[ptr] > nums[ptr1] && ptr != ptr1) {
+				tmp_ctr++;
+			}
+		}
+		res.push_back(tmp_ctr);
+	}
+	return res;
+}
+
+bool isHappy(int n) {
+	if (n == 1) {
+		return 1;
+	}
+	if (n == 2) {
+		return 0;
+	}
+
+	set<int> hsh;
+
+	while (n != 1) {
+		int tmp_n = 0;
+		
+		if (hsh.find(n) != hsh.end()) {
+			return 0;
+		}
+		hsh.insert(n);
+		while (n > 0) {
+			tmp_n += pow((n % 10), 2);
+			n /= 10;
+		}
+		
+		n = tmp_n;
+	}
+	return 1;
+}
+
 int main() {
-	vector<int> bits{  1, 1, 1 };
 	
-	cout << isOneBitCharacter(bits) << endl;
+	cout << isHappy(7) << endl;
 
 	return 0;
 }
