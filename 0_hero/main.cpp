@@ -525,35 +525,6 @@ int countGoodTriplets(vector<int>& arr, int a, int b, int c) {
 	return ctr;
 }
 
-class Solution {
-public:
-	struct ListNode {
-		int val;
-		ListNode* next;
-		ListNode(int x) : val(x), next(NULL) {}
-
-	};
-
-	Solution() :head(NULL) {}
-
-	Solution(const int val) {
-		head = new ListNode(val);
-	}
-
-	void deleteNode(ListNode* node) {
-		while (node != NULL && node->next != NULL) {
-			if (node->next == node) {
-				node->next->val = node->next->next->val;
-				node->next = node->next->next;
-				return;
-			}
-		}
-	}
-
-private:
-	ListNode* head;
-};
-
 int findKthPositive(vector<int>& arr, int k) {
 	for (int i = 0; i < arr.size(); i++) {
 		int x = arr[i] - (i + 1);
@@ -1062,9 +1033,94 @@ bool isHappy(int n) {
 	return 1;
 }
 
-int main() {
+bool canMakeArithmeticProgression(vector<int>& arr) {
+	std::sort(arr.begin(), arr.end());
+	int diff = arr[1] - arr[0];
+	for (size_t ptr = 0; ptr + 1 < arr.size(); ptr++) {
+		if (arr[ptr + 1] - arr[ptr] != diff) {
+			return false;
+		}
+	}
+	return true;
+}
+
+double average(vector<int>& salary) {
+	std::sort(salary.begin(), salary.end());
+	double avr = 0.0;
+	for (size_t ptr = 1; ptr < salary.size() - 1; ptr++) {
+		avr += salary[ptr];
+	}
+	return (avr / (double)(salary.size() - 2));
+}
+
+string restoreString(string s, vector<int>& indices) {
+	map<int, char> order;
+	for (size_t ptr = 0; ptr < indices.size(); ptr++) {
+		order[indices[ptr]] = s[ptr];
+	}
+	s.clear();
+	for (const auto& [pos, ch] : order) {
+		s += ch;
+	}
+	return s;
+}
+string restoreString_1(string s, vector<int>& indices) {
+	string res(s);
+	for (size_t ptr = 0; ptr < indices.size(); ptr++) {
+		res[indices[ptr]] = s[ptr];
+	}
+	return res;
+}
+
+
+ListNode* removeElements(ListNode* head, int val) {
+	if (head == nullptr) {
+		return {};
+	}
+	ListNode* new_root = head;
+	ListNode* head_next = head->next;
 	
-	cout << isHappy(7) << endl;
+	while (head_next != nullptr) {
+		if (head_next->val == val) {
+			head->next = head_next->next;
+			head_next = head->next;
+			continue;
+		}
+		head = head->next;
+		head_next = head_next->next;
+	}
+	if (new_root->val == val) {
+		return new_root = new_root->next;
+	}
+	return new_root;
+}
+
+void print_node(ListNode* node) {
+	if (node == NULL) {
+		cout << "EMPTY" << endl;
+	} else {
+		while (node != nullptr){
+			cout << node->val << " ";
+			node = node->next;
+		}
+		cout << "FIN" << endl;
+		cout << endl;
+	}
+}
+
+int main() {
+	ListNode* root = new ListNode(1);
+	root->next = new ListNode(2);
+	//root->next->next = new ListNode(7);
+	//root->next->next->next = new ListNode(7);
+	//root->next->next->next->next = new ListNode(7);
+	//root->next->next->next->next->next = new ListNode(7);
+	//root->next->next->next->next->next->next = new ListNode(7);
+
+
+	print_node(root);
+	ListNode* removed = removeElements(root, 1);
+	print_node(removed);
 
 	return 0;
 }
