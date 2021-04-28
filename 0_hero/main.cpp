@@ -1108,20 +1108,86 @@ void print_node(ListNode* node) {
 	}
 }
 
+vector<string> buildArray(vector<int>& target, int n) {
+	vector<string> moving;
+	for (int ptr = 0, ctr = 1; ptr < target.size(); ptr++, ctr++) {
+		if (ctr == target[ptr]) {
+			moving.push_back("Push"s);
+		} else {
+			ptr--;
+			moving.push_back("Push"s);
+			moving.push_back("Pop"s);
+		}
+	}
+
+	return moving;
+}
+
+vector<int> decode(vector<int>& encoded, int first) {
+	vector<int> decoded;
+	decoded.resize(encoded.size() + 1);
+	decoded[0] = first;
+	for (size_t ptr = 0; ptr < encoded.size(); ptr++) {
+		decoded[ptr + 1] = encoded[ptr] xor decoded[ptr];
+	}
+	return decoded;
+}
+
+bool isPalindrome(int x) {
+	vector<int>res;
+	if (x < 0) {
+		return false;
+	}
+	if (x == 0) {
+		return true;
+	}
+	while (x >= 10) {
+		int tmp = x % 10;
+		x /= 10;
+		res.push_back(tmp);
+	}
+	res.push_back(x);
+	for (size_t btr = 0, ept = res.size() - 1; btr < res.size() / 2; btr++, ept --) {
+		if (res[btr] != res[ept]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isPalindrome_1(int x) {
+	if (x < 0) {
+		return false;
+	}
+	long revX = 0;
+	long tmp_val = x;
+	while (tmp_val > 0) {
+		revX = revX * 10 + tmp_val % 10;
+		tmp_val /= 10;
+	}
+	return x == revX ? true : false;
+}
+
+bool isPalindrome(ListNode* head) {
+	vector<int> vec;
+	while (head != nullptr) {
+		vec.push_back(head->val);
+		head = head->next;
+	}
+	for (size_t btr = 0, ept = vec.size() - 1; btr < vec.size() / 2; btr++, ept--) {
+		if (vec[btr] != vec[ept]) {
+			return false;
+		}
+	}
+	return true;
+}
+
 int main() {
 	ListNode* root = new ListNode(1);
 	root->next = new ListNode(2);
-	//root->next->next = new ListNode(7);
-	//root->next->next->next = new ListNode(7);
-	//root->next->next->next->next = new ListNode(7);
-	//root->next->next->next->next->next = new ListNode(7);
-	//root->next->next->next->next->next->next = new ListNode(7);
-
-
-	print_node(root);
-	ListNode* removed = removeElements(root, 1);
-	print_node(removed);
-
+	root->next->next = new ListNode(2);
+	//root->next->next->next = new ListNode(1);
+	cout << isPalindrome(root) << endl;
 	return 0;
 }
 
