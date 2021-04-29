@@ -1204,7 +1204,6 @@ string reformatNumber(string number) {
 	size_t tel_size = number.size();
 	size_t ptr = 0;
 
-	cout << number << endl;
 	while (tel_size > 0) {
 		if (tel_size > 4) {
 			ptr += 3;
@@ -1223,9 +1222,31 @@ string reformatNumber(string number) {
 	return number;
 }
 
+bool isVowel(char c) {
+	return (c == 'a' || c == 'A' || c == 'e' ||	c == 'E' || c == 'i' || c == 'I' ||
+		c == 'o' || c == 'O' || c == 'u' ||	c == 'U');
+}
+//!!!!!!!!!!!!!!
+string reverseVowels(string s) {
+	size_t beg = 0;
+	size_t end = s.size() - 1;
+
+	while (beg < end) {
+		if (isVowel(s[beg]) && isVowel(s[end])) {
+			std::swap(s[beg++], s[end--]);
+		} else if (!isVowel(s[beg])) {
+			beg++;
+		} else if (!isVowel(s[end])) {
+			end--;
+		}
+	}
+	return s;
+}
+//!!!!!!!!!!!!!!
+//! 
 int main() {
-	string text = ("--17-5 229 35-39475 ");
-	cout << reformatNumber(text) << endl;
+	string s = "hello";
+	cout << reverseVowels(s) << endl;
 	return 0;
 }
 
