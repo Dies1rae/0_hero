@@ -1182,12 +1182,50 @@ bool isPalindrome(ListNode* head) {
 	return true;
 }
 
+bool checkIfPangram(string sentence) {
+	set<char> alphabet = { sentence.begin(), sentence.end() };
+	return alphabet.size() >= 26 ? true : false;
+}
+
+void delete_restricted(string& number) {
+	for (size_t ptr = 0; ptr < number.size(); ptr++) {
+		if (number[ptr] == 32 || number[ptr] == '-') {
+			number.erase(ptr, 1);
+			ptr--;
+		}
+	}
+}
+
+string reformatNumber(string number) {
+	delete_restricted(number);
+	if (number.size() < 4) {
+		return number;
+	}
+	size_t tel_size = number.size();
+	size_t ptr = 0;
+
+	cout << number << endl;
+	while (tel_size > 0) {
+		if (tel_size > 4) {
+			ptr += 3;
+			number.insert(ptr, "-");
+			ptr += 1;
+			tel_size -= 3;
+		} else if (tel_size == 4) {
+			ptr += 2;
+			number.insert(ptr, "-");
+			ptr += 1;
+			tel_size -= 2;
+		} else {
+			break;
+		}
+	}
+	return number;
+}
+
 int main() {
-	ListNode* root = new ListNode(1);
-	root->next = new ListNode(2);
-	root->next->next = new ListNode(2);
-	//root->next->next->next = new ListNode(1);
-	cout << isPalindrome(root) << endl;
+	string text = ("--17-5 229 35-39475 ");
+	cout << reformatNumber(text) << endl;
 	return 0;
 }
 
