@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <random>
+#include <stack>
 
 using namespace std;
 
@@ -567,97 +568,6 @@ vector<string> stringMatching(vector<string>& words) {
 		}
 	}
 	return {res.begin(), res.end()};
-}
-
-
-struct TreeNode {
-	TreeNode() = default;
-	TreeNode(int data) :val(data) {
-		TreeNode* l_leaf = NULL;
-		TreeNode* r_leaf = NULL;
-	};
-
-	int val = 0;
-	TreeNode* l_leaf = NULL;
-	TreeNode* r_leaf = NULL;
-};
-
-TreeNode* NewNode(int data) {
-	TreeNode* res = new TreeNode(data);
-	return res;
-}
-
-vector<TreeNode *> Create_TreeNodeSet_From_File(const string& path) {
-	ifstream src(path, ios::binary);
-	vector<TreeNode*> data;
-	while (src.good()) {
-		int val;
-		src >> val;
-		data.push_back(NewNode(val));
-	}
-	src.close();
-	return data;
-}
-
-TreeNode* create_balanced_tree(vector<TreeNode*>& nodes, int pos_start, int pos_end) {
-	if (pos_start > pos_end) {
-		return NULL;
-	}
-	int pos_mid = (pos_start + pos_end) / 2;
-	TreeNode* root = nodes[pos_mid];
-	root->l_leaf = create_balanced_tree(nodes, pos_start, pos_mid - 1);
-	root->r_leaf = create_balanced_tree(nodes, pos_mid + 1, pos_end);
-
-	return root;
-}
-
-//GOVNO NA PALKE
-void avl_push(int val, TreeNode** root) {
-	if ((*root) == NULL) {
-		(*root) = new TreeNode(val);
-		return;
-	}
-	if (val > (*root)->val) {
-		avl_push(val, &(*root)->r_leaf);
-		return;
-	} else {
-		avl_push(val, &(*root)->l_leaf);
-		return;
-	}
-}
-
-TreeNode* create_ideal_balanced_tree(vector<TreeNode*> nodes) {
-	if (nodes.empty()) {
-		return new TreeNode();
-	}
-	TreeNode* root = NULL;
-	for (TreeNode* node : nodes) {
-		avl_push(node->val, &root);
-	}
-	return root;
-}
-
-void PreOrder_Tree(TreeNode* root) {
-	if (root == NULL) {
-		return;
-	}
-	cout << root->val << " -> ";
-	PreOrder_Tree(root->l_leaf);
-	PreOrder_Tree(root->r_leaf);
-}
- 
-void print_tree(TreeNode* node, int start = 0) {
-	if (node == NULL) {
-		return;
-	} else {
-		print_tree(node->l_leaf, ++start);
-		for (int ptr = 0; ptr < start; ptr++) {
-			cout << '|';
-		}
-		cout << node->val << endl;
-		start--;
-	}
-	print_tree(node->r_leaf, ++start);
 }
 
 int floid_tortoise_hare(vector<int>& elems) {
@@ -1243,10 +1153,103 @@ string reverseVowels(string s) {
 	return s;
 }
 //!!!!!!!!!!!!!!
-//! 
+
+struct TreeNode {
+	TreeNode() = default;
+	TreeNode(int data) :val(data) {
+		TreeNode* left = nullptr;
+		TreeNode* right = nullptr;
+	};
+	TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
+
+	int val = 0;
+	TreeNode* left = nullptr;
+	TreeNode* right = nullptr;
+};
+
+void print_tree(TreeNode* node, int start = 0) {
+	if (node == nullptr) {
+		return;
+	} else {
+		print_tree(node->left, ++start);
+		for (int ptr = 0; ptr < start; ptr++) {
+			cout << '|';
+		}
+		cout << node->val << endl;
+		start--;
+	}
+	print_tree(node->right, ++start);
+}
+
+//BAD DESIGN
+int rangeSumBST(TreeNode* root, int low, int high) {
+	if (root == nullptr) {
+		return 0;
+	}
+
+	int summ = root->val;
+	if (summ < low) {
+		return rangeSumBST(root->right, low, high);
+	} else if (summ >= low && summ <= high) {
+		return summ + rangeSumBST(root->right, low, high) + rangeSumBST(root->left, low, high);
+	} else {
+		return rangeSumBST(root->left, low, high);
+	}
+}
+//!!!!!!!!!!!!!
+//GOOD DESIGN
+int rangeSumBST_1(TreeNode* root, int low, int high) {
+	int ans = 0;
+	if (!root) return ans;
+	if (root->val <= high && root->val >= low) {
+		ans += root->val;
+	}
+	ans += rangeSumBST(root->left, low, high);
+	ans += rangeSumBST(root->right, low, high);
+	root->left = nullptr;
+	root->right = nullptr;
+	return ans;
+}
+//!!!!!!!!!!!!!
+
+void clear_zeros(string& num) {
+	if (num.size() == 1) {
+		return;
+	}
+	while (num[0] == 48) {
+		num.erase(0, 1);
+	}
+	if (!std::isdigit(num[0])) {
+		num += '0';
+	}
+}
+
+int numDifferentIntegers(string word) {
+	set<string> strings_;
+	string tmp_num;
+	for (size_t ptr = 0; ptr < word.size(); ptr++) {
+		if (word[ptr] >= '0' && word[ptr] <= '9') {
+			tmp_num += word[ptr];
+			if (ptr == word.size() - 1) {
+				clear_zeros(tmp_num);
+				strings_.insert(tmp_num);
+				tmp_num.clear();
+			}
+		}
+		if ((word[ptr] < '0' || word[ptr] > '9') && !tmp_num.empty()) {
+			clear_zeros(tmp_num);
+			strings_.insert(tmp_num);
+			tmp_num.clear();
+		}
+	}
+
+	return strings_.size();
+}
+
 int main() {
-	string s = "hello";
-	cout << reverseVowels(s) << endl;
+	string dif_num = "xtimt5kqkz9osexe56ezwwninlyeeqsq5m99904os3ygs12t31n1et4uwzmt5kvv6teisobuxt10k33v1aaxysg4y8nsivxdp3fo9dr7x58m8uc4ofm41ai77u8cvzr5r3s97f5otns59ubqk57xwl00xsp9w2oodt6yxcbscloyr9c2su8gca1ly6rrjufm25luhxhesxwn7bk1as9na4cbabxk";
+	cout << numDifferentIntegers(dif_num) << endl;
+
 	return 0;
 }
 
