@@ -10,7 +10,7 @@
 #include <fstream>
 #include <random>
 #include <stack>
-
+#include <memory>
 using namespace std;
 
 bool containsDuplicate(vector<int>& nums) {
@@ -1307,14 +1307,84 @@ int totalMoney(int n) {
 	return total_sum;
 }
 
-int main() {
-	TreeNode* root = new TreeNode(3);
-	root->left = new TreeNode(9);
-	root->right = new TreeNode(20);
-	root->right->left = new TreeNode(15);
-	root->right->right = new TreeNode(7);
-	cout << isBalanced(root);
+//Prototype design pattern
 
+class dog {
+public:
+	explicit dog() = default;
+	dog(string name) : name_(name) {
+		this->age_ = 1;
+	}
+	dog(string name, size_t age) : name_(name), age_(age) {}
+	
+	void set_name(string name) {
+		this->name_ = name;
+	}
+	void set_age(size_t age) {
+		this->age_ = age;
+	}
+	string* name_mutable() {
+		return &this->name_;
+	}
+	size_t* age_mutable() {
+		return &this->age_;
+	}
+	virtual dog clone() const = delete;
+
+	virtual void wow() {
+		cout << "WOW WOW" << endl;
+	}
+private:
+	string name_ = "";
+	size_t age_ = 0;
+};
+
+
+class fight_dog: public dog {
+public:
+	explicit fight_dog() = default;
+	fight_dog(string name) : name_(name) {
+		this->age_ = 1;
+		this->power_ = 1;
+	}
+	fight_dog(string name, size_t age) {
+		this->name_  = name;
+		this->age_ = age;
+		this->power_ = 1;
+	}
+	fight_dog(string name, size_t age, size_t pow) : name_(name), age_(age), power_(pow) {}
+
+	void set_pow(size_t pow) {
+		this->power_ = pow;
+	}
+	
+	size_t* power_mutable() {
+		return &this->power_;
+	}
+
+	
+
+	void wow() override {
+		cout << "HEY MOTHERFUCKER! YOU BETTER RUN!" << endl;
+	}
+
+private:
+	string name_ = "";
+	size_t age_ = 0;
+	size_t power_ = 0;
+};
+
+
+int main() {
+	vector<dog*> whoows;
+	dog* simp_dog = new dog("PLUSHA", 8);
+	fight_dog* f_dog = new fight_dog("KARKAUSHA", 10, 100);
+
+	whoows.emplace_back(simp_dog);
+	whoows.emplace_back(f_dog);
+	for (auto dog : whoows) {
+		dog->wow();
+	}
 	return 0;
 }
 
