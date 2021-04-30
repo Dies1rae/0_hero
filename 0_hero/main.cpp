@@ -1211,6 +1211,25 @@ int rangeSumBST_1(TreeNode* root, int low, int high) {
 	return ans;
 }
 //!!!!!!!!!!!!!
+ 
+int height_subtree(TreeNode* node) {
+	if (node == NULL) {
+		return 0;
+	}
+	return 1 + max(height_subtree(node->left), height_subtree(node->right));
+}
+
+bool isBalanced(TreeNode* root) {
+	if (root == nullptr) {
+		return true;
+	}
+	int l_val = height_subtree(root->left);
+	int r_val = height_subtree(root->right);
+	if (std::abs(l_val - r_val) <= 1 && isBalanced(root->left) && isBalanced(root->right)) {
+		return true;
+	}
+		return false;
+}
 
 void clear_zeros(string& num) {
 	if (num.size() == 1) {
@@ -1246,10 +1265,57 @@ int numDifferentIntegers(string word) {
 	return strings_.size();
 }
 
+
+//bad design
+bool isAnagram(string s, string t) {
+	std::sort(s.begin(), s.end());
+	std::sort(t.begin(), t.end());
+	return s == t;
+}
+//good design
+bool isAnagram_1(string s, string t) {
+	vector<int> c1(26, 0);
+	for (char c : s) {
+		c1[c - 'a'] ++;
+	}
+	for (char c : t) {
+		c1[c - 'a'] --;
+	}
+
+	for (int i = 0; i < 26; ++i) {
+		if (c1[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int totalMoney(int n) {
+	int monday_pay = 1;
+	int total_sum = 0;
+	int weekend_ctr = 0;
+	while (n > 0) {
+		total_sum += monday_pay + weekend_ctr;
+		weekend_ctr++;
+		if (weekend_ctr == 7) {
+			monday_pay += 1;
+			weekend_ctr = 0;
+		}
+		n--;
+	}
+
+	return total_sum;
+}
+
 int main() {
-	string dif_num = "xtimt5kqkz9osexe56ezwwninlyeeqsq5m99904os3ygs12t31n1et4uwzmt5kvv6teisobuxt10k33v1aaxysg4y8nsivxdp3fo9dr7x58m8uc4ofm41ai77u8cvzr5r3s97f5otns59ubqk57xwl00xsp9w2oodt6yxcbscloyr9c2su8gca1ly6rrjufm25luhxhesxwn7bk1as9na4cbabxk";
-	cout << numDifferentIntegers(dif_num) << endl;
+	TreeNode* root = new TreeNode(3);
+	root->left = new TreeNode(9);
+	root->right = new TreeNode(20);
+	root->right->left = new TreeNode(15);
+	root->right->right = new TreeNode(7);
+	cout << isBalanced(root);
 
 	return 0;
 }
 
+ 
