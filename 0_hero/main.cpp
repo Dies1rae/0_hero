@@ -1316,7 +1316,7 @@ public:
 		this->age_ = 1;
 	}
 	dog(string name, size_t age) : name_(name), age_(age) {}
-	
+
 	void set_name(string name) {
 		this->name_ = name;
 	}
@@ -1338,7 +1338,6 @@ private:
 	string name_ = "";
 	size_t age_ = 0;
 };
-
 
 class fight_dog: public dog {
 public:
@@ -1374,17 +1373,51 @@ private:
 	size_t power_ = 0;
 };
 
+int tribonacci(int n) {
+	int res = 0;
+	vector<size_t> F_(41);
+	F_[0] = 0;
+	F_[1] = 1;
+	F_[2] = 1;
+
+	for (size_t ptr = 0; ptr < F_.size(); ptr++) {
+		if (n == ptr) {
+			return F_[ptr];
+		}
+		F_[ptr + 3] = F_[ptr] + F_[ptr + 1] + F_[ptr + 2];
+	}
+	return 0;
+}
+
+int maxAscendingSum(vector<int>& nums) {
+	int max_asc = 0;
+	int max_tmp = 0;
+	if (nums.empty()) {
+		return 0;
+	}
+	if (nums.size() == 1) {
+		return nums[0];
+	}
+	for (size_t ptr = 1; ptr  < nums.size(); ptr++) {
+		if (nums[ptr] > nums[ptr - 1]) {
+			max_tmp += nums[ptr - 1];
+			if (ptr == nums.size() - 1) {
+				max_tmp += nums[ptr];
+			}
+		} else {
+			max_tmp += nums[ptr - 1];
+			max_asc = std::max(max_asc, max_tmp);
+			max_tmp = 0;
+		}
+	}
+	max_asc = std::max(max_asc, max_tmp);
+	return max_asc;
+}
 
 int main() {
-	vector<dog*> whoows;
-	dog* simp_dog = new dog("PLUSHA", 8);
-	fight_dog* f_dog = new fight_dog("KARKAUSHA", 10, 100);
+	vector<int> nums{6 };
+	cout << maxAscendingSum(nums) << endl;
 
-	whoows.emplace_back(simp_dog);
-	whoows.emplace_back(f_dog);
-	for (auto dog : whoows) {
-		dog->wow();
-	}
 	return 0;
 }
 
