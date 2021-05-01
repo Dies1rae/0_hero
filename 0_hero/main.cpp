@@ -1231,6 +1231,94 @@ bool isBalanced(TreeNode* root) {
 		return false;
 }
 
+void print_inorderBST(TreeNode* root) {
+	if (root == nullptr) {
+		return;
+	}
+	cout << root->val << " ";
+	print_inorderBST(root->right);
+}
+
+TreeNode* prevN = nullptr;
+TreeNode* headN = nullptr;
+
+void recurs_incrBST(TreeNode* root) {
+	if (root == nullptr) {
+		return;
+	}
+	recurs_incrBST(root->left);
+	TreeNode* rhs = root->right;
+	TreeNode* lhs = root->left;
+	if (headN == nullptr) {
+		headN = root;
+		root->left = nullptr;
+		prevN = root;
+	} else {
+		prevN->right = root;
+		root->left = nullptr;
+		prevN = root;
+	}
+	recurs_incrBST(rhs);
+}
+
+TreeNode* increasingBST(TreeNode* root) {
+	recurs_incrBST(root);
+	return headN;
+}
+
+TreeNode* increasingBST_1(TreeNode* root) {
+	if (root == nullptr) {
+		return nullptr;
+	}
+	//STACK LIKE A HASH (filo)
+	stack<TreeNode*> hsh;
+	//RETURNED LIST
+	TreeNode* head_ = nullptr;
+	//CURRENT POSITION
+	TreeNode* curr_ = nullptr;
+	//TMP POSITION
+	TreeNode* tmp_ = root;
+
+	//GET ALL LEFT IN A HASH
+	while (tmp_ != nullptr)	{
+		hsh.push(tmp_);
+		tmp_ = tmp_->left;
+	}
+
+	//WHILE STACK NOT EMPTY
+	while (!hsh.empty()) {
+		//GET LAST NODE 
+		TreeNode* tmp2_ = hsh.top();
+		hsh.pop();
+
+		//IF RETURN LIST == 0
+		if (head_ == nullptr) {
+			//GET NEW NODE(COPY BASICALLY ION RETURN ROOT)
+			head_ = new TreeNode(tmp2_->val);
+			//CURRENT POS IN RETURN TO HEAD
+			curr_ = head_;
+		} else {
+			//PLASE NEXT TO THE RIGHT OF THE HEAD_ ROOT
+			curr_->right = new TreeNode(tmp2_->val);
+			//REPLACE CURRENT POSITION
+			curr_ = curr_->right;
+		}
+		//IF WE GOT SOMETHING IN  RIGHT
+		if (tmp2_->right != nullptr) {
+			//PUSH IT TO HASH FIRST
+			hsh.push(tmp2_->right);
+			//AND ITERATE TO RIGHT
+			tmp2_ = tmp2_->right;
+			//AND WHILE LEFT IS HEAR PUSH IT TO HEAD
+			while (tmp2_->left != nullptr) {
+				hsh.push(tmp2_->left);
+				tmp2_ = tmp2_->left;
+			}
+		}
+	}
+	return head_;
+}
+
 void clear_zeros(string& num) {
 	if (num.size() == 1) {
 		return;
@@ -1414,9 +1502,20 @@ int maxAscendingSum(vector<int>& nums) {
 	return max_asc;
 }
 
+
+
 int main() {
-	vector<int> nums{6 };
-	cout << maxAscendingSum(nums) << endl;
+	TreeNode* root = new TreeNode(5);
+	root->left = new TreeNode(3);
+	root->right = new TreeNode(6);
+	root->left->left = new TreeNode(2);
+	root->left->right = new TreeNode(4);
+	root->left->left->left = new TreeNode(1);
+	root->right->right = new TreeNode(8);
+	root->right->right->right = new TreeNode(9);
+	root->right->right->left = new TreeNode(7);
+	TreeNode* test = increasingBST_1(root);
+	print_inorderBST(test);
 
 	return 0;
 }
