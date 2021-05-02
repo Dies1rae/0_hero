@@ -1503,19 +1503,22 @@ int maxAscendingSum(vector<int>& nums) {
 }
 
 
+int sumBase(int n, int k) {
+	int converted = 0;
+	vector<int> res;
+	while (n > 0) {
+		converted = n % k;
+		res.push_back(converted);
+		n /= k;
+	}
+	converted = 0;
+	converted = accumulate(res.begin(), res.end(), converted);
+	return converted;
+}
+
 
 int main() {
-	TreeNode* root = new TreeNode(5);
-	root->left = new TreeNode(3);
-	root->right = new TreeNode(6);
-	root->left->left = new TreeNode(2);
-	root->left->right = new TreeNode(4);
-	root->left->left->left = new TreeNode(1);
-	root->right->right = new TreeNode(8);
-	root->right->right->right = new TreeNode(9);
-	root->right->right->left = new TreeNode(7);
-	TreeNode* test = increasingBST_1(root);
-	print_inorderBST(test);
+	cout << sumBase(34, 6) << endl;
 
 	return 0;
 }
