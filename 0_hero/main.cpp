@@ -1516,9 +1516,29 @@ int sumBase(int n, int k) {
 	return converted;
 }
 
+int getMinDistance(vector<int>& nums, int target, int start) {
+	int min_dist = INT_MAX;
+	for (size_t ptr_b = 0, ptr_e = nums.size() - 1; ptr_b < nums.size(); ptr_b++, ptr_e--) {
+		if (nums[ptr_b] == target) {
+			int tmp = ptr_b - start;
+			if ((std::abs(tmp)) < min_dist) {
+				min_dist = std::abs(tmp);
+			}
+		} else if (nums[ptr_e] == target) {
+			int tmp = ptr_e - start;
+			if ((std::abs(tmp)) < min_dist) {
+				min_dist = std::abs(tmp);
+			}
+		}
+	}
+	return min_dist;
+}
 
 int main() {
-	cout << sumBase(34, 6) << endl;
+	vector<int>nums{ 1,1,1,1,1,1,1,1,1,1 };
+	int target = 1, start = 0;
+
+	cout << getMinDistance(nums, target, start) << endl;
 
 	return 0;
 }
