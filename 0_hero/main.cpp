@@ -1571,8 +1571,33 @@ int hammingWeight(uint32_t n) {
 	return count_number(n);
 }
 
+int findTheWinner(int n, int k) {
+	vector<int> res;
+	for (size_t ptr = 0; ptr < n; ptr++) {
+		res.push_back(ptr + 1);
+	}
+	int ptr = 0;
+	int size = res.size();
+	while (size != 1) {
+		if ((ptr + (k - 1)) < size) {
+			ptr += (k - 1);
+			res.erase(res.begin() + ptr);
+		} else {
+			ptr = (ptr + (k - 1)) - res.size();
+			while (ptr >= res.size()) {
+				ptr -= res.size();
+			}
+			
+			res.erase(res.begin() + ptr);
+		}
+		size = res.size();
+	}
+
+	return res[0];
+}
+
 int main() {
-	cout << hammingWeight(00000000000000000000000010000000) << endl;
+  	cout << findTheWinner(5, 3) << endl;
 
 	return 0;
 }
