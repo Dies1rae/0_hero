@@ -1534,11 +1534,45 @@ int getMinDistance(vector<int>& nums, int target, int start) {
 	return min_dist;
 }
 
-int main() {
-	vector<int>nums{ 1,1,1,1,1,1,1,1,1,1 };
-	int target = 1, start = 0;
 
-	cout << getMinDistance(nums, target, start) << endl;
+
+bool count_number_set(unsigned n) {
+	int ctr = 0;
+	unsigned i;
+	for (i = 1 << 31; i > 0; i = i / 2) {
+		(n & i) ? ctr += 1 : ctr += 0;
+	}
+	if (ctr == 2 || ctr == 3 || ctr == 5 || ctr == 7 || ctr == 11 || ctr == 13 || ctr == 17 || ctr == 19) {
+		return true;
+	}
+	return false;
+}
+
+int countPrimeSetBits(int L, int R) {
+	int res = 0;
+	for (; L <= R; L++) {
+		if (count_number_set(L)) {
+			res++;
+		}
+	}
+	return res;
+}
+
+int count_number(uint32_t n) {
+	size_t ctr = 0;
+	unsigned i;
+	for (i = 1 << 31; i > 0; i = i / 2) {
+		(n & i) ? ctr += 1 : ctr += 0;
+	}
+	return ctr;
+}
+
+int hammingWeight(uint32_t n) {
+	return count_number(n);
+}
+
+int main() {
+	cout << hammingWeight(00000000000000000000000010000000) << endl;
 
 	return 0;
 }
