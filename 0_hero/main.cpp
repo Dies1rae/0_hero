@@ -1665,10 +1665,27 @@ string reformatDate(string date) {
 	return res;
 }
 
-int main() {
-	string date = "26th May 1960";
-	cout << reformatDate(date) << endl;
+int maxIceCream(vector<int>& costs, int coins) {
+	std::sort(costs.begin(), costs.end());
+	if (coins < costs[0]) {
+		return 0;
+	}
+	int res = 0;
+	auto ice_ptr = costs.begin();
+	while (coins >= *ice_ptr) {
+		coins -= *ice_ptr;
+		res++;
+		if (ice_ptr + 1 == costs.end()) {
+			break;
+		}
+		ice_ptr++;
+	}
+	return res;
+}
 
+int main() {
+	vector<int>ice_shops { 1,3,2,4,1,50,25,16,2,5,6 };
+	cout << maxIceCream(ice_shops, 70) << endl;
 	return 0;
 }
 
