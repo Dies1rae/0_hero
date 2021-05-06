@@ -1596,8 +1596,78 @@ int findTheWinner(int n, int k) {
 	return res[0];
 }
 
+int find_emerald(const string& J, const string& S) {
+	int res = 0;
+	for (const auto& s : S) {
+		if (J.find(s) != std::string::npos) {
+			res++;
+		}
+	}
+	return res;
+}
+
+bool check(vector<int>& nums) {
+	int x = 0;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if (nums[ptr] > nums[ptr + 1]) {
+			x = ptr + 1;
+		}
+	}
+	if (x == 0) {
+		return true;
+	}
+
+	vector<int> B = nums;
+	std::sort(B.begin(), B.end());
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		if (B[ptr] != nums[(ptr + x) % nums.size()]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+std::vector<std::string> SplitIntoWords(const std::string_view& text) {
+	std::vector<std::string> words;
+	std::string word;
+	for (const char c : text) {
+		if (c == ' ') {
+			if (!word.empty()) {
+				words.push_back(word);
+				word.clear();
+			}
+		}
+		else {
+			word += c;
+		}
+	}
+	if (!word.empty()) {
+		words.push_back(word);
+	}
+	return words;
+}
+
+string reformatDate(string date) {
+	string res;
+	map <string, string> month { {"Jan", "01"}, { "Feb", "02" }, { "Mar", "03" }, { "Apr", "04" }, { "May", "05" }, { "Jun", "06" }, { "Jul", "07" }, { "Aug", "08" },
+		{ "Sep", "09" }, { "Oct", "10" }, { "Nov", "11" }, { "Dec", "12" }};
+	vector<string> date_parsed = SplitIntoWords(date);
+
+	res += date_parsed[2] + '-';
+	res += month.at(date_parsed[1]) + '-';
+
+	string day_tmp = date_parsed[0].substr(0, date_parsed[0].size() - 2);
+	if (day_tmp.size() == 1) {
+		day_tmp.insert(0, "0");
+	}
+	res += day_tmp;
+	return res;
+}
+
 int main() {
-  	cout << findTheWinner(5, 3) << endl;
+	string date = "26th May 1960";
+	cout << reformatDate(date) << endl;
 
 	return 0;
 }
