@@ -10,7 +10,7 @@
 #include <fstream>
 #include <random>
 #include <stack>
-
+#include <memory>
 using namespace std;
 
 bool containsDuplicate(vector<int>& nums) {
@@ -1211,6 +1211,113 @@ int rangeSumBST_1(TreeNode* root, int low, int high) {
 	return ans;
 }
 //!!!!!!!!!!!!!
+ 
+int height_subtree(TreeNode* node) {
+	if (node == NULL) {
+		return 0;
+	}
+	return 1 + max(height_subtree(node->left), height_subtree(node->right));
+}
+
+bool isBalanced(TreeNode* root) {
+	if (root == nullptr) {
+		return true;
+	}
+	int l_val = height_subtree(root->left);
+	int r_val = height_subtree(root->right);
+	if (std::abs(l_val - r_val) <= 1 && isBalanced(root->left) && isBalanced(root->right)) {
+		return true;
+	}
+		return false;
+}
+
+void print_inorderBST(TreeNode* root) {
+	if (root == nullptr) {
+		return;
+	}
+	cout << root->val << " ";
+	print_inorderBST(root->right);
+}
+
+TreeNode* prevN = nullptr;
+TreeNode* headN = nullptr;
+
+void recurs_incrBST(TreeNode* root) {
+	if (root == nullptr) {
+		return;
+	}
+	recurs_incrBST(root->left);
+	TreeNode* rhs = root->right;
+	TreeNode* lhs = root->left;
+	if (headN == nullptr) {
+		headN = root;
+		root->left = nullptr;
+		prevN = root;
+	} else {
+		prevN->right = root;
+		root->left = nullptr;
+		prevN = root;
+	}
+	recurs_incrBST(rhs);
+}
+
+TreeNode* increasingBST(TreeNode* root) {
+	recurs_incrBST(root);
+	return headN;
+}
+
+TreeNode* increasingBST_1(TreeNode* root) {
+	if (root == nullptr) {
+		return nullptr;
+	}
+	//STACK LIKE A HASH (filo)
+	stack<TreeNode*> hsh;
+	//RETURNED LIST
+	TreeNode* head_ = nullptr;
+	//CURRENT POSITION
+	TreeNode* curr_ = nullptr;
+	//TMP POSITION
+	TreeNode* tmp_ = root;
+
+	//GET ALL LEFT IN A HASH
+	while (tmp_ != nullptr)	{
+		hsh.push(tmp_);
+		tmp_ = tmp_->left;
+	}
+
+	//WHILE STACK NOT EMPTY
+	while (!hsh.empty()) {
+		//GET LAST NODE 
+		TreeNode* tmp2_ = hsh.top();
+		hsh.pop();
+
+		//IF RETURN LIST == 0
+		if (head_ == nullptr) {
+			//GET NEW NODE(COPY BASICALLY ION RETURN ROOT)
+			head_ = new TreeNode(tmp2_->val);
+			//CURRENT POS IN RETURN TO HEAD
+			curr_ = head_;
+		} else {
+			//PLASE NEXT TO THE RIGHT OF THE HEAD_ ROOT
+			curr_->right = new TreeNode(tmp2_->val);
+			//REPLACE CURRENT POSITION
+			curr_ = curr_->right;
+		}
+		//IF WE GOT SOMETHING IN  RIGHT
+		if (tmp2_->right != nullptr) {
+			//PUSH IT TO HASH FIRST
+			hsh.push(tmp2_->right);
+			//AND ITERATE TO RIGHT
+			tmp2_ = tmp2_->right;
+			//AND WHILE LEFT IS HEAR PUSH IT TO HEAD
+			while (tmp2_->left != nullptr) {
+				hsh.push(tmp2_->left);
+				tmp2_ = tmp2_->left;
+			}
+		}
+	}
+	return head_;
+}
 
 void clear_zeros(string& num) {
 	if (num.size() == 1) {
@@ -1246,18 +1353,341 @@ int numDifferentIntegers(string word) {
 	return strings_.size();
 }
 
-string replaceDigits(string s) {
-	for (size_t ptr = 1; ptr < s.size(); ptr+=2) {
-		s[ptr] = s[ptr - 1] + (s[ptr] - 48);
+
+//bad design
+bool isAnagram(string s, string t) {
+	std::sort(s.begin(), s.end());
+	std::sort(t.begin(), t.end());
+	return s == t;
+}
+//good design
+bool isAnagram_1(string s, string t) {
+	vector<int> c1(26, 0);
+	for (char c : s) {
+		c1[c - 'a'] ++;
 	}
-	return s;
+	for (char c : t) {
+		c1[c - 'a'] --;
+	}
+
+	for (int i = 0; i < 26; ++i) {
+		if (c1[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int totalMoney(int n) {
+	int monday_pay = 1;
+	int total_sum = 0;
+	int weekend_ctr = 0;
+	while (n > 0) {
+		total_sum += monday_pay + weekend_ctr;
+		weekend_ctr++;
+		if (weekend_ctr == 7) {
+			monday_pay += 1;
+			weekend_ctr = 0;
+		}
+		n--;
+	}
+
+	return total_sum;
+}
+
+//Prototype design pattern
+
+class dog {
+public:
+	explicit dog() = default;
+	dog(string name) : name_(name) {
+		this->age_ = 1;
+	}
+	dog(string name, size_t age) : name_(name), age_(age) {}
+
+	void set_name(string name) {
+		this->name_ = name;
+	}
+	void set_age(size_t age) {
+		this->age_ = age;
+	}
+	string* name_mutable() {
+		return &this->name_;
+	}
+	size_t* age_mutable() {
+		return &this->age_;
+	}
+	virtual dog clone() const = delete;
+
+	virtual void wow() {
+		cout << "WOW WOW" << endl;
+	}
+private:
+	string name_ = "";
+	size_t age_ = 0;
+};
+
+class fight_dog: public dog {
+public:
+	explicit fight_dog() = default;
+	fight_dog(string name) : name_(name) {
+		this->age_ = 1;
+		this->power_ = 1;
+	}
+	fight_dog(string name, size_t age) {
+		this->name_  = name;
+		this->age_ = age;
+		this->power_ = 1;
+	}
+	fight_dog(string name, size_t age, size_t pow) : name_(name), age_(age), power_(pow) {}
+
+	void set_pow(size_t pow) {
+		this->power_ = pow;
+	}
+	
+	size_t* power_mutable() {
+		return &this->power_;
+	}
+
+	
+
+	void wow() override {
+		cout << "HEY MOTHERFUCKER! YOU BETTER RUN!" << endl;
+	}
+
+private:
+	string name_ = "";
+	size_t age_ = 0;
+	size_t power_ = 0;
+};
+
+int tribonacci(int n) {
+	int res = 0;
+	vector<size_t> F_(41);
+	F_[0] = 0;
+	F_[1] = 1;
+	F_[2] = 1;
+
+	for (size_t ptr = 0; ptr < F_.size(); ptr++) {
+		if (n == ptr) {
+			return F_[ptr];
+		}
+		F_[ptr + 3] = F_[ptr] + F_[ptr + 1] + F_[ptr + 2];
+	}
+	return 0;
+}
+
+int maxAscendingSum(vector<int>& nums) {
+	int max_asc = 0;
+	int max_tmp = 0;
+	if (nums.empty()) {
+		return 0;
+	}
+	if (nums.size() == 1) {
+		return nums[0];
+	}
+	for (size_t ptr = 1; ptr  < nums.size(); ptr++) {
+		if (nums[ptr] > nums[ptr - 1]) {
+			max_tmp += nums[ptr - 1];
+			if (ptr == nums.size() - 1) {
+				max_tmp += nums[ptr];
+			}
+		} else {
+			max_tmp += nums[ptr - 1];
+			max_asc = std::max(max_asc, max_tmp);
+			max_tmp = 0;
+		}
+	}
+	max_asc = std::max(max_asc, max_tmp);
+	return max_asc;
 }
 
 
+int sumBase(int n, int k) {
+	int converted = 0;
+	vector<int> res;
+	while (n > 0) {
+		converted = n % k;
+		res.push_back(converted);
+		n /= k;
+	}
+	converted = 0;
+	converted = accumulate(res.begin(), res.end(), converted);
+	return converted;
+}
+
+int getMinDistance(vector<int>& nums, int target, int start) {
+	int min_dist = INT_MAX;
+	for (size_t ptr_b = 0, ptr_e = nums.size() - 1; ptr_b < nums.size(); ptr_b++, ptr_e--) {
+		if (nums[ptr_b] == target) {
+			int tmp = ptr_b - start;
+			if ((std::abs(tmp)) < min_dist) {
+				min_dist = std::abs(tmp);
+			}
+		} else if (nums[ptr_e] == target) {
+			int tmp = ptr_e - start;
+			if ((std::abs(tmp)) < min_dist) {
+				min_dist = std::abs(tmp);
+			}
+		}
+	}
+	return min_dist;
+}
+
+
+
+bool count_number_set(unsigned n) {
+	int ctr = 0;
+	unsigned i;
+	for (i = 1 << 31; i > 0; i = i / 2) {
+		(n & i) ? ctr += 1 : ctr += 0;
+	}
+	if (ctr == 2 || ctr == 3 || ctr == 5 || ctr == 7 || ctr == 11 || ctr == 13 || ctr == 17 || ctr == 19) {
+		return true;
+	}
+	return false;
+}
+
+int countPrimeSetBits(int L, int R) {
+	int res = 0;
+	for (; L <= R; L++) {
+		if (count_number_set(L)) {
+			res++;
+		}
+	}
+	return res;
+}
+
+int count_number(uint32_t n) {
+	size_t ctr = 0;
+	unsigned i;
+	for (i = 1 << 31; i > 0; i = i / 2) {
+		(n & i) ? ctr += 1 : ctr += 0;
+	}
+	return ctr;
+}
+
+int hammingWeight(uint32_t n) {
+	return count_number(n);
+}
+
+int findTheWinner(int n, int k) {
+	vector<int> res;
+	for (size_t ptr = 0; ptr < n; ptr++) {
+		res.push_back(ptr + 1);
+	}
+	int ptr = 0;
+	int size = res.size();
+	while (size != 1) {
+		if ((ptr + (k - 1)) < size) {
+			ptr += (k - 1);
+			res.erase(res.begin() + ptr);
+		} else {
+			ptr = (ptr + (k - 1)) - res.size();
+			while (ptr >= res.size()) {
+				ptr -= res.size();
+			}
+			
+			res.erase(res.begin() + ptr);
+		}
+		size = res.size();
+	}
+
+	return res[0];
+}
+
+int find_emerald(const string& J, const string& S) {
+	int res = 0;
+	for (const auto& s : S) {
+		if (J.find(s) != std::string::npos) {
+			res++;
+		}
+	}
+	return res;
+}
+
+bool check(vector<int>& nums) {
+	int x = 0;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if (nums[ptr] > nums[ptr + 1]) {
+			x = ptr + 1;
+		}
+	}
+	if (x == 0) {
+		return true;
+	}
+
+	vector<int> B = nums;
+	std::sort(B.begin(), B.end());
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		if (B[ptr] != nums[(ptr + x) % nums.size()]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+std::vector<std::string> SplitIntoWords(const std::string_view& text) {
+	std::vector<std::string> words;
+	std::string word;
+	for (const char c : text) {
+		if (c == ' ') {
+			if (!word.empty()) {
+				words.push_back(word);
+				word.clear();
+			}
+		}
+		else {
+			word += c;
+		}
+	}
+	if (!word.empty()) {
+		words.push_back(word);
+	}
+	return words;
+}
+
+string reformatDate(string date) {
+	string res;
+	map <string, string> month { {"Jan", "01"}, { "Feb", "02" }, { "Mar", "03" }, { "Apr", "04" }, { "May", "05" }, { "Jun", "06" }, { "Jul", "07" }, { "Aug", "08" },
+		{ "Sep", "09" }, { "Oct", "10" }, { "Nov", "11" }, { "Dec", "12" }};
+	vector<string> date_parsed = SplitIntoWords(date);
+
+	res += date_parsed[2] + '-';
+	res += month.at(date_parsed[1]) + '-';
+
+	string day_tmp = date_parsed[0].substr(0, date_parsed[0].size() - 2);
+	if (day_tmp.size() == 1) {
+		day_tmp.insert(0, "0");
+	}
+	res += day_tmp;
+	return res;
+}
+
+int maxIceCream(vector<int>& costs, int coins) {
+	std::sort(costs.begin(), costs.end());
+	if (coins < costs[0]) {
+		return 0;
+	}
+	int res = 0;
+	auto ice_ptr = costs.begin();
+	while (coins >= *ice_ptr) {
+		coins -= *ice_ptr;
+		res++;
+		if (ice_ptr + 1 == costs.end()) {
+			break;
+		}
+		ice_ptr++;
+	}
+	return res;
+}
+
 int main() {
-	string dif_num = "a1b2c3d4e";
-	cout << replaceDigits(dif_num) << endl;
+	string dif_num = "xtimt5kqkz9osexe56ezwwninlyeeqsq5m99904os3ygs12t31n1et4uwzmt5kvv6teisobuxt10k33v1aaxysg4y8nsivxdp3fo9dr7x58m8uc4ofm41ai77u8cvzr5r3s97f5otns59ubqk57xwl00xsp9w2oodt6yxcbscloyr9c2su8gca1ly6rrjufm25luhxhesxwn7bk1as9na4cbabxk";
+	cout << numDifferentIntegers(dif_num) << endl;
 
 	return 0;
 }
 
+ 
