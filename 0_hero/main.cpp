@@ -1246,9 +1246,17 @@ int numDifferentIntegers(string word) {
 	return strings_.size();
 }
 
+string replaceDigits(string s) {
+	for (size_t ptr = 1; ptr < s.size(); ptr+=2) {
+		s[ptr] = s[ptr - 1] + (s[ptr] - 48);
+	}
+	return s;
+}
+
+
 int main() {
-	string dif_num = "xtimt5kqkz9osexe56ezwwninlyeeqsq5m99904os3ygs12t31n1et4uwzmt5kvv6teisobuxt10k33v1aaxysg4y8nsivxdp3fo9dr7x58m8uc4ofm41ai77u8cvzr5r3s97f5otns59ubqk57xwl00xsp9w2oodt6yxcbscloyr9c2su8gca1ly6rrjufm25luhxhesxwn7bk1as9na4cbabxk";
-	cout << numDifferentIntegers(dif_num) << endl;
+	string dif_num = "a1b2c3d4e";
+	cout << replaceDigits(dif_num) << endl;
 
 	return 0;
 }
