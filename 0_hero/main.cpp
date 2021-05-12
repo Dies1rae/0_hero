@@ -10,6 +10,7 @@
 #include <fstream>
 #include <random>
 #include <stack>
+#include <iterator>
 #include <memory>
 using namespace std;
 
@@ -1704,14 +1705,34 @@ vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
 	return res;
 }
 
-int main() {
-	vector<int> n1{2,4};
-	vector<int> n2{ 1,2,3,4 };
-
-	for (const auto& n : nextGreaterElement(n1, n2)) {
-		cout << n << ' ';
+bool kLengthApart(vector<int>& nums, int k) {
+	if (k == 0) {
+		return true;
 	}
-	cout << endl;
+	size_t pos_first = 0;
+	size_t pos_end = 0;
+	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
+		if (nums[ptr] == 1) {
+			pos_first = ptr;
+			for (size_t ptr2 = ptr + 1; ptr2 < nums.size(); ptr2++) {
+				if (nums[ptr2] == 1) {
+					pos_end = ptr2;
+					break;
+				}
+			}
+		}
+		if ((pos_end - pos_first) <= k && pos_first < pos_end) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int main() {
+	vector<int> n1{ 1,0,1 };
+	int k = 2;
+
+	cout << kLengthApart(n1, k) << endl;
 	return 0;
 }
 
