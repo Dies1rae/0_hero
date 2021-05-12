@@ -1683,10 +1683,35 @@ int maxIceCream(vector<int>& costs, int coins) {
 	return res;
 }
 
-int main() {
-	string dif_num = "xtimt5kqkz9osexe56ezwwninlyeeqsq5m99904os3ygs12t31n1et4uwzmt5kvv6teisobuxt10k33v1aaxysg4y8nsivxdp3fo9dr7x58m8uc4ofm41ai77u8cvzr5r3s97f5otns59ubqk57xwl00xsp9w2oodt6yxcbscloyr9c2su8gca1ly6rrjufm25luhxhesxwn7bk1as9na4cbabxk";
-	cout << numDifferentIntegers(dif_num) << endl;
+vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+	vector<int>res;
+	for (auto const& n : nums1) {
+		auto n2 = std::find(nums2.begin(), nums2.end(), n);
+		if (n2 == nums2.end()) {
+			res.push_back(-1);
+		} else {
+			for (; n2 != nums2.end(); n2++) {
+				if (n < *n2) {
+					res.push_back(*n2);
+					break;
+				}
+			}
+			if (n2 == nums2.end()) {
+				res.push_back(-1);
+			}
+		}
+	}
+	return res;
+}
 
+int main() {
+	vector<int> n1{2,4};
+	vector<int> n2{ 1,2,3,4 };
+
+	for (const auto& n : nextGreaterElement(n1, n2)) {
+		cout << n << ' ';
+	}
+	cout << endl;
 	return 0;
 }
 
