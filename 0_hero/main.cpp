@@ -1728,11 +1728,27 @@ bool kLengthApart(vector<int>& nums, int k) {
 	return true;
 }
 
-int main() {
-	vector<int> n1{ 1,0,1 };
-	int k = 2;
+bool isSubsequence(string s, string t) {
+	if (s.empty()) {
+		return false;
+	}
+	size_t len_s = s.size();
+	size_t ptr = 0;
+	for (size_t ptr1 = 0; ptr1 < t.size(); ptr1 ++) {
+		if (t[ptr1] == s[ptr]) {
+			ptr++;
+		}
+		if (ptr == len_s) {
+			return true;
+		}
+	}
+	return false;
+}
 
-	cout << kLengthApart(n1, k) << endl;
+int main() {
+	string vs = "leeeeetcode";
+	string vst = "bbaaaa";
+	cout << isSubsequence(vs, vst) << endl;
 	return 0;
 }
 
