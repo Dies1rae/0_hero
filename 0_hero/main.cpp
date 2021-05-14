@@ -1745,10 +1745,22 @@ bool isSubsequence(string s, string t) {
 	return false;
 }
 
+vector<int> shuffle(vector<int>& nums, int n) {
+	vector<int> res;
+	for (size_t ptr = 0, ptr_mid = n; ptr < n; ptr++, ptr_mid++) {
+		res.push_back(nums[ptr]);
+		res.push_back(nums[ptr_mid]);
+	}
+	return res;
+}
+
 int main() {
-	string vs = "leeeeetcode";
-	string vst = "bbaaaa";
-	cout << isSubsequence(vs, vst) << endl;
+	vector<int> nums{ 1, 1, 2, 2 };
+	int n = 2;
+	for (const auto& ptr : shuffle(nums, n)) {
+		cout << ptr << ' ';
+	}
+	cout << endl;
 	return 0;
 }
 
