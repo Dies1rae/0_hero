@@ -1754,12 +1754,23 @@ vector<int> shuffle(vector<int>& nums, int n) {
 	return res;
 }
 
-int main() {
-	vector<int> nums{ 1, 1, 2, 2 };
-	int n = 2;
-	for (const auto& ptr : shuffle(nums, n)) {
-		cout << ptr << ' ';
+int secondHighest(string s) {
+	set<int> res;
+	for (const auto& el : s) {
+		if (std::isdigit(el)) {
+			res.insert(el - 48);
+		}
 	}
+	if (res.size() == 1 || res.empty()) {
+		return -1;
+	}
+
+	return *--(--res.end());
+}
+
+int main() {
+	string s = "ck077";
+	cout << secondHighest(s) << endl;
 	cout << endl;
 	return 0;
 }
