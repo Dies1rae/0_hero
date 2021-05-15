@@ -1745,10 +1745,33 @@ bool isSubsequence(string s, string t) {
 	return false;
 }
 
+vector<int> shuffle(vector<int>& nums, int n) {
+	vector<int> res;
+	for (size_t ptr = 0, ptr_mid = n; ptr < n; ptr++, ptr_mid++) {
+		res.push_back(nums[ptr]);
+		res.push_back(nums[ptr_mid]);
+	}
+	return res;
+}
+
+int secondHighest(string s) {
+	set<int> res;
+	for (const auto& el : s) {
+		if (std::isdigit(el)) {
+			res.insert(el - 48);
+		}
+	}
+	if (res.size() == 1 || res.empty()) {
+		return -1;
+	}
+
+	return *--(--res.end());
+}
+
 int main() {
-	string vs = "leeeeetcode";
-	string vst = "bbaaaa";
-	cout << isSubsequence(vs, vst) << endl;
+	string s = "ck077";
+	cout << secondHighest(s) << endl;
+	cout << endl;
 	return 0;
 }
 
