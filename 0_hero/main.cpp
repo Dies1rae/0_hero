@@ -1625,7 +1625,7 @@ bool check(vector<int>& nums) {
 			return false;
 		}
 	}
-	return true
+	return true;
 }
 
 
@@ -1768,9 +1768,72 @@ int secondHighest(string s) {
 	return *--(--res.end());
 }
 
+void sort_clean(std::vector<std::string>& words) {
+	std::sort(words.begin(), words.end(), [](std::string& A, std::string& B) {
+		return A[A.size() - 1] < B[B.size() - 1];
+		});
+	for (auto& w : words) {
+		w = w.substr(0, w.size() - 1);
+	}
+}
+
+std::vector<std::string> SplitIntoWords_1(const std::string_view& text) {
+	std::vector<std::string> words;
+	std::string word;
+	for (const char c : text) {
+		if (c == ' ') {
+			if (!word.empty()) {
+				words.push_back(word);
+				word.clear();
+			}
+		}
+		else {
+			word += c;
+		}
+	}
+	if (!word.empty()) {
+		words.push_back(word);
+	}
+	sort_clean(words);
+	return words;
+}
+
+string sortSentence(string s) {
+	std::string res;
+	std::vector<std::string> words = SplitIntoWords_1(s);
+	
+	for (auto& w : words) {
+		res += w + ' ';
+	}
+
+	return res.substr(0, res.size() - 1);
+}
+
+int arraySign(vector<int>& nums) {
+	if (nums.empty()) {
+		return 0;
+	}
+	for (auto& w : nums) {
+		if (w < 0) {
+			w = -1;
+		}
+		if (w > 0) {
+			w = 1;
+		}
+	}
+	int res = std::accumulate(begin(nums), end(nums), 1, std::multiplies<int>());
+	if (res > 0) {
+		return 1;
+	}
+	if (res == 0) {
+		return 0;
+	}
+	return -1;
+}
+
 int main() {
-	string s = "ck077";
-	cout << secondHighest(s) << endl;
+	std::vector<int> arr{ 41,65,14,80,20,10,55,58,24,56,28,86,96,10,3,84,4,41,13,32,42,43,83,78,82,70,15,-41 };
+	cout << arraySign(arr) << endl;
 	cout << endl;
 	return 0;
 }
