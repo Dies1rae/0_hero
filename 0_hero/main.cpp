@@ -1625,7 +1625,7 @@ bool check(vector<int>& nums) {
 			return false;
 		}
 	}
-	return true;
+	return true
 }
 
 
