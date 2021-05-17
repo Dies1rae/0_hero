@@ -1831,9 +1831,30 @@ int arraySign(vector<int>& nums) {
 	return -1;
 }
 
+bool rotateString(string s, string goal) {
+	if (s.empty() && goal.empty()) {
+		return true;
+	}
+	if (s.empty()) {
+		return false;
+	}
+
+	size_t s_s = s.size();
+	while (s_s) {
+		char f = s[0];
+		s = s.substr(1);
+		s += f;
+		if (s == goal) {
+			return true;
+		}
+		s_s--;
+	}
+	return false;
+}
+
 int main() {
-	std::vector<int> arr{ 41,65,14,80,20,10,55,58,24,56,28,86,96,10,3,84,4,41,13,32,42,43,83,78,82,70,15,-41 };
-	cout << arraySign(arr) << endl;
+	string s = "abcde", goal = "abced";
+	cout << rotateString(s, goal) << endl;
 	cout << endl;
 	return 0;
 }
