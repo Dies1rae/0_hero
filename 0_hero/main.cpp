@@ -1852,10 +1852,41 @@ bool rotateString(string s, string goal) {
 	return false;
 }
 
+TreeNode* searchBST(TreeNode* root, int val) {
+	if (root == nullptr) {
+		return nullptr;
+	}
+	TreeNode* quoe = root;
+	while (quoe) {
+		if (quoe->val > val) {
+			if (!quoe->left) {
+				return nullptr;
+			}
+			quoe = quoe->left;
+		}
+		if (quoe->val < val) {
+			if (!quoe->right) {
+				return nullptr;
+			}
+			quoe = quoe->right;
+		}
+		if (quoe->val == val) {
+			return quoe;
+		}
+	}
+
+	return nullptr;
+}
+
 int main() {
-	string s = "abcde", goal = "abced";
-	cout << rotateString(s, goal) << endl;
-	cout << endl;
+	TreeNode* root = new TreeNode(4);
+	root->right = new TreeNode(7);
+	root->left = new TreeNode(2);
+	root->left->right = new TreeNode(3);
+	root->left->left = new TreeNode(1);
+
+	print_tree(searchBST(root, 5));
+
 	return 0;
 }
 
