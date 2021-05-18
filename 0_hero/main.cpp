@@ -1878,14 +1878,53 @@ TreeNode* searchBST(TreeNode* root, int val) {
 	return nullptr;
 }
 
-int main() {
-	TreeNode* root = new TreeNode(4);
-	root->right = new TreeNode(7);
-	root->left = new TreeNode(2);
-	root->left->right = new TreeNode(3);
-	root->left->left = new TreeNode(1);
+/*
+ListNode* reverseList(ListNode* head) {
+	if (head == nullptr) {
+		return {};
+	}
+	ListNode* tmp = head;
+	while (head) {
+		if (head->next && !head->next->next) {
+			reversed->next = head->next;
+		}
+	}
 
-	print_tree(searchBST(root, 5));
+	return reversed;
+}*/
+
+bool canConstruct(string ransomNote, string magazine) {
+	map<char, int> rans;
+	map<char, int> mag;
+	for (const auto& c : ransomNote) {
+		rans[c]++;
+	}
+	for (const auto& c : magazine) {
+		mag[c]++;
+	}
+	for (const auto& [ch, ctr] : rans) {
+		if (mag.find(ch) == mag.end()) {
+			return false;
+		}
+		if (ctr > mag.at(ch)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+int main() {
+	/*
+	ListNode* root = new ListNode(1);
+	root->next = new ListNode(2);
+	root->next->next = new ListNode(3);
+	root->next->next->next = new ListNode(4);
+	root->next->next->next->next = new ListNode(5);*/
+
+	string rn = "bg", m = "efjbdfbdgfjhhaiigfhbaejahgfbbgbjagbddfgdiaigdadhcfcj";
+
+	cout << canConstruct(rn, m) << endl;
 
 	return 0;
 }
