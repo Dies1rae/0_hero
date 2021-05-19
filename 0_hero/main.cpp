@@ -1878,21 +1878,6 @@ TreeNode* searchBST(TreeNode* root, int val) {
 	return nullptr;
 }
 
-/*
-ListNode* reverseList(ListNode* head) {
-	if (head == nullptr) {
-		return {};
-	}
-	ListNode* tmp = head;
-	while (head) {
-		if (head->next && !head->next->next) {
-			reversed->next = head->next;
-		}
-	}
-
-	return reversed;
-}*/
-
 bool canConstruct(string ransomNote, string magazine) {
 	map<char, int> rans;
 	map<char, int> mag;
@@ -1913,18 +1898,60 @@ bool canConstruct(string ransomNote, string magazine) {
 	return true;
 }
 
+vector<vector<int>> largeGroupPositions(string s) {
+	vector<vector<int>> res;
+	int ctr = 0;
+	int p_beg = 0;
+	int p_end = 0;
+
+	for (size_t ptr = 0; ptr + 1 < s.size(); ptr++) {
+		if (s[ptr] == s[ptr + 1]) {
+			p_beg = ptr;
+			while (s[ptr] == s[ptr + 1]) {
+				ptr++;
+			}
+			p_end = ptr;
+		}
+
+
+		if ((p_end - p_beg) + 1 >= 3) {
+			res.push_back({ p_beg, p_end });
+			p_beg = 0;
+			p_end = 0;
+		}
+	}
+
+	return res;
+}
+
+
+
+ListNode* reverseList(ListNode* head) {
+	if (head == nullptr) {
+		return {};
+	}
+	ListNode* prev_ = nullptr;
+	ListNode* curr_ = head;
+	ListNode* next_ = nullptr;
+	while (curr_ != nullptr) {
+		next_ = curr_->next;
+		curr_->next = prev_;
+		prev_ = curr_;
+		curr_ = next_;
+
+	}
+
+	return head;
+}
 
 int main() {
-	/*
+	
 	ListNode* root = new ListNode(1);
 	root->next = new ListNode(2);
 	root->next->next = new ListNode(3);
 	root->next->next->next = new ListNode(4);
-	root->next->next->next->next = new ListNode(5);*/
+	root->next->next->next->next = new ListNode(5);
 
-	string rn = "bg", m = "efjbdfbdgfjhhaiigfhbaejahgfbbgbjagbddfgdiaigdadhcfcj";
-
-	cout << canConstruct(rn, m) << endl;
 
 	return 0;
 }
