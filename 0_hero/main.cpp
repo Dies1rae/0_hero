@@ -1944,14 +1944,32 @@ ListNode* reverseList(ListNode* head) {
 	return head;
 }
 
-int main() {
-	
-	ListNode* root = new ListNode(1);
-	root->next = new ListNode(2);
-	root->next->next = new ListNode(3);
-	root->next->next->next = new ListNode(4);
-	root->next->next->next->next = new ListNode(5);
+int lastStoneWeight(vector<int>& stones) {
+	std::sort(stones.begin(), stones.end());
 
+	while (stones.size() > 2) {
+		int ptr_max = stones[stones.size() - 1];
+		int ptr_max_min = stones[stones.size() - 2];
+		stones.pop_back();
+		stones.pop_back();
+
+		if (ptr_max - ptr_max_min > 0) {
+			stones.push_back(ptr_max - ptr_max_min);
+		}
+
+		std::sort(stones.begin(), stones.end());
+	}
+
+	if (stones.size() == 1) {
+		return stones[stones.size() - 1];
+	}
+	return stones[stones.size() - 1] - stones[stones.size() - 2];
+}
+
+int main() {
+	vector<int> stones{ 2, 7, 4, 1, 8, 1 };
+
+	cout << lastStoneWeight(stones) << endl;
 
 	return 0;
 }
