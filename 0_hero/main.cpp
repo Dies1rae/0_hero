@@ -1944,14 +1944,39 @@ ListNode* reverseList(ListNode* head) {
 	return head;
 }
 
+void XoringSubsets(vector<int>& nums, vector<int>& subset, int& res, int index) {
+	int r = 0;
+	for (auto& num : subset) {
+		r = r xor num;
+	}
+	res += r;
+
+	for (int ptr = index; ptr < nums.size(); ptr++) {
+		subset.push_back(nums[ptr]);
+		XoringSubsets(nums, subset, res, ptr + 1);
+		subset.pop_back();
+	}
+	return;
+}
+
+int subsetXORSum(vector<int>& nums) {
+	if (nums.size() == 1) {
+		return nums[0];
+	}
+
+	int res = 0, index = 0;
+	vector<int> subset;
+
+	XoringSubsets(nums, subset, res, index);
+
+	return res;
+}
+
 int main() {
 	
-	ListNode* root = new ListNode(1);
-	root->next = new ListNode(2);
-	root->next->next = new ListNode(3);
-	root->next->next->next = new ListNode(4);
-	root->next->next->next->next = new ListNode(5);
+	vector<int> nums{ 3,4,5,6,7,8 };
 
+	cout << subsetXORSum(nums) << endl;
 
 	return 0;
 }
