@@ -1995,11 +1995,36 @@ int lastStoneWeight(vector<int>& stones) {
 }
 
 
+int findJudge(int n, vector<vector<int>>& trust) {
+	if (trust.empty()) {
+		return -1;
+	}
+	int judge_num = -1;
+
+
+	for (int ptr = 1; ptr <= n; ptr++) {
+		int trusts_up = std::count_if(trust.begin(), trust.end(), [&ptr](const vector<int>& pair) {
+			return ptr != pair[0];
+			});
+		if (ptr == trust[ptr - 1][0]) { ///NOT RIGHT BUILD THE GRAPH!!!!
+			trusts_up = 0;
+		}
+		int trusts_down = std::count_if(trust.begin(), trust.end(), [&ptr](const vector<int>& pair) {
+			return ptr == pair[1];
+			});
+		if (trusts_up == n - 1 && trusts_down == n - 1) {
+			judge_num = ptr;
+		}
+	}
+
+	return judge_num;
+}
+
 int main() {
 	
-	vector<int> nums{ 3,4,5,6,7,8 };
-
-	cout << subsetXORSum(nums) << endl;
+	vector<vector<int>> trust{ {1, 2} };
+	int n = 2;
+	cout << findJudge(n , trust) << endl;
 
 	return 0;
 }
