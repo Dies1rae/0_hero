@@ -1944,32 +1944,39 @@ ListNode* reverseList(ListNode* head) {
 	return head;
 }
 
-int lastStoneWeight(vector<int>& stones) {
-	std::sort(stones.begin(), stones.end());
+void XoringSubsets(vector<int>& nums, vector<int>& subset, int& res, int index) {
+	int r = 0;
+	for (auto& num : subset) {
+		r = r xor num;
+	}
+	res += r;
 
-	while (stones.size() > 2) {
-		int ptr_max = stones[stones.size() - 1];
-		int ptr_max_min = stones[stones.size() - 2];
-		stones.pop_back();
-		stones.pop_back();
+	for (int ptr = index; ptr < nums.size(); ptr++) {
+		subset.push_back(nums[ptr]);
+		XoringSubsets(nums, subset, res, ptr + 1);
+		subset.pop_back();
+	}
+	return;
+}
 
-		if (ptr_max - ptr_max_min > 0) {
-			stones.push_back(ptr_max - ptr_max_min);
-		}
-
-		std::sort(stones.begin(), stones.end());
+int subsetXORSum(vector<int>& nums) {
+	if (nums.size() == 1) {
+		return nums[0];
 	}
 
-	if (stones.size() == 1) {
-		return stones[stones.size() - 1];
-	}
-	return stones[stones.size() - 1] - stones[stones.size() - 2];
+	int res = 0, index = 0;
+	vector<int> subset;
+
+	XoringSubsets(nums, subset, res, index);
+
+	return res;
 }
 
 int main() {
-	vector<int> stones{ 2, 7, 4, 1, 8, 1 };
+	
+	vector<int> nums{ 3,4,5,6,7,8 };
 
-	cout << lastStoneWeight(stones) << endl;
+	cout << subsetXORSum(nums) << endl;
 
 	return 0;
 }
