@@ -1972,6 +1972,29 @@ int subsetXORSum(vector<int>& nums) {
 	return res;
 }
 
+int lastStoneWeight(vector<int>& stones) {
+	std::sort(stones.begin(), stones.end());
+
+	while (stones.size() > 2) {
+		int ptr_max = stones[stones.size() - 1];
+		int ptr_max_min = stones[stones.size() - 2];
+		stones.pop_back();
+		stones.pop_back();
+
+		if (ptr_max - ptr_max_min > 0) {
+			stones.push_back(ptr_max - ptr_max_min);
+		}
+
+		std::sort(stones.begin(), stones.end());
+	}
+
+	if (stones.size() == 1) {
+		return stones[stones.size() - 1];
+	}
+	return stones[stones.size() - 1] - stones[stones.size() - 2];
+}
+
+
 int main() {
 	
 	vector<int> nums{ 3,4,5,6,7,8 };
