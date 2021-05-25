@@ -2031,11 +2031,27 @@ int findJudge(int n, vector<vector<int>>& trust) {
 	return judge_num;
 }
 
+int findJudge_2(int N, vector<vector<int>>& trust) {
+	vector<int> arr;
+	arr.resize(1005);
+
+	for (int i = 0; i < trust.size(); i++) {
+		arr[trust[i][0]]--;
+		arr[trust[i][1]]++;
+	}
+	for (int i = 1; i <= N; i++) {
+		if (arr[i] == N - 1) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 int main() {
 	
 	vector<vector<int>> trust{ {1,3},{1,4},{2,3} };
 	int n = 4;
-	cout << findJudge(n , trust) << endl;
+	cout << findJudge_2(n , trust) << endl;
 
 	return 0;
 }
