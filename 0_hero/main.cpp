@@ -1996,24 +1996,35 @@ int lastStoneWeight(vector<int>& stones) {
 
 
 int findJudge(int n, vector<vector<int>>& trust) {
-	if (trust.empty()) {
+	if (trust.empty() && n == 1) {
+		return 1;
+	}
+	else if (trust.empty() && n > 1) {
 		return -1;
 	}
+
 	int judge_num = -1;
+	
+	map<int, set<int>> hash_tree;
 
+	for (const auto& pair : trust) {
+		hash_tree[pair[0]].insert(pair[1]);
+	}
 
-	for (int ptr = 1; ptr <= n; ptr++) {
-		int trusts_up = std::count_if(trust.begin(), trust.end(), [&ptr](const vector<int>& pair) {
-			return ptr != pair[0];
-			});
-		if (ptr == trust[ptr - 1][0]) { ///NOT RIGHT BUILD THE GRAPH!!!!
-			trusts_up = 0;
-		}
-		int trusts_down = std::count_if(trust.begin(), trust.end(), [&ptr](const vector<int>& pair) {
-			return ptr == pair[1];
-			});
-		if (trusts_up == n - 1 && trusts_down == n - 1) {
-			judge_num = ptr;
+	for (int guy = 1; guy <= n; guy++) {
+		bool trusted = true;
+		size_t ctr = 0;
+		if (hash_tree.find(guy) == hash_tree.end()) {
+			for (const auto& [peop, trusts] : hash_tree) {
+				if (trusts.find(guy) == trusts.end()) {
+					trusted = false;
+				}
+				ctr++;
+			}
+			if (trusted && ctr == n - 1) {
+				judge_num = guy;
+				break;
+			}
 		}
 	}
 
@@ -2022,8 +2033,8 @@ int findJudge(int n, vector<vector<int>>& trust) {
 
 int main() {
 	
-	vector<vector<int>> trust{ {1, 2} };
-	int n = 2;
+	vector<vector<int>> trust{ {1,3},{1,4},{2,3} };
+	int n = 4;
 	cout << findJudge(n , trust) << endl;
 
 	return 0;
