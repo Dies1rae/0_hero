@@ -1,3 +1,5 @@
+#include "queue.h"
+
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -12,6 +14,7 @@
 #include <stack>
 #include <iterator>
 #include <memory>
+
 using namespace std;
 
 bool containsDuplicate(vector<int>& nums) {
@@ -2023,7 +2026,7 @@ int findJudge(int n, vector<vector<int>>& trust) {
 			}
 		}
 	}
-	return std::pow(x, N);
+	return judge_num;
 }
 
 int findJudge_2(int N, vector<vector<int>>& trust) {
@@ -2042,11 +2045,138 @@ int findJudge_2(int N, vector<vector<int>>& trust) {
 	return -1;
 }
 
-int main() {
+
+struct Point {
+	int x = 0;
+	int y = 0;
+};
+
+bool operator==(const Point& lhs, const Point& rhs) {
+	return lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
+bool operator!=(const Point& lhs, const Point& rhs) {
+	return !(lhs.x == rhs.x && lhs.y == rhs.y);
+}
+
+bool isPathCrossing(string path) {
+	vector<Point> da_way{{0,0}};
+	for (const auto& p : path) {
+		if (p == 'N') {
+			Point tmp = *(--da_way.end());
+			tmp.x += 1;
+			auto p_serch = std::find(da_way.begin(), da_way.end(), tmp);
+			if (p_serch != da_way.end()) {
+				return true;
+			} else {
+				da_way.push_back(tmp);
+			}
+		}
+		if (p == 'E') {
+			Point tmp = *(--da_way.end());
+			tmp.y += 1;
+			auto p_serch = std::find(da_way.begin(), da_way.end(), tmp);
+			if (p_serch != da_way.end()) {
+				return true;
+			} else {
+				da_way.push_back(tmp);
+			}
+		}
+		if (p == 'S') {
+			Point tmp = *(--da_way.end());
+			tmp.x -= 1;
+			auto p_serch = std::find(da_way.begin(), da_way.end(), tmp);
+			if (p_serch != da_way.end()) {
+				return true;
+			} else {
+				da_way.push_back(tmp);
+			}
+		}
+		if (p == 'W') {
+			Point tmp = *(--da_way.end());
+			tmp.y -= 1;
+			auto p_serch = std::find(da_way.begin(), da_way.end(), tmp);
+			if (p_serch != da_way.end()) {
+				return true;
+			} else {
+				da_way.push_back(tmp);
+			}
+		}
+	}
+
+	return false;
+}
+
+bool isPalindrome(const string& x) {
+	if (x.size() == 0) {
+		return true;
+	}
 	
-	vector<vector<int>> trust{ {1, 2} };
-	int n = 2;
-	cout << findJudge(n , trust) << endl;
+	for (size_t btr = 0, ept = x.size() - 1; btr < x.size() / 2; btr++, ept--) {
+		if (x[btr] != x[ept]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void XoringSubsets(vector<vector<string>>& res, vector<string>& subset, size_t start, size_t n, const string& str) {
+	if (start >= n) {
+		res.push_back(subset);
+		return;
+	}
+
+	for (size_t ptr = start; ptr < n; ptr++) {
+		if (isPalindrome(str.substr(start, ptr - start + 1))) {
+			subset.push_back(str.substr(start, ptr - start + 1));
+			XoringSubsets(res, subset, ptr + 1, n, str);
+			subset.pop_back();
+		}
+	}
+	return;
+}
+
+vector<vector<string>> partition(string s) {
+	vector<vector<string>> res;
+	vector<string> tmp_1;
+
+	XoringSubsets(res, tmp_1, 0, s.size(), s);
+	return res;
+}
+
+int main() {
+	queue test(5);
+	test.Enqueue(4);
+	test.Enqueue(3);
+	test.Enqueue(2);
+	test.Enqueue(1);
+	test.Enqueue(0);
+
+	
+	queue::LinkedList * ptr = test.Head()->next_;
+
+	cout << "Struct size: " << test.Size() << endl;
+
+	cout << "Head: " <<test.Head()->val_ << endl;
+	cout << "Tail: " << test.Tail()->val_ << endl;
+
+	cout << "Body: ";
+	while (ptr->next_) {
+		cout << ptr->val_ << ' ';
+		ptr = ptr->next_;
+	}
+	cout << endl;
+
+	test.Dequeue();
+	test.Dequeue();
+	test.Dequeue();
+	test.Dequeue();
+	test.Dequeue();
+	test.Dequeue();
+
+	cout << "After Dequeue:" << endl;
+	cout << "Struct size: " << test.Size() << endl;
+	cout << "Empty: " << test.IsEmpty() << endl;
 
 	return 0;
 }
