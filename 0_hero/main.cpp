@@ -1990,20 +1990,63 @@ bool isPowerOfFour(int num) {
 	}
 }
 
-double myPow(double x, int n) {
-	long pow = 0;
-	long N = n;
-	if (n < 0) {
-		pow = 1.0 / std::pow(x, std::abs(N));
-	} else {
-		pow = std::pow(x, N);
+
+int findJudge(int n, vector<vector<int>>& trust) {
+	if (trust.empty() && n == 1) {
+		return 1;
+	}
+	else if (trust.empty() && n > 1) {
+		return -1;
+	}
+
+	int judge_num = -1;
+	
+	map<int, set<int>> hash_tree;
+
+	for (const auto& pair : trust) {
+		hash_tree[pair[0]].insert(pair[1]);
+	}
+
+	for (int guy = 1; guy <= n; guy++) {
+		bool trusted = true;
+		size_t ctr = 0;
+		if (hash_tree.find(guy) == hash_tree.end()) {
+			for (const auto& [peop, trusts] : hash_tree) {
+				if (trusts.find(guy) == trusts.end()) {
+					trusted = false;
+				}
+				ctr++;
+			}
+			if (trusted && ctr == n - 1) {
+				judge_num = guy;
+				break;
+			}
+		}
 	}
 	return std::pow(x, N);
 }
 
-int main() {
+int findJudge_2(int N, vector<vector<int>>& trust) {
+	vector<int> arr;
+	arr.resize(1005);
 
-	cout << myPow(2.00000, -2) << endl;
+	for (int i = 0; i < trust.size(); i++) {
+		arr[trust[i][0]]--;
+		arr[trust[i][1]]++;
+	}
+	for (int i = 1; i <= N; i++) {
+		if (arr[i] == N - 1) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+int main() {
+	
+	vector<vector<int>> trust{ {1, 2} };
+	int n = 2;
+	cout << findJudge(n , trust) << endl;
 
 	return 0;
 }
