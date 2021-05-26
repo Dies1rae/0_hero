@@ -1972,59 +1972,38 @@ int subsetXORSum(vector<int>& nums) {
 	return res;
 }
 
-int lastStoneWeight(vector<int>& stones) {
-	std::sort(stones.begin(), stones.end());
-
-	while (stones.size() > 2) {
-		int ptr_max = stones[stones.size() - 1];
-		int ptr_max_min = stones[stones.size() - 2];
-		stones.pop_back();
-		stones.pop_back();
-
-		if (ptr_max - ptr_max_min > 0) {
-			stones.push_back(ptr_max - ptr_max_min);
-		}
-
-		std::sort(stones.begin(), stones.end());
-	}
-
-	if (stones.size() == 1) {
-		return stones[stones.size() - 1];
-	}
-	return stones[stones.size() - 1] - stones[stones.size() - 2];
+bool isPowerOfTwo(int n) {
+	return ((n > 0) && ((n & n - 1) == 0));
+	//https://tproger.ru/problems/explaination-what-the-following-code-do/
 }
 
+bool isPowerOfThree(int n) {
+	return ((n > 0) && (1162261467 % n == 0));
+}
 
-int findJudge(int n, vector<vector<int>>& trust) {
-	if (trust.empty()) {
-		return -1;
+bool isPowerOfFour(int num) {
+	if (num <= 0) {
+		return false;
+	} else {
+		double x = log(num) / log(4);  //OLOLO
+		return (int)x == x;		//MATH MAGIC!!!
 	}
-	int judge_num = -1;
+}
 
-
-	for (int ptr = 1; ptr <= n; ptr++) {
-		int trusts_up = std::count_if(trust.begin(), trust.end(), [&ptr](const vector<int>& pair) {
-			return ptr != pair[0];
-			});
-		if (ptr == trust[ptr - 1][0]) { ///NOT RIGHT BUILD THE GRAPH!!!!
-			trusts_up = 0;
-		}
-		int trusts_down = std::count_if(trust.begin(), trust.end(), [&ptr](const vector<int>& pair) {
-			return ptr == pair[1];
-			});
-		if (trusts_up == n - 1 && trusts_down == n - 1) {
-			judge_num = ptr;
-		}
+double myPow(double x, int n) {
+	long pow = 0;
+	long N = n;
+	if (n < 0) {
+		pow = 1.0 / std::pow(x, std::abs(N));
+	} else {
+		pow = std::pow(x, N);
 	}
-
-	return judge_num;
+	return std::pow(x, N);
 }
 
 int main() {
-	
-	vector<vector<int>> trust{ {1, 2} };
-	int n = 2;
-	cout << findJudge(n , trust) << endl;
+
+	cout << myPow(2.00000, -2) << endl;
 
 	return 0;
 }
