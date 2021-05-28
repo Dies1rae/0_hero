@@ -1,3 +1,5 @@
+#include "TreeNode.h"
+
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -12,6 +14,7 @@
 #include <stack>
 #include <iterator>
 #include <memory>
+
 using namespace std;
 
 bool containsDuplicate(vector<int>& nums) {
@@ -1137,7 +1140,7 @@ bool isVowel(char c) {
 	return (c == 'a' || c == 'A' || c == 'e' ||	c == 'E' || c == 'i' || c == 'I' ||
 		c == 'o' || c == 'O' || c == 'u' ||	c == 'U');
 }
-//!!!!!!!!!!!!!!
+
 string reverseVowels(string s) {
 	size_t beg = 0;
 	size_t end = s.size() - 1;
@@ -1152,172 +1155,6 @@ string reverseVowels(string s) {
 		}
 	}
 	return s;
-}
-//!!!!!!!!!!!!!!
-
-struct TreeNode {
-	TreeNode() = default;
-	TreeNode(int data) :val(data) {
-		TreeNode* left = nullptr;
-		TreeNode* right = nullptr;
-	};
-	TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
-
-	int val = 0;
-	TreeNode* left = nullptr;
-	TreeNode* right = nullptr;
-};
-
-void print_tree(TreeNode* node, int start = 0) {
-	if (node == nullptr) {
-		return;
-	} else {
-		print_tree(node->left, ++start);
-		for (int ptr = 0; ptr < start; ptr++) {
-			cout << '|';
-		}
-		cout << node->val << endl;
-		start--;
-	}
-	print_tree(node->right, ++start);
-}
-
-//BAD DESIGN
-int rangeSumBST(TreeNode* root, int low, int high) {
-	if (root == nullptr) {
-		return 0;
-	}
-
-	int summ = root->val;
-	if (summ < low) {
-		return rangeSumBST(root->right, low, high);
-	} else if (summ >= low && summ <= high) {
-		return summ + rangeSumBST(root->right, low, high) + rangeSumBST(root->left, low, high);
-	} else {
-		return rangeSumBST(root->left, low, high);
-	}
-}
-//!!!!!!!!!!!!!
-//GOOD DESIGN
-int rangeSumBST_1(TreeNode* root, int low, int high) {
-	int ans = 0;
-	if (!root) return ans;
-	if (root->val <= high && root->val >= low) {
-		ans += root->val;
-	}
-	ans += rangeSumBST(root->left, low, high);
-	ans += rangeSumBST(root->right, low, high);
-	root->left = nullptr;
-	root->right = nullptr;
-	return ans;
-}
-//!!!!!!!!!!!!!
- 
-int height_subtree(TreeNode* node) {
-	if (node == NULL) {
-		return 0;
-	}
-	return 1 + max(height_subtree(node->left), height_subtree(node->right));
-}
-
-bool isBalanced(TreeNode* root) {
-	if (root == nullptr) {
-		return true;
-	}
-	int l_val = height_subtree(root->left);
-	int r_val = height_subtree(root->right);
-	if (std::abs(l_val - r_val) <= 1 && isBalanced(root->left) && isBalanced(root->right)) {
-		return true;
-	}
-		return false;
-}
-
-void print_inorderBST(TreeNode* root) {
-	if (root == nullptr) {
-		return;
-	}
-	cout << root->val << " ";
-	print_inorderBST(root->right);
-}
-
-TreeNode* prevN = nullptr;
-TreeNode* headN = nullptr;
-
-void recurs_incrBST(TreeNode* root) {
-	if (root == nullptr) {
-		return;
-	}
-	recurs_incrBST(root->left);
-	TreeNode* rhs = root->right;
-	TreeNode* lhs = root->left;
-	if (headN == nullptr) {
-		headN = root;
-		root->left = nullptr;
-		prevN = root;
-	} else {
-		prevN->right = root;
-		root->left = nullptr;
-		prevN = root;
-	}
-	recurs_incrBST(rhs);
-}
-
-TreeNode* increasingBST(TreeNode* root) {
-	recurs_incrBST(root);
-	return headN;
-}
-
-TreeNode* increasingBST_1(TreeNode* root) {
-	if (root == nullptr) {
-		return nullptr;
-	}
-	//STACK LIKE A HASH (filo)
-	stack<TreeNode*> hsh;
-	//RETURNED LIST
-	TreeNode* head_ = nullptr;
-	//CURRENT POSITION
-	TreeNode* curr_ = nullptr;
-	//TMP POSITION
-	TreeNode* tmp_ = root;
-
-	//GET ALL LEFT IN A HASH
-	while (tmp_ != nullptr)	{
-		hsh.push(tmp_);
-		tmp_ = tmp_->left;
-	}
-
-	//WHILE STACK NOT EMPTY
-	while (!hsh.empty()) {
-		//GET LAST NODE 
-		TreeNode* tmp2_ = hsh.top();
-		hsh.pop();
-
-		//IF RETURN LIST == 0
-		if (head_ == nullptr) {
-			//GET NEW NODE(COPY BASICALLY ION RETURN ROOT)
-			head_ = new TreeNode(tmp2_->val);
-			//CURRENT POS IN RETURN TO HEAD
-			curr_ = head_;
-		} else {
-			//PLASE NEXT TO THE RIGHT OF THE HEAD_ ROOT
-			curr_->right = new TreeNode(tmp2_->val);
-			//REPLACE CURRENT POSITION
-			curr_ = curr_->right;
-		}
-		//IF WE GOT SOMETHING IN  RIGHT
-		if (tmp2_->right != nullptr) {
-			//PUSH IT TO HASH FIRST
-			hsh.push(tmp2_->right);
-			//AND ITERATE TO RIGHT
-			tmp2_ = tmp2_->right;
-			//AND WHILE LEFT IS HEAR PUSH IT TO HEAD
-			while (tmp2_->left != nullptr) {
-				hsh.push(tmp2_->left);
-				tmp2_ = tmp2_->left;
-			}
-		}
-	}
-	return head_;
 }
 
 void clear_zeros(string& num) {
@@ -1638,8 +1475,7 @@ std::vector<std::string> SplitIntoWords(const std::string_view& text) {
 				words.push_back(word);
 				word.clear();
 			}
-		}
-		else {
+		} else {
 			word += c;
 		}
 	}
@@ -1852,31 +1688,7 @@ bool rotateString(string s, string goal) {
 	return false;
 }
 
-TreeNode* searchBST(TreeNode* root, int val) {
-	if (root == nullptr) {
-		return nullptr;
-	}
-	TreeNode* quoe = root;
-	while (quoe) {
-		if (quoe->val > val) {
-			if (!quoe->left) {
-				return nullptr;
-			}
-			quoe = quoe->left;
-		}
-		if (quoe->val < val) {
-			if (!quoe->right) {
-				return nullptr;
-			}
-			quoe = quoe->right;
-		}
-		if (quoe->val == val) {
-			return quoe;
-		}
-	}
 
-	return nullptr;
-}
 
 bool canConstruct(string ransomNote, string magazine) {
 	map<char, int> rans;
