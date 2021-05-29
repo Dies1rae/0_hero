@@ -16,6 +16,8 @@
 #include <stack>
 #include <iterator>
 #include <memory>
+#include <cassert>
+#include <exception>
 
 using namespace std;
 
@@ -1988,7 +1990,7 @@ bool is_balanced_bracers(const std::string& data_) {
 }
 
 int main() {
-	Stack test_st;
+	Stack<int> test_st;
 	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
 	test_st.Push(4);
 	test_st.Push(2);
@@ -2003,6 +2005,13 @@ int main() {
 		cout << "So Peek - " << test_st.Peek() << " == Pop - " << test_st.Pop() << endl;
 	}
 	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
+
+	try {
+		test_st.Pop();
+	} catch (std::exception& e){
+		cerr << e.what() << endl;
+	}
+
 	return 0;
 }
 

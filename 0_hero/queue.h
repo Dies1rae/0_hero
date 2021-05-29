@@ -2,13 +2,16 @@
 
 #include "SingleLinkedLIst.h"
 
+#include <stdexcept>
+
+template <typename T>
 class queue {
 public:
 	explicit queue() = default;
-	explicit queue(const int& val) {
+	explicit queue(const T& val) {
 		this->Enqueue(val);
 	}
-	explicit queue(const LinkedList * node) {
+	explicit queue(const LinkedList<T> * node) {
 		this->Enqueue(node->val_);
 	}
 
@@ -35,7 +38,7 @@ public:
 	void Dequeue() {
 		if (!this->head_) {
 			this->size_ = 0;
-			return;
+			throw std::range_error("Empty queue");
 		}
 		if (this->head_ != this->tail_) {
 			LinkedList* prev_node = this->head_;
@@ -50,11 +53,11 @@ public:
 		this->size_--;
 	}
 
-	LinkedList* Head() const noexcept {
+	LinkedList<T>* Head() const noexcept {
 		return this->head_;
 	}
 
-	LinkedList* Tail() const noexcept {
+	LinkedList<T>* Tail() const noexcept {
 		return this->tail_;
 	}
 
@@ -68,7 +71,7 @@ public:
 
 private:
 	size_t size_ = 0;
-	LinkedList* head_ = nullptr;
-	LinkedList* tail_ = nullptr;
+	LinkedList<T>* head_ = nullptr;
+	LinkedList<T>* tail_ = nullptr;
 };
 

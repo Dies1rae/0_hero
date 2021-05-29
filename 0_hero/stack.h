@@ -2,50 +2,58 @@
 
 #include "SingleLinkedLIst.h"
 
+#include <stdexcept>
+
+template <typename T>
 class Stack {
 public:
 	explicit Stack() = default;
-	explicit Stack(const int& val) {
+	explicit Stack(const T& val) {
 		this->Push(val);
 	}
-	explicit Stack(const LinkedList * node) {
+	explicit Stack(const LinkedList<T>* node) {
 		this->Push(node->val_);
 	}
 
 	~Stack() {
 		while (this->top_) {
-			LinkedList* tmp_root = this->top_;
+			LinkedList<T>* tmp_root = this->top_;
 			this->top_ = this->top_->next_;
 			delete tmp_root;
 		}
 	}
 
-	void Push(const int& val) {
-		LinkedList* new_elem = new LinkedList(val);
+	void Push(const T& val) {
+		LinkedList<T>* new_elem = new LinkedList(val);
 		new_elem->next_ = this->top_;
 		this->top_ = new_elem;
 		this->size_++;
 	}
 
-	int Pop() {
+	T Pop() {
 		if(this->top_) {
-			LinkedList* tmp = this->top_;
+			LinkedList<T>* tmp = this->top_;
 			this->top_ = this->top_->next_;
 			this->size_--;
-			return tmp->val_;	
+			T tmp_value = tmp->val_;
+			delete tmp;
+			return tmp_value;	
 		}
+		throw std::range_error("Empty stack");
 	}
 
-	int Top() const noexcept {
+	T Top() const noexcept {
 		if (!this->Empty()) {
 			return this->top_->val_;
 		}
+		throw std::range_error("Empty stack");
 	}
 
-	int Peek() const noexcept {
+	T Peek() const noexcept {
 		if (!this->Empty()) {
 			return this->top_->val_;
 		}
+		throw std::range_error("Empty stack");
 	}
 
 	bool Empty() const {
@@ -58,6 +66,6 @@ public:
 
 private:
 	size_t size_ = 0;
-	LinkedList* top_ = nullptr;
+	LinkedList<T>* top_ = nullptr;
 };
 
