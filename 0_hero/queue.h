@@ -1,20 +1,14 @@
 #pragma once
 
+#include "SingleLinkedLIst.h"
+
 class queue {
 public:
-	struct LinkedList {
-		explicit LinkedList() = default;
-		explicit LinkedList(int val) : val_(val) {}
-
-		int val_ = 0;
-		LinkedList* next_ = nullptr;
-	};
-
 	explicit queue() = default;
-	explicit queue(int val) {
+	explicit queue(const int& val) {
 		this->Enqueue(val);
 	}
-	explicit queue(LinkedList * node) {
+	explicit queue(const LinkedList * node) {
 		this->Enqueue(node->val_);
 	}
 
@@ -26,7 +20,7 @@ public:
 		}
 	}
 
-	void Enqueue(int val) {
+	void Enqueue(const int& val) {
 		LinkedList* next_node = new LinkedList(val);
 		if (!this->head_) {
 			this->head_ = next_node;

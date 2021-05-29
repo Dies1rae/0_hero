@@ -1,5 +1,6 @@
 #include "TreeNode.h"
 #include "queue.h"
+#include "stack.h"
 
 #include <algorithm>
 #include <vector>
@@ -1954,40 +1955,54 @@ vector<vector<string>> partition(string s) {
 	return res;
 }
 
-int main() {
-	queue test(5);
-	test.Enqueue(4);
-	test.Enqueue(3);
-	test.Enqueue(2);
-	test.Enqueue(1);
-	test.Enqueue(0);
-
-	
-	queue::LinkedList * ptr = test.Head()->next_;
-
-	cout << "Struct size: " << test.Size() << endl;
-
-	cout << "Head: " <<test.Head()->val_ << endl;
-	cout << "Tail: " << test.Tail()->val_ << endl;
-
-	cout << "Body: ";
-	while (ptr->next_) {
-		cout << ptr->val_ << ' ';
-		ptr = ptr->next_;
+bool bracers_comparator(const char& open, const char& close) {
+	if (open == 40 && close == 41) {
+		return 0;
 	}
-	cout << endl;
+	if (open == 91 && close == 93) {
+		return 0;
+	}
+	if (open == 123 && close == 125) {
+		return 0;
+	}
+	return 1;
+}
 
-	test.Dequeue();
-	test.Dequeue();
-	test.Dequeue();
-	test.Dequeue();
-	test.Dequeue();
-	test.Dequeue();
+bool is_balanced_bracers(const std::string& data_) {
+	if (data_.size() % 2 != 0 || data_.size() == 0) {
+		return 0;
+	}
+	std::stack<char> open_bracers;
+	for (const auto& ch : data_) {
+		if (ch == '(' || ch == '{' || ch == '[') {
+			open_bracers.push(ch);
+		} else {
+			if (open_bracers.empty() || bracers_comparator(open_bracers.top(), ch)) {
+				return 0;
+			} else {
+				open_bracers.pop();
+			}
+		}
+	}
+	return 1;
+}
 
-	cout << "After Dequeue:" << endl;
-	cout << "Struct size: " << test.Size() << endl;
-	cout << "Empty: " << test.IsEmpty() << endl;
+int main() {
+	Stack test_st;
+	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
+	test_st.Push(4);
+	test_st.Push(2);
+	test_st.Push(5);
+	test_st.Push(12);
+	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
 
+	cout << "Peek - " << test_st.Peek() << " or Top - " << test_st.Top() << endl;
+	
+
+	while(!test_st.Empty()) {
+		cout << "So Peek - " << test_st.Peek() << " == Pop - " << test_st.Pop() << endl;
+	}
+	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
 	return 0;
 }
 
