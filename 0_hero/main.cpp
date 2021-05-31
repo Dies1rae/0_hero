@@ -20,6 +20,7 @@
 #include <exception>
 #include <time.h>
 #include <ctime>
+#include <sstream>
 
 using namespace std;
 
@@ -2007,10 +2008,33 @@ int daysBetweenDates(string date1, string date2) {
 	return difference;
 }
 
+#define MAX(x,y) ((x)>(y)?(x):(y))
+#define SquareOf(x) x * x
+
+void f(int a[]){
+	int i;
+	a[0] = 10;
+	a[1] = 20;
+}
+
 int main() {
-	string d1 = "2019-06-29";
-	string d2 = "2019-06-30";
-	cout << daysBetweenDates(d1, d2) << endl;
+	int x, y, z;
+	int *p, *q, *r;
+	x = 2;
+	y = 4;
+	z = 6;
+
+	p = &x;
+	q = &y;
+	r = &z;
+
+	r = p;
+	p = q;
+	q = r;
+
+	cout << *p << ' ' << *q << ' ' << *r << endl;
+	cout << p << ' ' << q << ' ' << r << endl;
+
 	return 0;
 }
 
