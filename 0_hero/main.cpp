@@ -18,6 +18,8 @@
 #include <memory>
 #include <cassert>
 #include <exception>
+#include <time.h>
+#include <ctime>
 
 using namespace std;
 
@@ -1989,29 +1991,26 @@ bool is_balanced_bracers(const std::string& data_) {
 	return 1;
 }
 
+int daysBetweenDates(string date1, string date2) {
+	std::tm dt_first = {};
+	stringstream ss_f(date1);
+	ss_f >> get_time(&dt_first, "%Y-%m-%d");
+
+	std::tm dt_second = {};
+	stringstream ss_s(date2);
+	ss_s >> get_time(&dt_second, "%Y-%m-%d");
+
+	std::time_t x = std::mktime(&dt_first);
+	std::time_t y = std::mktime(&dt_second);
+
+	double difference = std::difftime(y, x) / (60 * 60 * 24);
+	return difference;
+}
+
 int main() {
-	Stack<int> test_st;
-	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
-	test_st.Push(4);
-	test_st.Push(2);
-	test_st.Push(5);
-	test_st.Push(12);
-	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
-
-	cout << "Peek - " << test_st.Peek() << " or Top - " << test_st.Top() << endl;
-	
-
-	while(!test_st.Empty()) {
-		cout << "So Peek - " << test_st.Peek() << " == Pop - " << test_st.Pop() << endl;
-	}
-	cout << "Empty stack? - " << test_st.Empty() << " and size? - " << test_st.Size() << endl;
-
-	try {
-		test_st.Pop();
-	} catch (std::exception& e){
-		cerr << e.what() << endl;
-	}
-
+	string d1 = "2019-06-29";
+	string d2 = "2019-06-30";
+	cout << daysBetweenDates(d1, d2) << endl;
 	return 0;
 }
 
