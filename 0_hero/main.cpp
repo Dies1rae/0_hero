@@ -2008,6 +2008,7 @@ int daysBetweenDates(string date1, string date2) {
 	return difference;
 }
 
+namespace C {
 #define MAX(x,y) ((x)>(y)?(x):(y))
 #define SquareOf(x) x * x
 
@@ -2016,24 +2017,48 @@ void f(int a[]){
 	a[0] = 10;
 	a[1] = 20;
 }
+} //namespace C
+
+bool squareIsWhite(string coordinates) {
+	int x = coordinates[0] - 96;
+	int y = coordinates[1] - 48;
+
+	if (y % 2 != 0) {
+		if (x % 2 != 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	if (y % 2 == 0) {
+		if (x % 2 != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
+}
+
+bool arrayStringsAreEqual(vector<string>& word1, vector<string>& word2) {
+	string f;
+	string s;
+	for (size_t ptr = 0; ptr < word1.size(); ptr++) {
+		f += word1[ptr];
+
+	}
+	for (size_t ptr = 0; ptr < word2.size(); ptr++) {
+		s += word2[ptr];
+
+	}
+	return f == s;
+}
 
 int main() {
-	int x, y, z;
-	int *p, *q, *r;
-	x = 2;
-	y = 4;
-	z = 6;
 
-	p = &x;
-	q = &y;
-	r = &z;
-
-	r = p;
-	p = q;
-	q = r;
-
-	cout << *p << ' ' << *q << ' ' << *r << endl;
-	cout << p << ' ' << q << ' ' << r << endl;
+	vector<string> word1{ "a", "cb" };
+	vector<string> word2{ "ab", "c" };
+	cout << arrayStringsAreEqual(word1, word2) << endl;
 
 	return 0;
 }
