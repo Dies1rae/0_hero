@@ -2054,11 +2054,53 @@ bool arrayStringsAreEqual(vector<string>& word1, vector<string>& word2) {
 	return f == s;
 }
 
+int minOperations(vector<int>& nums) {
+	if (nums.size() == 1) {
+		return 0;
+	}
+
+	int res = 0;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if (nums[ptr] >= nums[ptr + 1]) {
+			res += (nums[ptr] - nums[ptr + 1]) + 1;
+			nums[ptr + 1] += (nums[ptr] - nums[ptr + 1]) + 1;
+		}
+	}
+
+	if (nums[nums.size() - 2] >= nums[nums.size() - 1]) {
+		res += (nums[nums.size() - 2] - nums[nums.size() - 1]) + 1;
+		nums[nums.size() - 1] += (nums[nums.size() - 2] - nums[nums.size() - 1]) + 1;
+	}
+	return res;
+}
+
+int minOperations_good(vector<int>& nums) {
+	int res = 0, last = 0;
+	for (auto n : nums) {
+		res += max(0, last - n + 1);
+		last = max(n, last + 1);
+	}
+	return res;
+}
+
+int mySqrt(int x) {
+	long long res = 1, ptr = 1;
+	if (x == 0 || x == 1) {
+		return x;
+	} else {
+		while (res <= x) {
+			ptr++;
+			res = ptr * ptr;
+		}
+		return ptr - 1;
+	}
+	return 0;
+}
+
 int main() {
 
-	vector<string> word1{ "a", "cb" };
-	vector<string> word2{ "ab", "c" };
-	cout << arrayStringsAreEqual(word1, word2) << endl;
+	vector<int> nums{ 1,1,1 };
+	cout << minOperations(nums) << endl;
 
 	return 0;
 }
