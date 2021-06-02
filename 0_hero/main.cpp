@@ -2067,18 +2067,25 @@ int minOperations(vector<int>& nums) {
 		}
 	}
 
-	p = &x;
-	q = &y;
-	r = &z;
+}
 
-	r = p;
-	p = q;
-	q = r;
 
-	cout << *p << ' ' << *q << ' ' << *r << endl;
-	cout << p << ' ' << q << ' ' << r << endl;
+int main() {
+	int a, b, c, x;
+	cin >> a >> b >> c;
+
+	if(c < 0) {
+		cout << "NO SOLUTION\n"s;
+	} else if (!a && b == c * c){
+		cout << "MANY SOLUTIONS\n"s;
+	} else {
+		x = (c*c - b)/a;
+		if (a*x + b == c*c) {
+			cout << x << endl;
+		} else {
+			cout << "NO SOLUTION\n"s;
+		}
+	}
 
 	return 0;
 }
-
- 
