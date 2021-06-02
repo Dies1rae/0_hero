@@ -2008,6 +2008,7 @@ int daysBetweenDates(string date1, string date2) {
 	return difference;
 }
 
+namespace C {
 #define MAX(x,y) ((x)>(y)?(x):(y))
 #define SquareOf(x) x * x
 
@@ -2016,23 +2017,66 @@ void f(int a[]){
 	a[0] = 10;
 	a[1] = 20;
 }
+} //namespace C
 
-int main() {
-	int a, b, c, x;
-	cin >> a >> b >> c;
+bool squareIsWhite(string coordinates) {
+	int x = coordinates[0] - 96;
+	int y = coordinates[1] - 48;
 
-	if(c < 0) {
-		cout << "NO SOLUTION\n"s;
-	} else if (!a && b == c * c){
-		cout << "MANY SOLUTIONS\n"s;
-	} else {
-		x = (c*c - b)/a;
-		if (a*x + b == c*c) {
-			cout << x << endl;
+	if (y % 2 != 0) {
+		if (x % 2 != 0) {
+			return false;
 		} else {
-			cout << "NO SOLUTION\n"s;
+			return true;
 		}
 	}
+	if (y % 2 == 0) {
+		if (x % 2 != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
+}
+
+bool arrayStringsAreEqual(vector<string>& word1, vector<string>& word2) {
+	string f;
+	string s;
+	for (size_t ptr = 0; ptr < word1.size(); ptr++) {
+		f += word1[ptr];
+
+	}
+	for (size_t ptr = 0; ptr < word2.size(); ptr++) {
+		s += word2[ptr];
+
+	}
+	return f == s;
+}
+
+int minOperations(vector<int>& nums) {
+	if (nums.size() == 1) {
+		return 0;
+	}
+
+	int res = 0;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if (nums[ptr] >= nums[ptr + 1]) {
+			res += (nums[ptr] - nums[ptr + 1]) + 1;
+			nums[ptr + 1] += (nums[ptr] - nums[ptr + 1]) + 1;
+		}
+	}
+
+	p = &x;
+	q = &y;
+	r = &z;
+
+	r = p;
+	p = q;
+	q = r;
+
+	cout << *p << ' ' << *q << ' ' << *r << endl;
+	cout << p << ' ' << q << ' ' << r << endl;
 
 	return 0;
 }
