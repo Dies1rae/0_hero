@@ -21,6 +21,7 @@
 #include <time.h>
 #include <ctime>
 #include <sstream>
+#include <array>
 
 using namespace std;
 
@@ -2069,23 +2070,139 @@ int minOperations(vector<int>& nums) {
 
 }
 
-
-int main() {
-	int a, b, c, x;
-	cin >> a >> b >> c;
-
-	if(c < 0) {
+void f_sqrt(const int a, const int b, const int c) {
+	int x;
+	if (c < 0) {
 		cout << "NO SOLUTION\n"s;
-	} else if (!a && b == c * c){
+	} else if (!a && b == c * c) {
 		cout << "MANY SOLUTIONS\n"s;
 	} else {
-		x = (c*c - b)/a;
-		if (a*x + b == c*c) {
+		x = (c * c - b) / a;
+		if (a * x + b == c * c) {
 			cout << x << endl;
 		} else {
 			cout << "NO SOLUTION\n"s;
 		}
 	}
+}
+
+void clean_numbers(string& num, const bool flag) {
+	if (num[0] == '+') {
+		num = num.substr(2);
+	} else 	if (num[0] == '8') {
+		num = num.substr(1);
+	}
+	if(num.find('-') != std::string::npos){
+		num.erase(std::remove(num.begin(), num.end(), '-'), num.end());
+	}
+	if (num.find('(') != std::string::npos) {
+		num.erase(std::remove(num.begin(), num.end(), '('), num.end());
+	}
+	if (num.find(')') != std::string::npos) {
+		num.erase(std::remove(num.begin(), num.end(), ')'), num.end());
+	}
+	if (flag) {
+		if (num.size() < 10 && num.size() + 3 == 10) {
+			num.insert(0, "495");
+		}
+	}
+}
+
+void compare_number(const string& b1, const string& b2, const string& b3, const string& q) {
+	if (b1 == q) {
+		std::cout << "YES\n";
+	} else {
+		std::cout << "NO\n";
+	}
+	if (b2 == q) {
+		std::cout << "YES\n";
+	} else {
+		std::cout << "NO\n";
+	}
+	if (b3 == q) {
+		std::cout << "YES\n";
+	} else {
+		std::cout << "NO\n";
+	}
+
+}
+
+pair<int, int> emerj(int K1, int M, int K2, int P2, int N2) {
+	pair<int, int> res;
+	int f_f = 1;
+	if ((M * (P2 - 1) + (N2 - 1) != 0)) {
+		f_f = K2 / (M * (P2 - 1) + (N2 - 1));
+	}	
+
+	if (f_f * (M * (P2 - 1) + (N2 - 1)) < K2 && K2 <= f_f * (M * (P2 - 1) + N2) && N2 <= M) {
+		res.first = (((K1 - 1) / f_f) / M) + 1;
+		res.second = 1 + ((K1 - 1) / f_f) - M * (((K1 - 1) / f_f) / M);
+	} else {
+		res.first = -1;
+		res.second = -1;
+	}
+	if (P2 == 1 && N2 == 1) {
+		res.first = 0;
+	}
+
+	return res;
+}
+
+struct ntb_cmp {
+	bool operator() (const pair<int, int>& lhs, const pair<int, int>& rhs) const {
+		return lhs.first * lhs.second < rhs.first * rhs.second;
+	}
+};
+
+
+pair<int, int> notebooks(const int x, const int y, const int j, const int z) {
+	set<pair <int, int>, ntb_cmp> res;
+	pair <int, int> tmp;
+
+	if (x > z) {
+		tmp.first = x;
+	} else  {
+		tmp.first = z;
+	}
+	tmp.second = y + j;
+	res.insert(tmp);
+
+	if (x > j) {
+		tmp.first = x;
+	} else {
+		tmp.first = j;
+	}
+	tmp.second = y + z;
+	res.insert(tmp);
+
+	if (y > j) {
+		tmp.first = y;
+	} else {
+		tmp.first = j;
+	}
+	tmp.second = x + z;
+	res.insert(tmp);
+
+	if (y > z) {
+		tmp.first = y;
+	} else {
+		tmp.first = z;
+	}
+	tmp.second = x + j;
+	res.insert(tmp);
+
+	
+	return *res.begin();
+}
+
+int main() {
+	int a, b, c, d;
+
+	cin >> a >> b >> c >> d;
+
+	pair<int, int> res = notebooks(a, b, c, d);
+
+	cout << res.first << ' ' << res.second <<'\n';
 
 	return 0;
 }
