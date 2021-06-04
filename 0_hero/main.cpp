@@ -2195,14 +2195,47 @@ pair<int, int> notebooks(const int x, const int y, const int j, const int z) {
 	return *res.begin();
 }
 
+int steel_rain(int N, int K, int M) {
+	int ctr_d = 0;
+	int ctr_z = 0;
+	while (N >= K) {
+		ctr_z = N / K;
+		ctr_d += ctr_z * (K / M);
+		N -= ctr_z * (K / M) * M;
+	}
+
+	return ctr_d;
+}
+
+int steel_rain_m(int N, int K, int M) {
+	if (M == 0) {
+		return 0;
+	}
+	int q = K / M;
+	if ((K - (K % M)) == 0) {
+		return 0;
+	}
+	M *= q;
+
+	return (((N - K + 1) / M + bool((N - K + 1) % M)) * q);
+}
+
+void castle_if(int A, int B, int C, int D, int E) {
+	if ((D >= A && E >= B) || (D >= B && E >= A) ||
+		(D >= A && E >= C) || (D >= C && E >= A) ||
+		(D >= C && E >= B) || (D >= B && E >= C)
+		) {
+		std::cout << "YES\n";
+	} else {
+		std::cout << "NO\n";
+	}
+}
+
 int main() {
-	int a, b, c, d;
+	int A, B, C, D, E;
+	cin >> A >> B >> C >> D >> E;
 
-	cin >> a >> b >> c >> d;
-
-	pair<int, int> res = notebooks(a, b, c, d);
-
-	cout << res.first << ' ' << res.second <<'\n';
+	castle_if(A, B, C, D, E);
 
 	return 0;
 }
