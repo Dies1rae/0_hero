@@ -89,6 +89,7 @@ private:
 			return false;
 		}
 		std::swap(*lhs_hsh_iter, *rhs_hsh_iter);
+		std::swap(this->elems[lhs_pos], this->elems[rhs_pos]);
 		return true;
 	}
 
