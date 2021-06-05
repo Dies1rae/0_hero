@@ -23,7 +23,7 @@ public:
 		}
 	}
 
-	void Enqueue(const int& val) {
+	void Enqueue(const T& val) {
 		LinkedList* next_node = new LinkedList(val);
 		if (!this->head_) {
 			this->head_ = next_node;
