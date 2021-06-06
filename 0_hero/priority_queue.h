@@ -78,13 +78,9 @@ public:
 	}
 
 	T Remove(const T& elem) {
-		if (elem == NULL) {
-			throw std::runtime_error("Wrong arg");
-		}
-		
 		std::set<size_t> rem_set = this->pos_hsh_.at(elem);
 		if (!rem_set.empty()) {
-			return this->RemoveAt(rem_set.size() - 1);
+			return this->RemoveAt(*(--rem_set.end()));
 		}
 		return NULL;
 	}
@@ -106,6 +102,7 @@ public:
 		}
 
 		if (pos == this->size_) {
+			this->HshRenew();
 			return remvd_elem;
 		}
 
@@ -115,6 +112,7 @@ public:
 		if (this->elems_[pos] == tmp_elem) {
 			this->SwimUp(pos);
 		}
+		this->HshRenew();
 		return remvd_elem;
 	}
 
@@ -135,10 +133,7 @@ public:
 	}
 
 	bool Contains(const T& elem) const {
-		if (elem == nullptr) {
-			return false;
-		}
-		return this->pos_hsh_.at(elem);
+		return this->pos_hsh_.count(elem);
 	}
 
 	void PrintPQ() {

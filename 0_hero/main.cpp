@@ -2091,5 +2091,18 @@ int main() {
 	cout << "Size of Heap: " << test_add.Size() << endl;
 	test_add.PrintPQ();
 	test_add.PrintHSHPQ();
+
+	int removed_tmp = test_add.Remove(55);
+	cout << "Array construcvtor test_add:\n";
+	cout << "Peak element: " << test_add.Peek() << endl;
+	cout << "Is heap min: " << test_add.isMinHeap() << endl;
+	cout << "Size of Heap: " << test_add.Size() << endl;
+	test_add.PrintPQ();
+	test_add.PrintHSHPQ();
+	cout << "Has been removed: " << removed_tmp << endl;
+
+	cout << "CONTAINS TEST 1 YES: " << test.Contains(0) << endl;
+	cout << "CONTAINS TEST 2 YES: " << test_add.Contains(900) << endl;
+	cout << "CONTAINS TEST 2 NOPE: " << test_add.Contains(900000) << endl;
 	return 0;
 }
