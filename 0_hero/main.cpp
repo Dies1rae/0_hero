@@ -2073,7 +2073,7 @@ int minOperations(vector<int>& nums) {
 
 int main() {
 	
-	vector<int> ttt{1,2,4,5,0, 1,99,66};
+	vector<int> ttt{1, 2, 4, 5, 0, 1, 99, 66, 0};
 	priority_queue <int> test(ttt);
 
 	cout << "Array construcvtor test:\n";
@@ -2082,5 +2082,14 @@ int main() {
 	cout << "Size of Heap: " << test.Size() << endl;
 	test.PrintPQ();
 	test.PrintHSHPQ();
+
+	priority_queue <int> test_add;
+	test_add.Add(55).Add(2).Add(3).Add(900).Add(0).Add(3).Add(0);
+	cout << "Array construcvtor test_add:\n";
+	cout << "Peak element: " << test_add.Peek() << endl;
+	cout << "Is heap min: " << test_add.isMinHeap() << endl;
+	cout << "Size of Heap: " << test_add.Size() << endl;
+	test_add.PrintPQ();
+	test_add.PrintHSHPQ();
 	return 0;
 }
