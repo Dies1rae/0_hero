@@ -1,6 +1,8 @@
 #include "TreeNode.h"
 #include "queue.h"
 #include "stack.h"
+#include "priority_queue.h"
+
 
 #include <algorithm>
 #include <vector>
@@ -2071,6 +2073,14 @@ int minOperations(vector<int>& nums) {
 
 int main() {
 	
+	vector<int> ttt{1,2,4,5,0, 1,99,66};
+	priority_queue <int> test(ttt);
 
+	cout << "Array construcvtor test:\n";
+	cout << "Peak element: " << test.Peek() << endl;
+	cout << "Is heap min: " << test.isMinHeap() << endl;
+	cout << "Size of Heap: " << test.Size() << endl;
+	test.PrintPQ();
+	test.PrintHSHPQ();
 	return 0;
 }
