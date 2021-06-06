@@ -139,7 +139,7 @@ public:
 
 	void PrintPQ() {
 		std::cout << "ELEMENTS PRESENTED: ";
-		for (const auto& elem : this->elems_) {
+		for (const auto& elem : this->elemss_) {
 			std::cout << elem << ' ';
 		}
 		std::cout << '\n';
