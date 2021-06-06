@@ -2074,7 +2074,7 @@ int minOperations(vector<int>& nums) {
 int main() {
 	
 	vector<int> ttt{1, 2, 4, 5, 0, 1, 99, 66, 0};
-	priority_queue <int> test(ttt);
+  	priority_queue <int> test(ttt);
 
 	cout << "Array construcvtor test:\n";
 	cout << "Peak element: " << test.Peek() << endl;
