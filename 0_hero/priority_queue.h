@@ -11,7 +11,6 @@ template <typename T>
 class priority_queue {
 public:
 	explicit priority_queue() {
-		this->capacity_ = 1;
 		this->elemss_.resize(this->capacity_);
 	}
 
@@ -126,7 +125,7 @@ public:
 		return this->pos_hsh_.count(elem);
 	}
 
-	void PrintPQ() {
+	void PrintPQ() const {
 		std::cout << "ELEMENTS PRESENTED: ";
 		for (const auto& elem : this->elemss_) {
 			std::cout << elem << ' ';
@@ -134,7 +133,7 @@ public:
 		std::cout << '\n';
 	}
 
-	void PrintHSHPQ() {
+	void PrintHSHPQ() const {
 		std::cout << "HASH PRESENTED:\n";
 		for (const auto& [elem, positions] : this->pos_hsh_) {
 			std::cout << elem << ": ";
@@ -252,7 +251,7 @@ private:
 	}
 
 	size_t size_ = 0;
-	size_t capacity_ = 0;
+	size_t capacity_ = 1;
 	std::list <T> elemss_;
 	std::map <T, std::set<size_t>> pos_hsh_;
 };
