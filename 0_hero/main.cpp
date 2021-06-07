@@ -2111,6 +2111,15 @@ int main() {
 	test.PrintPQ();
 	test.PrintHSHPQ();
 	test.PrintHeap();
+	cout << endl;
 
+	priority_queue <int> max_min;
+	max_min.Add(4000).Add(5).Add(0).Add(0).Add(25940);
+	cout << "max_min test:\n";
+	cout << "MAX: " << max_min.GetMaxValue() << '\n';
+	cout << "MIN: " << max_min.GetMimValue() << '\n';
+	max_min.PrintPQ();
+	max_min.PrintHSHPQ();
+	max_min.PrintHeap();
 	return 0;
 }

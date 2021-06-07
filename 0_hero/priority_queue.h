@@ -10,7 +10,10 @@
 template <typename T>
 class priority_queue {
 public:
-	explicit priority_queue() = default;
+	explicit priority_queue() {
+		this->capacity_ = 1;
+		this->elemss_.resize(this->capacity_);
+	}
 
 	explicit priority_queue(const size_t capacity) {
 		this->elemss_.resize(capacity);
@@ -41,7 +44,6 @@ public:
 		*this->GetElemByPos(this->size_ - 1) = elem;
 
 		this->SwimUp(this->size_ - 1);
-		
 		this->HshRenew();
 		return *this;
 	}
@@ -55,6 +57,9 @@ public:
 	}
 
 	T Poll() {
+		if (this->IsEmpty()) {
+			return NULL;
+		}
 		return this->RemoveAt(0);
 	}
 
@@ -168,6 +173,20 @@ public:
 			std::cout << *this->GetElemByPos(ptr) << "  ";
 		}
 		std::cout << '\n';
+	}
+
+	T GetMaxValue() const {
+		if (this->IsEmpty()) {
+			return NULL;
+		}
+		return (--this->pos_hsh_.end())->first;
+	}
+
+	T GetMimValue() const {
+		if (this->IsEmpty()) {
+			return NULL;
+		}
+		return (this->pos_hsh_.begin())->first;
 	}
 private:
 	size_t Parrent(const size_t pos) {
