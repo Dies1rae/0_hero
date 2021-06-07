@@ -2076,16 +2076,41 @@ int main() {
 	vector<int> ttt{1, 2, 4, 5, 0, 1, 99, 66, 0};
   	priority_queue <int> test(ttt);
 
+	
 	cout << "Array construcvtor test:\n";
 	cout << "Peak element: " << test.Peek() << endl;
 	cout << "Is heap min: " << test.isMinHeap() << endl;
 	cout << "Size of Heap: " << test.Size() << endl;
 	test.PrintPQ();
 	test.PrintHSHPQ();
-
 	test.PrintHeap();
 
+	test.Add(5).Add(500).Add(0).Add(7);
+	cout << "Array ADD test:\n";
+	cout << "Peak element: " << test.Peek() << endl;
+	cout << "Is heap min: " << test.isMinHeap() << endl;
+	cout << "Size of Heap: " << test.Size() << endl;
+	test.PrintPQ();
+	test.PrintHSHPQ();
+	test.PrintHeap();
+	
+	cout << "Array remove test:\n";
+	cout << "Element removed: " << test.Remove(99) << endl;
+	cout << "Peak element: " << test.Peek() << endl;
+	cout << "Is heap min: " << test.isMinHeap() << endl;
+	cout << "Size of Heap: " << test.Size() << endl;
+	test.PrintPQ();
+	test.PrintHSHPQ();
+	test.PrintHeap();
 
+	cout << "Array pool test:\n";
+	cout << "Element removed: " << test.Poll() << endl;
+	cout << "Peak element: " << test.Peek() << endl;
+	cout << "Is heap min: " << test.isMinHeap() << endl;
+	cout << "Size of Heap: " << test.Size() << endl;
+	test.PrintPQ();
+	test.PrintHSHPQ();
+	test.PrintHeap();
 
 	return 0;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <map>
 #include <set>
 #include <stdexcept>
@@ -31,18 +31,19 @@ public:
 
 	~priority_queue() {}
 
-	void Add(const T& elem) {
+	priority_queue& Add(const T& elem) {
 		if(this->size_ == this->capacity_) {
 			this->capacity_ = 2*this->capacity_;
 			this->elemss_.resize(this->capacity_);
 		}
 
 		this->size_++;
-		this->elemss_[this->size_ - 1] = elem;
+		*this->GetElemByPos(this->size_ - 1) = elem;
 
 		this->SwimUp(this->size_ - 1);
 		
 		this->HshRenew();
+		return *this;
 	}
 
 	T Peek() {
@@ -50,7 +51,7 @@ public:
 			return NULL;
 		}
 		
-		return this->elemss_[0];
+		return *this->GetElemByPos(0);
 	}
 
 	T Poll() {
@@ -72,9 +73,13 @@ public:
 
 		this->size_--;
 
-		T remvd_elem = this->elemss_[pos];
-		std::swap(this->elemss_[pos], this->elemss_[this->size_]);
-		this->elemss_.erase(this->elemss_.begin() + this->size_);
+		T remvd_elem = *this->GetElemByPos(pos);
+		std::swap(*this->GetElemByPos(pos), *this->GetElemByPos(this->size_));
+
+		auto erase_it = this->elemss_.begin();
+		std::advance(erase_it, this->size_);
+		this->elemss_.erase(erase_it);
+
 		this->pos_hsh_[remvd_elem].erase(pos);
 		
 		if (this->pos_hsh_[remvd_elem].empty()) {
@@ -86,10 +91,10 @@ public:
 			return remvd_elem;
 		}
 
-		T tmp_elem = this->elemss_[pos];
+		T tmp_elem = *this->GetElemByPos(pos);
 		this->SinkDown(pos);
 
-		if (this->elemss_[pos] == tmp_elem) {
+		if (*this->GetElemByPos(pos) == tmp_elem) {
 			this->SwimUp(pos);
 		}
 		this->HshRenew();
@@ -160,7 +165,7 @@ public:
 				power += 1;
 				value += (1 << power);
 			}
-			std::cout << this->elemss_[ptr] << "  ";
+			std::cout << *this->GetElemByPos(ptr) << "  ";
 		}
 		std::cout << '\n';
 	}
@@ -180,25 +185,25 @@ private:
 	void HshRenew() {
 		this->pos_hsh_.clear();
 		for (size_t ptr = 0; ptr < this->size_; ptr++) {
-			std::set<size_t> tmp_new = this->pos_hsh_[this->elemss_[ptr]];
+			std::set<size_t> tmp_new = this->pos_hsh_[*this->GetElemByPos(ptr)];
 			if (tmp_new.empty()) {
 				tmp_new.insert(ptr);
-				this->pos_hsh_[this->elemss_[ptr]] = tmp_new;
+				this->pos_hsh_[*this->GetElemByPos(ptr)] = tmp_new;
 			} else {
-				this->pos_hsh_.at(this->elemss_[ptr]).insert(ptr);
+				this->pos_hsh_.at(*this->GetElemByPos(ptr)).insert(ptr);
 			}
 		}
 	}
 
 	bool LessCmp(const size_t lhs, const size_t rhs) {
-		return this->elemss_[lhs] <= this->elemss_[rhs];
+		return *this->GetElemByPos(lhs) <= *this->GetElemByPos(rhs);
 	}
 
 	void SwimUp(size_t node_pos) {
 		size_t parrent_left = this->Parrent(node_pos);
 
 		while (node_pos > 0 && this->LessCmp(node_pos, parrent_left)) {
-			std::swap(this->elemss_[parrent_left], this->elemss_[node_pos]);
+			std::swap(*this->GetElemByPos(parrent_left), *this->GetElemByPos(node_pos));
 			node_pos = parrent_left;
 			parrent_left = this->Parrent(node_pos);
 		}
@@ -216,45 +221,20 @@ private:
 			if (left_ch >= this->size_ || this->LessCmp(node_pos, smallest_pos)) {
 				break;
 			}
-			std::swap(this->elemss_[smallest_pos], this->elemss_[node_pos]);
+			std::swap(*this->GetElemByPos(smallest_pos), *this->GetElemByPos(node_pos));
 			node_pos = smallest_pos;
 		}
 	}
 
-	void Heapify(size_t n, size_t node) {
-		size_t largest = node;
-		size_t lhs = this->left_ch(node);
-		size_t rhs = this->right_ch(node);
-
-		if (lhs < n && this->elemss_[lhs] < this->elemss_[largest]) {
-			largest = lhs;
-		}
-
-		if (rhs < n && this->elemss_[rhs] < this->elemss_[largest]) {
-			largest = rhs;
-		}
-
-		if (largest != node) {
-			std::swap(this->elemss_[node], this->elemss_[largest]);
-			this->Heapify(n, largest);
-		}
+	T* GetElemByPos(const size_t pos) {
+		auto elem = this->elemss_.begin();
+		std::advance(elem, pos);
+		return &(*elem);
 	}
-
-	void HeapSort() {
-		for (int ptr = (this->size_ / 2) - 1; ptr >= 0; ptr--) {
-			this->Heapify(this->size_, ptr);
-		}
-
-		for (int ptr = this->size_ - 1; ptr >= 0; ptr--) {
-			std::swap(this->elemss_[0], this->elemss_[ptr]);
-			this->Heapify(ptr, 0);
-		}
-	}
-
 
 	size_t size_ = 0;
 	size_t capacity_ = 0;
-	std::vector <T> elemss_;
+	std::list <T> elemss_;
 	std::map <T, std::set<size_t>> pos_hsh_;
 };
 
