@@ -915,6 +915,121 @@ vector<string> commonChars(vector<string>& A) {
 	return res;
 }
 
+int findLucky(vector<int>& arr) {
+	int ptrmax = 0;
+	map<int, int> duplicates;
+	sort(arr.begin(), arr.end());
+	for_each(arr.begin(), arr.end(), [&duplicates](int value) {duplicates[value]++; });
+	for (auto ptr : duplicates) {
+		if (ptr.first == ptr.second) {
+			if (ptrmax < ptr.first) {
+				ptrmax = ptr.first;
+			}
+		}
+	}
+	return ptrmax ? ptrmax : -1;
+}
+
+vector<int> sortedSquares(vector<int>& A) {
+	for (int ptr = 0; ptr < A.size(); ptr++) {
+		A[ptr] = A[ptr] * A[ptr];
+	}
+	sort(A.begin(), A.end());
+	return A;
+}
+
+uint32_t reverseBits(uint32_t n) {
+	uint32_t res;
+	string bin;
+
+	for (int i = 31; i >= 0; i--) {
+		int k = n >> i;
+		if (k & 1)
+			bin += "1";
+		else
+			bin += "0";
+	}
+	cout << bin << endl;
+	reverse(bin.begin(), bin.end());
+	res = stoll(bin, nullptr, 2);
+	return res;
+}
+
+int heightChecker(vector<int>& heights) {
+	int res = 0;
+	vector <int> tmp(heights);
+	sort(tmp.begin(), tmp.end());
+	for (int ptr = 0; ptr < heights.size(); ptr++) {
+		if (tmp[ptr] != heights[ptr]) {
+			res++;
+		}
+	}
+
+	return res;
+}
+
+bool judgeCircle(string moves) {
+	int X = 0, Y = 0;
+	for (int ptr = 0; ptr < moves.size(); ptr++) {
+		if (moves[ptr] == 'U') {
+			X++;
+		}
+		if (moves[ptr] == 'D') {
+			X--;
+		}
+		if (moves[ptr] == 'L') {
+			Y--;
+		}
+		if (moves[ptr] == 'R') {
+			Y++;
+		}
+	}
+	if (X == 0 && Y == 0) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
+vector<int> sortArrayByParity(vector<int>& A) {
+	vector <int> res;
+	for (int ptr = 0; ptr < A.size(); ptr++) {
+		if (A[ptr] % 2 == 0) {
+			res.insert(res.begin(), A[ptr]);
+		} else if (A[ptr] % 2 != 0) {
+			res.insert(res.end(), A[ptr]);
+		}
+	}
+	return res;
+}
+
+string reverseWords(string s) {
+	int tmp = 0;
+	std::string::size_type pos = 0;
+	for (; (pos = s.find_first_of(" ", pos)) != std::string::npos; pos++) {
+		if (pos) {
+			reverse(s.begin() + tmp, s.begin() + pos);
+			tmp = pos + 1;
+		}
+	}
+	reverse(s.begin() + tmp, s.end());
+	return s;
+}
+
+int singleNumber(std::vector<int>& nums) {
+	std::unordered_map<int, int> mp;
+	for (int i = 0; i < nums.size(); i++) {
+		mp[nums[i]]++;
+	}
+	for (int i = 0; i < nums.size(); i++) {
+		if (mp[nums[i]] == 1) {
+			return nums[i];
+		}
+	}
+	return -1;
+}
+
 vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
 	vector<int>res;
 	for (size_t ptr = 0; ptr < nums.size(); ptr++) {
@@ -2069,6 +2184,183 @@ int minOperations(vector<int>& nums) {
 		}
 	}
 
+}
+
+
+ListNode* mergeKLists(vector<ListNode*> lists) {
+	ListNode* res_ = nullptr;
+	vector<int> tmp_values;
+	size_t ctr = 0;
+	for (auto list : lists) {
+		while (list != nullptr) {
+			tmp_values.push_back(list->val);
+			list = list->next;
+		}
+	}
+
+	std::sort(tmp_values.begin(), tmp_values.end());
+
+	for (auto v : tmp_values) {
+		ListNode* tmp = new ListNode(v, nullptr);
+		ListNode* tmp_ptr = nullptr;
+		if (res_ == NULL) {
+			res_ = tmp;
+		} else {
+			tmp_ptr = res_;
+			while (tmp_ptr->next != NULL) {
+				tmp_ptr = tmp_ptr->next;
+			}
+			tmp_ptr->next = tmp;
+		}
+	}
+
+	return res_;
+}
+
+vector<int> findDuplicates(vector<int>& nums) {
+	map<int, int>ctr;
+	vector<int>res;
+	for (auto& ptr : nums) {
+		++ctr[ptr];
+	}
+	for (auto& ptr : ctr) {
+		if (ptr.second > 1) {
+			res.push_back(ptr.first);
+		}
+	}
+	return res;
+}
+
+//----
+int finde_max_m_element(vector<int>& numbers, vector<int>& directions) {
+	int index = -1;
+	for (int p = 0; p < numbers.size(); p++) {
+		int next_index = p + directions[p];
+		if (next_index >= 0 && next_index < numbers.size()) {
+			if (numbers[p] > numbers[next_index]) {
+				if (index == -1) {
+					index = p;
+				} else {
+					if (numbers[p] > numbers[index]) {
+						index = p;
+					}
+				}
+			}
+		}
+	}
+	return index;
+}
+
+void element_swap(vector<int>& numbers, vector<int>& directions, int src, int dst) {
+	std::swap(numbers[src], numbers[dst]);
+	std::swap(directions[src], directions[dst]);
+}
+
+void change_direction_elemnt(vector<int>& numbers, vector<int>& directions, int mobile_element) {
+	for (int ptr = 0; ptr < numbers.size(); ptr++) {
+		if (numbers[ptr] > mobile_element) {
+			directions[ptr] = directions[ptr] * (-1);
+		}
+	}
+}
+
+int j_t_shuffle(vector<int>& numbers) {
+	if (numbers.empty()) {
+		return 0;
+	}
+	if (numbers.size() == 1) {
+		return 1;
+	}
+	if (numbers.size() == 2) {
+		return 2;
+	}
+	int var_ctr = 1;
+	sort(numbers.begin(), numbers.end());
+	vector<int> directions(numbers.size(), -1);
+
+	int m_index = finde_max_m_element(numbers, directions);
+	while (m_index != -1) {
+		int mob_element = numbers[m_index];
+		int next_index = m_index + directions[m_index];
+		element_swap(numbers, directions, m_index, next_index);
+		change_direction_elemnt(numbers, directions, mob_element);
+
+
+		var_ctr++;
+		m_index = finde_max_m_element(numbers, directions);
+	}
+
+	return var_ctr;
+}
+//----
+//KNUT-MORRIS-PRATTA
+bool repeatedSubstringPattern(string s) {
+	string res;
+	int m = 0;
+	if (s.size() <= 1) {
+		return false;
+	} else {
+		// ---- Search algorithm KNUT - MORRIS - PRATT ---- //
+		int* ref = new int[s.size()];
+		int b = 0, S = 1;
+		ref[0] = -1;
+		while (s[S]) {
+			if (s[S] == s[b]) {
+				ref[S++] = b++;
+			} else if (b == 0) {
+				ref[S++] = -1;
+			} else {
+				b = ref[b - 1] + 1;
+			}
+		}
+		delete[] ref;
+		m = S - b;
+		// ---- Search algorithm KNUT - MORRIS - PRATT ---- //
+		if (m == s.size()) {
+			return false;
+		} else {
+			int size = s.size() / m;
+			while (size) {
+				for (int ptr = 0; ptr < m; ptr++) {
+					res += s[ptr];
+				}
+				size--;
+			}
+		}
+	}
+	return res == s ? true : false;
+}
+
+string toHex(int num) {
+	string res;
+	stringstream ss;
+	ss << hex << num;
+	res = ss.str();
+	return res;
+}
+
+vector<string> subdomainVisits(vector<string>& cpdomains) {
+	vector<string> res;
+	unordered_map<string, int> SS;
+	for (string ptr : cpdomains) {
+		int spaceI = ptr.find(' ');
+		int cntr = stoi(ptr.substr(0, spaceI));
+		string rem = ptr.substr(spaceI + 1);
+		for (int i = 0; i < rem.size(); i++) {
+			if (rem[i] == '.') {
+				SS[rem.substr(i + 1)] += cntr;
+			}
+		}
+		SS[rem] += cntr;
+	}
+	for (auto ptr : SS) {
+		string tmp;
+		tmp += to_string(ptr.second);
+		tmp += ' ';
+		tmp += ptr.first;
+		res.push_back(tmp);
+	}
+	return res;
 }
 
 int main() {
