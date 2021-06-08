@@ -144,9 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="priority_queue.cpp" />
-    <ClCompile Include="queue.cpp" />
-    <ClCompile Include="stack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="priority_queue.h" />
