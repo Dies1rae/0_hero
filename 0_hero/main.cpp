@@ -2363,55 +2363,52 @@ vector<string> subdomainVisits(vector<string>& cpdomains) {
 	return res;
 }
 
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+	if (l1 == nullptr || l2 == nullptr) {
+		if (l1 == nullptr) {
+			return l2;
+		} else {
+			return l1;
+		}
+	}
+	vector<int> values;
+	
+	while (l1 != nullptr) {
+		values.push_back(l1->val);
+		l1 = l1->next;
+	}
+	while (l2 != nullptr) {
+		values.push_back(l2->val);
+		l2 = l2->next;
+	}
+	std::sort(values.begin(), values.end());
+	ListNode* res = new ListNode(values[0]);
+	ListNode* head = res;
+	for (size_t ptr = 1; ptr < values.size(); ptr++) {
+		head->next = new ListNode(values[ptr]);
+		head = head->next;
+	}
+	return res;
+}
+
+TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+	if (!root1) {
+		return root2;
+	}
+	if (!root2) {
+		return root1;
+	}
+
+	root1->val += root2->val;
+	root1->left = mergeTrees(root1->left, root2->left);
+	root1->right = mergeTrees(root1->right, root2->right);
+
+	return root1;
+}
+
 int main() {
 	
-	vector<int> ttt{1, 2, 4, 5, 0, 1, 99, 66, 0};
-  	priority_queue <int> test(ttt);
 
-	
-	cout << "Array construcvtor test:\n";
-	cout << "Peak element: " << test.Peek() << endl;
-	cout << "Is heap min: " << test.isMinHeap() << endl;
-	cout << "Size of Heap: " << test.Size() << endl;
-	test.PrintPQ();
-	test.PrintHSHPQ();
-	test.PrintHeap();
 
-	test.Add(5).Add(500).Add(0).Add(7);
-	cout << "Array ADD test:\n";
-	cout << "Peak element: " << test.Peek() << endl;
-	cout << "Is heap min: " << test.isMinHeap() << endl;
-	cout << "Size of Heap: " << test.Size() << endl;
-	test.PrintPQ();
-	test.PrintHSHPQ();
-	test.PrintHeap();
-	
-	cout << "Array remove test:\n";
-	cout << "Element removed: " << test.Remove(99) << endl;
-	cout << "Peak element: " << test.Peek() << endl;
-	cout << "Is heap min: " << test.isMinHeap() << endl;
-	cout << "Size of Heap: " << test.Size() << endl;
-	test.PrintPQ();
-	test.PrintHSHPQ();
-	test.PrintHeap();
-
-	cout << "Array pool test:\n";
-	cout << "Element removed: " << test.Poll() << endl;
-	cout << "Peak element: " << test.Peek() << endl;
-	cout << "Is heap min: " << test.isMinHeap() << endl;
-	cout << "Size of Heap: " << test.Size() << endl;
-	test.PrintPQ();
-	test.PrintHSHPQ();
-	test.PrintHeap();
-	cout << endl;
-
-	priority_queue <int> max_min;
-	max_min.Add(4000).Add(5).Add(0).Add(0).Add(25940);
-	cout << "max_min test:\n";
-	cout << "MAX: " << max_min.GetMaxValue() << '\n';
-	cout << "MIN: " << max_min.GetMimValue() << '\n';
-	max_min.PrintPQ();
-	max_min.PrintHSHPQ();
-	max_min.PrintHeap();
 	return 0;
 }
