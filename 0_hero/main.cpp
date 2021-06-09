@@ -2390,6 +2390,65 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
 	return res;
 }
 
+int minPairSum(vector<int>& nums) {
+	int max = INT_MIN;
+	std::sort(nums.begin(), nums.end());
+	for (size_t ptr_b = 0, ptr_e = nums.size() - 1; ptr_b < nums.size() / 2; ptr_b++, ptr_e--) {
+		if (nums[ptr_b] + nums[ptr_e] > max) {
+			max = nums[ptr_b] + nums[ptr_e];
+		}
+	}
+	return max;
+}
+
+ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+	ListNode* begin_node = list1;
+	ListNode* end_node = list1;
+	ListNode* list2_end = list2;
+	a -= 1;
+	b += 1;
+	while (a != 0) {
+		begin_node = begin_node->next;
+		a--;
+	}
+	while (b != 0) {
+		end_node = end_node->next;
+		b--;
+	}
+	while (list2_end->next != nullptr) {
+		list2_end = list2_end->next;
+	}
+
+	begin_node->next = list2;
+	list2_end->next = end_node;
+	return list1;
+}
+
+
+void inorder_trav(TreeNode* node, vector<int>& hsh, int start = 0) {
+	if (node == nullptr) {
+		return;
+	} else {
+		inorder_trav(node->left, hsh,++start);
+		hsh.push_back(node->val);
+		start--;
+	}
+	inorder_trav(node->right, hsh);
+}
+
+int getMinimumDifference(TreeNode* root) {
+	vector<int> root_values;
+	inorder_trav(root, root_values);
+	int min = INT_MAX;
+	for (size_t ptr = 0; ptr + 1< root_values.size(); ptr++) {
+		int tmp_min = root_values[ptr + 1] - root_values[ptr];
+		if (min > tmp_min) {
+			min = tmp_min;
+		}
+	}
+	return min;
+}
+
 int main() {
 	
 
