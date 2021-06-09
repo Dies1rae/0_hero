@@ -222,7 +222,7 @@ TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
 	return root1;
 }
 
-void inorder_trav(TreeNode* node, vector<int>& hsh, int start = 0) {
+void inorder_trav(TreeNode* node, std::vector<int>& hsh, int start = 0) {
 	if (node == nullptr) {
 		return;
 	} else {
@@ -234,7 +234,7 @@ void inorder_trav(TreeNode* node, vector<int>& hsh, int start = 0) {
 }
 
 int getMinimumDifference(TreeNode* root) {
-	vector<int> root_values;
+	std::vector<int> root_values;
 	inorder_trav(root, root_values);
 	int min = INT_MAX;
 	for (size_t ptr = 0; ptr + 1 < root_values.size(); ptr++) {

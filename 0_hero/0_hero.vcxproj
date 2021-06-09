@@ -146,11 +146,15 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SingleLinkedList_full.h" />
+    <ClInclude Include="vector_simple.h" />
+    <ClInclude Include="vector_full.h" />
     <ClInclude Include="priority_queue.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="SingleLinkedLIst.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="TreeNode.h" />
+    <ClInclude Include="vector_full_test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

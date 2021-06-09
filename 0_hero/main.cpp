@@ -2,6 +2,9 @@
 #include "queue.h"
 #include "stack.h"
 #include "priority_queue.h"
+#include "vector_full_test.h"
+#include "vector_simple.h"
+#include "SingleLinkedList_full.h"
 
 #include <algorithm>
 #include <vector>
@@ -2117,7 +2120,7 @@ int daysBetweenDates(string date1, string date2) {
 	return difference;
 }
 
-namespace C {
+namespace C_ {
 #define MAX(x,y) ((x)>(y)?(x):(y))
 #define SquareOf(x) x * x
 
@@ -2411,13 +2414,21 @@ ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
 		list2_end = list2_end->next;
 	}
 
+	ListNode* to_delete;
+	to_delete = begin_node->next;
+	while (to_delete) {
+		ListNode* deleted = to_delete;
+		delete deleted;
+		to_delete = to_delete->next;
+	}
+
 	begin_node->next = list2;
 	list2_end->next = end_node;
 	return list1;
 }
 
 int main() {
-	
+	RUN_ALL();
 
 
 	return 0;
