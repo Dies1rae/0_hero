@@ -1357,7 +1357,6 @@ int totalMoney(int n) {
 }
 
 //Prototype design pattern
-
 class dog {
 public:
 	explicit dog() = default;
@@ -1463,7 +1462,6 @@ int maxAscendingSum(vector<int>& nums) {
 	return max_asc;
 }
 
-
 int sumBase(int n, int k) {
 	int converted = 0;
 	vector<int> res;
@@ -1494,8 +1492,6 @@ int getMinDistance(vector<int>& nums, int target, int start) {
 	}
 	return min_dist;
 }
-
-
 
 bool count_number_set(unsigned n) {
 	int ctr = 0;
@@ -1587,7 +1583,6 @@ bool check(vector<int>& nums) {
 	}
 	return true;
 }
-
 
 std::vector<std::string> SplitIntoWords(const std::string_view& text) {
 	std::vector<std::string> words;
@@ -1810,8 +1805,6 @@ bool rotateString(string s, string goal) {
 	}
 	return false;
 }
-
-
 
 bool canConstruct(string ransomNote, string magazine) {
 	map<char, int> rans;
@@ -2185,7 +2178,6 @@ int minOperations(vector<int>& nums) {
 
 }
 
-
 ListNode* mergeKLists(vector<ListNode*> lists) {
 	ListNode* res_ = nullptr;
 	vector<int> tmp_values;
@@ -2422,31 +2414,6 @@ ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
 	begin_node->next = list2;
 	list2_end->next = end_node;
 	return list1;
-}
-
-
-void inorder_trav(TreeNode* node, vector<int>& hsh, int start = 0) {
-	if (node == nullptr) {
-		return;
-	} else {
-		inorder_trav(node->left, hsh,++start);
-		hsh.push_back(node->val);
-		start--;
-	}
-	inorder_trav(node->right, hsh);
-}
-
-int getMinimumDifference(TreeNode* root) {
-	vector<int> root_values;
-	inorder_trav(root, root_values);
-	int min = INT_MAX;
-	for (size_t ptr = 0; ptr + 1< root_values.size(); ptr++) {
-		int tmp_min = root_values[ptr + 1] - root_values[ptr];
-		if (min > tmp_min) {
-			min = tmp_min;
-		}
-	}
-	return min;
 }
 
 int main() {

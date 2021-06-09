@@ -221,3 +221,27 @@ TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
 
 	return root1;
 }
+
+void inorder_trav(TreeNode* node, vector<int>& hsh, int start = 0) {
+	if (node == nullptr) {
+		return;
+	} else {
+		inorder_trav(node->left, hsh, ++start);
+		hsh.push_back(node->val);
+		start--;
+	}
+	inorder_trav(node->right, hsh);
+}
+
+int getMinimumDifference(TreeNode* root) {
+	vector<int> root_values;
+	inorder_trav(root, root_values);
+	int min = INT_MAX;
+	for (size_t ptr = 0; ptr + 1 < root_values.size(); ptr++) {
+		int tmp_min = root_values[ptr + 1] - root_values[ptr];
+		if (min > tmp_min) {
+			min = tmp_min;
+		}
+	}
+	return min;
+}
