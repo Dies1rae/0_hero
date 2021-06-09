@@ -2428,7 +2428,7 @@ ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
 }
 
 int main() {
-	RUN_ALL();
+
 
 
 	return 0;
