@@ -5,6 +5,7 @@
 #include "vector_full_test.h"
 #include "vector_simple.h"
 #include "SingleLinkedList_full.h"
+#include "UnionFind.h"
 
 #include <algorithm>
 #include <vector>
@@ -2428,8 +2429,16 @@ ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
 }
 
 int main() {
+	UnionFind<char> test(12);
 
+	cout << test.Size() << ' ' << test.NumberComponents() << endl;
 
+	test.Unify(4, 9);
+	cout << test.Size() << ' ' << test.NumberComponents() << endl;
+
+	cout << test.Find(9) << endl;
+
+	cout << test.Connected(4, 9) << endl;
 
 	return 0;
 }

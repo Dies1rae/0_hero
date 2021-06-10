@@ -149,6 +149,7 @@
     <ClInclude Include="AvlTree.h" />
     <ClInclude Include="Optional.h" />
     <ClInclude Include="SingleLinkedList_full.h" />
+    <ClInclude Include="UnionFind.h" />
     <ClInclude Include="vector_simple.h" />
     <ClInclude Include="vector_full.h" />
     <ClInclude Include="priority_queue.h" />
