@@ -2467,9 +2467,30 @@ int busyStudent(vector<int>& startTime, vector<int>& endTime, int queryTime) {
 }
 
 int main() {
-	vector<int> startI {4};
-	vector<int> endT {4};
-	cout << busyStudent(startI, endT, 4) << endl;
+	vector<char> chars{'e','f','g','h'};
+	UnionFind<char> test(8);
+	test.SetElement(0, 'a');
+	test.SetElement(1, 'b'); 
+	test.SetElement(2, 'c');
+	test.SetElement(3, 'd');
+	test.SetElement(chars);
+
+	test.Unify(0, 2);
+	test.Unify(5, 7);
+		
+	for (const auto& t : test.FindElemsUnify(0)) {
+		cout << t << ' ';
+	}
+	cout << endl;
+	for (const auto& t : test.FindElemsUnify(7)) {
+		cout << t << ' ';
+	}
+	cout << endl;
+	test.Unify(0, 6);
+	for (const auto& t : test.FindElemsUnify(6)) {
+		cout << t << ' ';
+	}
+	cout << endl;
 
 	return 0;
 }
