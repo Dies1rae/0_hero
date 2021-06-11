@@ -2428,17 +2428,48 @@ ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
 	return list1;
 }
 
+struct BoxCmp {
+	bool operator()(const vector<int> a, const vector<int> b) {
+		return a[1] > b[1];
+	}
+};
+
+
+int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
+	std::sort(boxTypes.begin(), boxTypes.end(), BoxCmp());
+	size_t box_iter = 0;
+	int res = 0;
+	
+	while (truckSize > 0) {
+		if (box_iter == boxTypes.size()) {
+			break;
+		}
+		if (truckSize < boxTypes[box_iter][0]) {
+			res += truckSize*boxTypes[box_iter][1];
+		} else {
+			res += boxTypes[box_iter][0]*boxTypes[box_iter][1];
+		}
+		
+		truckSize -= boxTypes[box_iter][0];
+		box_iter++;
+	}
+	return res;
+}
+
+int busyStudent(vector<int>& startTime, vector<int>& endTime, int queryTime) {
+	int res = 0;
+	for (size_t ptr = 0; ptr < startTime.size(); ptr++) {
+		if ((startTime[ptr] <= queryTime) &&(endTime[ptr] >= queryTime)) {
+			res++;
+		}
+	}
+	return res;
+}
+
 int main() {
-	UnionFind<char> test(12);
-
-	cout << test.Size() << ' ' << test.NumberComponents() << endl;
-
-	test.Unify(4, 9);
-	cout << test.Size() << ' ' << test.NumberComponents() << endl;
-
-	cout << test.Find(9) << endl;
-
-	cout << test.Connected(4, 9) << endl;
+	vector<int> startI {4};
+	vector<int> endT {4};
+	cout << busyStudent(startI, endT, 4) << endl;
 
 	return 0;
 }
