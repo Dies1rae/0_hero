@@ -2466,31 +2466,51 @@ int busyStudent(vector<int>& startTime, vector<int>& endTime, int queryTime) {
 	return res;
 }
 
-int main() {
-	vector<char> chars{'e','f','g','h'};
-	UnionFind<char> test(8);
-	test.SetElement(0, 'a');
-	test.SetElement(1, 'b'); 
-	test.SetElement(2, 'c');
-	test.SetElement(3, 'd');
-	test.SetElement(chars);
+int maxCoins(vector<int>& piles) {
+	int res = 0;
+	std::sort(piles.begin(), piles.end());
+	for (size_t ptr = piles.size() / 3; ptr < piles.size(); ptr+=2) {
+		res += piles[ptr];
+	}
 
-	test.Unify(0, 2);
-	test.Unify(5, 7);
-		
-	for (const auto& t : test.FindElemsUnify(0)) {
-		cout << t << ' ';
+	return res;
+}
+
+
+int isPrefixOfWord(string sentence, string searchWord) {
+	int res = 0;
+	int spaces = 0;
+	std::string word;
+	for (const char c : sentence) {
+		if (c == ' ') {
+			spaces++;
+			if (!word.empty()) {
+				size_t find_it = word.find(searchWord);
+				if (find_it == 0) {
+					res += spaces;
+					return ++res;
+				}
+				word.clear();
+			}
+		} else {
+			word += c;
+		}
 	}
-	cout << endl;
-	for (const auto& t : test.FindElemsUnify(7)) {
-		cout << t << ' ';
+	if (!word.empty()) {
+		size_t find_it = word.find(searchWord);
+		if (find_it == 0) {
+			res += spaces;
+			return ++res;
+		}
 	}
-	cout << endl;
-	test.Unify(0, 6);
-	for (const auto& t : test.FindElemsUnify(6)) {
-		cout << t << ' ';
-	}
-	cout << endl;
+	return -1;
+}
+
+int main() {
+	string a = "hellohello hellohellohello";
+	string b = "ell";
+
+	cout << isPrefixOfWord(a, b) << endl;
 
 	return 0;
 }
