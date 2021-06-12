@@ -2506,11 +2506,44 @@ int isPrefixOfWord(string sentence, string searchWord) {
 	return -1;
 }
 
-int main() {
-	string a = "hellohello hellohellohello";
-	string b = "ell";
+void bst(TreeNode* root, map<int, int>& result) {
+	if (root == nullptr) {
+		return;
+	}
+	std::stack<std::pair<TreeNode*, int>> hsh;
+	hsh.push({root, 1});
 
-	cout << isPrefixOfWord(a, b) << endl;
+	while (!hsh.empty()) {
+		std::pair<TreeNode*, int> curr_root = hsh.top();
+		hsh.pop();
+		result[curr_root.second] += curr_root.first->val;
+		if (curr_root.first->left) {
+			hsh.push({curr_root.first->left, curr_root.second + 1});
+		}
+		if ( curr_root.first->right) {
+			hsh.push({curr_root.first->right, curr_root.second + 1});
+		}
+	}
+}
+
+int maxLevelSum(TreeNode* root) {
+	map<int, int> sum_level;
+	bst(root, sum_level);
+	auto pr = std::max_element(std::begin(sum_level), std::end(sum_level), [](const std::pair<int,int>& lhs, const std::pair<int,int>& rhs) {
+		return lhs.second < rhs.second;
+	});
+	return pr->first;
+}
+
+int main() {
+	TreeNode* root = new TreeNode(-100);
+	root->left = new TreeNode(-200);
+	root->right = new TreeNode(-300);
+	root->left->left = new TreeNode(-20);
+	root->left->right = new TreeNode(-5);
+	root->right->left = new TreeNode(-10);
+
+	cout << maxLevelSum(root) << endl;
 
 	return 0;
 }
