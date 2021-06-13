@@ -2535,15 +2535,78 @@ int maxLevelSum(TreeNode* root) {
 	return pr->first;
 }
 
-int main() {
-	TreeNode* root = new TreeNode(-100);
-	root->left = new TreeNode(-200);
-	root->right = new TreeNode(-300);
-	root->left->left = new TreeNode(-20);
-	root->left->right = new TreeNode(-5);
-	root->right->left = new TreeNode(-10);
+string maximumTime(string time) {
+	size_t f_pos = time.find('?', 0);
+	while (f_pos != std::string::npos) {
+		if (f_pos == 0) {
+			if (time[f_pos + 1] > '3' && time[f_pos + 1] != '?') {
+				time[f_pos] = '1';
+			} else {
+				time[f_pos] = '2';
+			}
+		}
+		if (f_pos == 1) {
+			if (time[f_pos - 1] == '2') {
+				time[f_pos] = '3';
+			} else {
+				time[f_pos] = '9';
+			}
 
-	cout << maxLevelSum(root) << endl;
+		}
+		if (f_pos == 3) {
+			time[f_pos] = '5';
+		}
+		if (f_pos == 4) {
+			time[f_pos] = '9';
+		}
+		f_pos = time.find('?', f_pos++);
+	}
+	return time;
+}
+
+
+//BAD
+int numberOfMatches(int n) {
+	int res = 0;
+	if (n == 1) {
+		return 0;
+	}
+	while (n != 1) {
+		if (n % 2 == 0) {
+			res += n / 2;
+			n /= 2;
+		} else {
+			res += (n - 1) / 2;
+			n = (n - 1) / 2 + 1;
+		}
+	}
+	return res;
+}
+
+//GOOD
+int numberOfMatches_1(int n) {
+	return n - 1;
+}
+
+string truncateSentence(string s, int k) {
+	string res;
+	vector<string> words = SplitIntoWords(s);
+	if (k >= words.size()) {
+		return s;
+	}
+	for (size_t ptr = 0; ptr < k; ptr++) {
+		if (ptr != k) {
+			res += words[ptr] + ' ';
+		} else {
+			res += words[ptr];
+		}
+	}
+	return res;
+}
+
+int main() {
+
+	cout << truncateSentence("Hello how are you Contestant", 4) << endl;
 
 	return 0;
 }
