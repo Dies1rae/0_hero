@@ -2604,9 +2604,20 @@ string truncateSentence(string s, int k) {
 	return res;
 }
 
+int TwoSum(const vector<int>& elems, const int target) {
+	map<int, int> hsh;
+	for (const auto& elem : elems) {
+		int compliant = target - elem;
+		if (hsh.count(elem) > 0) {
+			return hsh.at(elem) + elem;
+		}
+		hsh[compliant] = elem;
+	}
+	return -1;
+}
+
 int main() {
 
-	cout << truncateSentence("Hello how are you Contestant", 4) << endl;
 
 	return 0;
 }
