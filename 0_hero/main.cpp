@@ -6,6 +6,7 @@
 #include "vector_simple.h"
 #include "SingleLinkedList_full.h"
 #include "UnionFind.h"
+#include "BST.h"
 
 #include <algorithm>
 #include <vector>
@@ -2647,7 +2648,18 @@ bool checkZeroOnes(string s) {
 }
 
 int main() {
-
-
+	BinarySearchTree<int> tress_bst_test(9999);
+	cout << tress_bst_test.Add(1) << endl;
+	cout << tress_bst_test.Add(55) << endl;
+	cout << tress_bst_test.Add(23) << endl;
+	cout << tress_bst_test.Add(55) << endl;
+	cout << tress_bst_test.Contains(55) << endl;
+	cout << tress_bst_test.Contains(1) << endl;
+	cout << tress_bst_test.Contains(23) << endl;
+	cout << tress_bst_test.Remove(55) << endl;
+	cout << tress_bst_test.Contains(55) << endl;
+	cout << tress_bst_test.Contains(9999) << endl;
+	cout << tress_bst_test.Size() << endl;
+	cout << tress_bst_test.Height() << endl;
 	return 0;
 }
