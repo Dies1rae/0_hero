@@ -2616,6 +2616,36 @@ int TwoSum(const vector<int>& elems, const int target) {
 	return -1;
 }
 
+bool checkZeroOnes(string s) {
+	int zero_ctr = 0;
+	int one_ctr = 0;
+	if (s.find('0') == std::string::npos) {
+		return 1;
+	}
+	if (s.find('1') == std::string::npos) {
+		return 0;
+	}
+	for (size_t ptr = 0; ptr < s.size();) {
+		int tmp_one = 0;
+		int tmp_zero = 0;
+		while (s[ptr] == '1') {
+			tmp_one++;
+			ptr++;
+		}
+		while (s[ptr] == '0') {
+			tmp_zero++;
+			ptr++;
+		}
+		if (zero_ctr < tmp_zero) {
+			zero_ctr = tmp_zero;
+		}
+		if (one_ctr < tmp_one) {
+			one_ctr = tmp_one;
+		}
+	}
+	return one_ctr > zero_ctr ? 1 : 0;
+}
+
 int main() {
 
 
