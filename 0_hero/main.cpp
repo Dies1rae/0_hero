@@ -2647,19 +2647,50 @@ bool checkZeroOnes(string s) {
 	return one_ctr > zero_ctr ? 1 : 0;
 }
 
+vector<int> decompressRLElist(vector<int>& nums) {
+	vector<int> res;
+	for (size_t ptr = 0; ptr < nums.size(); ptr += 2) {
+		int ctr = nums[ptr];
+		while (ctr) {
+			res.push_back(nums[ptr + 1]);
+			ctr--;
+		}
+	}
+	return res;
+}
+
+int maxDepth(string s) {
+	if (s.find('(') == std::string::npos || s.find(')') == std::string::npos) {
+		return 0;
+	}
+	int res = 0;
+	int tmp = 0;
+	int ctr_open = 0;
+	int ctr_close = 0;
+	for (const auto& ch : s) {
+		if (ch == '(' ) {
+			ctr_open++;
+		} else if (ch == ')' ){
+			tmp = ctr_open - ctr_close;
+			ctr_close++;
+		}
+		res = max(res, tmp);
+	}
+	res = max(res, tmp);
+	return res;
+}
+
+string toLowerCase(string s) {
+	for (auto& ch : s) {
+		if (ch >= 'A' && ch <= 'Z') {
+			ch += 32;
+		}
+	}
+	return s;
+}
+
 int main() {
-	BinarySearchTree<int> tress_bst_test(9999);
-	cout << tress_bst_test.Add(1) << endl;
-	cout << tress_bst_test.Add(55) << endl;
-	cout << tress_bst_test.Add(23) << endl;
-	cout << tress_bst_test.Add(55) << endl;
-	cout << tress_bst_test.Contains(55) << endl;
-	cout << tress_bst_test.Contains(1) << endl;
-	cout << tress_bst_test.Contains(23) << endl;
-	cout << tress_bst_test.Remove(55) << endl;
-	cout << tress_bst_test.Contains(55) << endl;
-	cout << tress_bst_test.Contains(9999) << endl;
-	cout << tress_bst_test.Size() << endl;
-	cout << tress_bst_test.Height() << endl;
+	cout << maxDepth("+(+(+)+)+") << endl;
+	cout << maxDepth("()(()())") << endl;
 	return 0;
 }
