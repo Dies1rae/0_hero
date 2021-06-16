@@ -2752,6 +2752,13 @@ private:
 	vector<vector<int>> rectangle_coords_;
 };
 
+int minPartitions(string n) {
+	int max_ = 0;
+	for (const char ch : n) {
+		max_ = max(max_, ch - 48);
+	}
+	return max_;
+}
 
 int main() {
 	
