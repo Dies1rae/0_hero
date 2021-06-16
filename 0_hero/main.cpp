@@ -2688,9 +2688,72 @@ string toLowerCase(string s) {
 	}
 	return s;
 }
+//---------------------------
+struct sumestruct {
+	sumestruct(string st, size_t i, char c) {
+		num = st;
+		id = i;
+		I = c;
+	}
+	string num = "";
+	size_t id = 0;
+	char I = ' ';
+};
+
+inline static constexpr int hshr_salt = 65;
+
+struct Testhshr {
+	int operator()(const sumestruct& lhs) const {
+		return ((lhs.num.size() * lhs.id) + lhs.I) * hshr_salt;
+	}
+};
+
+struct TestComparator_word {
+	bool operator()(const pair<int, string>& lhs, const pair<int, string>& rhs) const {
+		return std::lexicographical_compare(lhs.second.begin(), lhs.second.end(), rhs.second.begin(), rhs.second.end());
+	}
+};
+
+struct TestComparator_key {
+	bool operator()(const pair<int, string>& lhs, const pair<int, string>& rhs) const {
+		return lhs.first > rhs.first;
+	}
+};
+
+struct sumestruct_id_cmp {
+	bool operator()(const sumestruct& lhs, const sumestruct& rhs) const {
+		return lhs.id > rhs.id;
+	}
+};
+//---------------------------
+
+int maxProduct(vector<int>& nums) {
+	sort(nums.begin(), nums.end());
+	size_t length = nums.size();
+	return (nums[length - 2] - 1) * (nums[length - 1] - 1);
+}
+
+class SubrectangleQueries {
+public:
+	SubrectangleQueries(vector<vector<int>>& rectangle) : rectangle_coords_(rectangle) {}
+
+	void updateSubrectangle(int row1, int col1, int row2, int col2, int newValue) {
+		for (size_t row_ = row1; row_ <= row2; row_++) {
+			for (size_t col_ = col1; col_ <= col2; col_++) {
+				this->rectangle_coords_[row_][col_] = newValue;
+			}
+		}
+	}
+
+	int getValue(int row, int col) {
+		return this->rectangle_coords_[row][col];
+	}
+private:
+	vector<vector<int>> rectangle_coords_;
+};
+
 
 int main() {
-	cout << maxDepth("+(+(+)+)+") << endl;
-	cout << maxDepth("()(()())") << endl;
+	
 	return 0;
 }
