@@ -2760,7 +2760,60 @@ int minPartitions(string n) {
 	return max_;
 }
 
+string thousandSeparator(int n) {
+	string res = to_string(n);
+	if (res.size() < 4) {
+		return res;
+	}
+	for (int ptr = res.size() - 3; ptr > 0; ptr -= 3) {
+		res.insert(ptr, 1, '.');
+	}
+	return res;
+}
+
+vector<int> countPoints(vector<vector<int>>& points, vector<vector<int>>& queries) {
+	vector<int> res;
+	res.resize(queries.size());
+
+	for (size_t ptr = 0; ptr < queries.size(); ptr ++) {
+		int ctr = 0;
+		for (const auto point : points) {
+			if (std::pow((point[0] - queries[ptr][0]), 2) + std::pow((point[1] -  queries[ptr][1]), 2) <= std::pow( queries[ptr][2], 2)) {
+				ctr++;
+			}
+		}
+		res[ptr] = ctr;
+	}
+	return res;
+}
+
+string interpret(string command) {
+	string res;
+	auto str_ptr = command.begin();
+	while (str_ptr != command.end()) {
+		if (*str_ptr == 'G') {
+			res += *str_ptr;
+			str_ptr++;
+			continue;
+		}
+		if (*str_ptr == '(') {
+			if (*(str_ptr + 1) == ')') {
+				res += 'o';
+				str_ptr += 2;
+				continue;
+			} else {
+				res += "al";
+				str_ptr += 4;
+				continue;
+			}
+		}
+	}
+	return res;
+}
+
 int main() {
 	
+	cout << interpret("(al)G(al)()()G") << endl;
+
 	return 0;
 }
