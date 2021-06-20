@@ -2811,9 +2811,91 @@ string interpret(string command) {
 	return res;
 }
 
+bool detectCapitalUse(string word) {
+    if(word.size() == 1){
+		return true;
+	}
+	if(word[0] >= 97) {
+		auto ptr = word.begin();
+		while(ptr != word.end()) {
+			if(*ptr < 97){
+				return false;
+			}
+			ptr ++;
+		}
+		return true;
+	}
+	if(word[0] >= 65 && word[0] <= 90) {
+		if(word[1] >= 97){
+			auto ptr = word.begin() + 1;
+			while(ptr != word.end()) {
+				if(*ptr < 97){
+					return false;
+				}
+				ptr ++;
+			}
+			return true;
+		} else {
+			auto ptr = word.begin();
+			while(ptr != word.end()) {
+				if(*ptr > 90) {
+					return false;
+				}
+				ptr ++;
+			}
+			return true;
+		}
+	}
+	return true;
+}
+
+struct RestCmp {
+	bool operator()(const pair<string, int[2]>& lhs, const pair<string, int[2]>& rhs) const {
+		return lhs.second[1] < rhs.second[1];
+	}
+};
+
+vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+	vector <string> res;
+	map<string, int[2], RestCmp()> hash;
+	for(size_t ptr1 = 0, ptr2 = 0; ptr1 < list1.size() || ptr2 < list2.size();) {
+		if(ptr1 < list1.size()){
+			if(hash.count(list1[ptr1]) > 0){
+				hash[list1[ptr1]][0] += 1;
+				hash[list1[ptr1]][1] += ptr1;
+			} else {
+				hash[list1[ptr1]][0] = 1;
+				hash[list1[ptr1]][1] = ptr1;
+			}
+			
+			ptr1++;
+		}
+		if(ptr2 < list2.size()){
+			if(hash.count(list2[ptr2]) > 0){
+				hash[list2[ptr2]][0] += 1;
+				hash[list2[ptr2]][1] += ptr2;
+			} else {
+				hash[list2[ptr2]][0] = 1;
+				hash[list2[ptr2]][1] = ptr2;
+			}
+			ptr2++;
+		}
+	}
+	int tmp_min = INT_MAX;
+	for(const auto& [rest, ctr] : hash){
+		if(ctr[0] > 1) {
+			if(tmp_min > ctr[1] || tmp_min == ctr[1]){
+				tmp_min = ctr[1];
+				res.push_back(rest);
+			}
+		}
+	}
+	return res;
+}
+
 int main() {
 	
-	cout << interpret("(al)G(al)()()G") << endl;
+	cout << detectCapitalUse("Google") << endl;
 
 	return 0;
 }
