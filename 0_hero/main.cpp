@@ -2849,15 +2849,9 @@ bool detectCapitalUse(string word) {
 	return true;
 }
 
-struct RestCmp {
-	bool operator()(const pair<string, int[2]>& lhs, const pair<string, int[2]>& rhs) const {
-		return lhs.second[1] < rhs.second[1];
-	}
-};
-
 vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
 	vector <string> res;
-	map<string, int[2], RestCmp()> hash;
+	map<string, int[2]> hash;
 	for(size_t ptr1 = 0, ptr2 = 0; ptr1 < list1.size() || ptr2 < list2.size();) {
 		if(ptr1 < list1.size()){
 			if(hash.count(list1[ptr1]) > 0){
@@ -2867,7 +2861,7 @@ vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
 				hash[list1[ptr1]][0] = 1;
 				hash[list1[ptr1]][1] = ptr1;
 			}
-			
+
 			ptr1++;
 		}
 		if(ptr2 < list2.size()){
@@ -2881,10 +2875,14 @@ vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
 			ptr2++;
 		}
 	}
+
 	int tmp_min = INT_MAX;
 	for(const auto& [rest, ctr] : hash){
 		if(ctr[0] > 1) {
 			if(tmp_min > ctr[1] || tmp_min == ctr[1]){
+				if(tmp_min > ctr[1] && !res.empty()) {
+					res.clear();
+				}
 				tmp_min = ctr[1];
 				res.push_back(rest);
 			}
@@ -2893,9 +2891,31 @@ vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
 	return res;
 }
 
+
+int maximumPopulation(vector<vector<int>>& logs) {
+	map<int, int> res;
+	int year_res = 0;
+	int year_summ = 0;
+	int year_summ_tmp = 0;
+	for (size_t pst = 0; pst < logs.size(); pst++) {
+		res[logs[pst][1]]--; 
+		res[logs[pst][0]]++;
+	}
+
+	for (const auto& [year, ctr] : res) {
+		year_summ += ctr;
+		if (year_summ > year_summ_tmp) {
+			year_summ_tmp = year_summ;
+			year_res = year;
+		}
+	}
+
+	return year_res;
+}
+
 int main() {
-	
-	cout << detectCapitalUse("Google") << endl;
+	vector<vector<int>> a {{1982, 1998}, {2013, 2042},{2010, 2035}, {2022, 2050}, {2047, 2048}};
+	cout << maximumPopulation(a) << endl;
 
 	return 0;
 }
