@@ -2913,9 +2913,84 @@ int maximumPopulation(vector<vector<int>>& logs) {
 	return year_res;
 }
 
+string licenseKeyFormatting(string s, int k) {
+	string res = s;
+	stringstream ss_res;
+	res.erase(std::remove(res.begin(), res.end(), '-'), res.end());
+	for (char& ch : res) {
+		if (std::isalpha(ch)) {
+			ch = std::toupper(ch);
+		}
+	}
+
+	if (res.size() % k != 0) {
+		for (size_t ptr = 0; ptr < res.size(); ptr++) {
+			if (ptr % k == 0 && ptr != 0) {
+				ss_res << '-';
+				ss_res << res[ptr];
+			} else {
+				ss_res << res[ptr];
+			}
+		}
+	} else {
+		int sep_tmp = 1;
+		while ((res.size() - sep_tmp) % k == 0) {
+			sep_tmp++;
+		}
+		while (sep_tmp) {
+			ss_res << res[0];
+			res = res.substr(1);
+			sep_tmp--;
+		}
+		
+		for (size_t ptr = 0; ptr < res.size(); ptr++) {
+			if (ptr % k == 0) {
+				ss_res << '-';
+				ss_res << res[ptr];
+			} else {
+				ss_res << res[ptr];
+			}
+		}
+	}
+	return ss_res.str();
+}
+
+int isSubseq(string s, string t) {
+	int res = 0;
+	size_t len_s = s.size();
+	size_t ptr = 0;
+	size_t Tlen_ctr = 0;
+	for (size_t ptr1 = 0; ptr1 < t.size() && ptr < len_s;) {
+		if (t[ptr1] == s[ptr]) {
+			Tlen_ctr++;
+			if ((ptr1 == t.size() - 1 || ptr == len_s - 1) && Tlen_ctr == t.size()) {
+				res++;
+			}
+			ptr++;
+			ptr1++;
+		} else {
+			ptr++;
+		}
+	}
+	return res;
+}
+
+int numMatchingSubseq(string s, vector<string>& words) {
+	int res = 0;
+	map<string, int> hsh;
+	for (const auto& word : words) {
+		hsh[word]++;
+	}
+	for (const auto& [word, ctr] : hsh) {
+		res += (isSubseq(s, word) * ctr);
+	}
+	return res;
+}
+
 int main() {
-	vector<vector<int>> a {{1982, 1998}, {2013, 2042},{2010, 2035}, {2022, 2050}, {2047, 2048}};
-	cout << maximumPopulation(a) << endl;
+	vector<string> tt{ "ahjpjau","ja","ahbwzgqnuk","tnmlanowax" };
+	cout << numMatchingSubseq("dsahjpjauf", tt) << endl;
 
 	return 0;
 }
+
