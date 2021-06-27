@@ -2987,9 +2987,40 @@ int numMatchingSubseq(string s, vector<string>& words) {
 	return res;
 }
 
+int countGoodRectangles(vector<vector<int>>& rectangles) {
+	int max_lin = 0;
+	int ctr = 0;
+	for (const auto& rect : rectangles) {
+		int tmp_miv = *(std::min_element(rect.begin(), rect.end()));
+		if (tmp_miv > max_lin) {
+			max_lin = tmp_miv;
+			ctr = 1;
+		} else if(tmp_miv == max_lin) {
+			ctr++;
+		}
+	}
+
+	return ctr;
+}
+
+int findLengthOfLCIS(vector<int>& nums) {
+	int ctr = 1;
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		int tmp_ctr = 1;
+		while ( ptr + 1 < nums.size() && nums[ptr] < nums[ptr + 1]) {
+			ptr++;
+			tmp_ctr++;
+		}
+		if (tmp_ctr > ctr) {
+			ctr = tmp_ctr;
+		}
+	}
+	return ctr;
+}
+
 int main() {
-	vector<string> tt{ "ahjpjau","ja","ahbwzgqnuk","tnmlanowax" };
-	cout << numMatchingSubseq("dsahjpjauf", tt) << endl;
+	vector<int> tt{1,3,5,7};
+	cout << findLengthOfLCIS(tt) << endl;
 
 	return 0;
 }
