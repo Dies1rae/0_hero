@@ -35,7 +35,7 @@ public:
 
 	priority_queue& Add(const T& elem) {
 		if(this->size_ == this->capacity_) {
-			this->capacity_ = 2*this->capacity_;
+			this->capacity_ = 2 * this->capacity_;
 			this->elemss_.resize(this->capacity_);
 		}
 
