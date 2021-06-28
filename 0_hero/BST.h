@@ -1,10 +1,20 @@
 #pragma once
 
 #include <algorithm>
+#include <stack>
+#include <vector>
+#include <queue>
 
 template <typename T>
 class BinarySearchTree {
 public:
+	enum class OrderTraversal {
+		preOrderTraversal
+		, inOrderTraversal
+		, postOrderTraversal
+		, levelOrderTraversal
+	};
+
 	explicit BinarySearchTree() = default;
 	explicit BinarySearchTree(const T& elem) : node_count_(1), root_(new TreeNode(elem)) {}
 
@@ -42,6 +52,32 @@ public:
 	size_t Height() {
 		return this->Height(this->root_);
 	}
+
+	std::vector<T> travers(const OrderTraversal& order) {
+		switch (order) {
+		case OrderTraversal::preOrderTraversal:
+			preOrderTraversal();
+			return this->traversals_;
+		break;
+		case OrderTraversal::inOrderTraversal:
+			inOrderTraversal();
+			return this->traversals_;
+		break;
+		case OrderTraversal::postOrderTraversal:
+			postOrderTraversal();
+			return this->traversals_;
+		break;
+		case OrderTraversal::levelOrderTraversal:
+			levelOrderTraversal();
+			return this->traversals_;
+		break;
+		default:
+			return this->traversals_;
+		break;
+		}
+		return this->traversals_;
+	}
+
 private:
 	struct TreeNode {
 		TreeNode() = default;
@@ -138,4 +174,100 @@ private:
 
 	size_t node_count_ = 0;
 	TreeNode * root_ = nullptr;
+	std::vector<T> traversals_;
+
+	void inOrderTraversal() {
+		if (this->root_ == nullptr) {
+			return;
+		}
+		this->traversals_.clear();
+
+		TreeNode* trav = this->root_;
+		std::stack<TreeNode*> hsh;
+		
+		while (trav != nullptr || !hsh.empty()) {
+			while (trav != nullptr) {
+				hsh.push(trav);
+				trav = trav->left;
+			}
+			TreeNode* node = hsh.top();
+			hsh.pop();
+			this->traversals_.push_back(node->val);
+			trav = node->right;
+		}
+	}
+
+	void preOrderTraversal() {
+		if (this->root_ == nullptr) {
+			return;
+		}
+		this->traversals_.clear();
+
+		TreeNode* trav = this->root_;
+		std::stack<TreeNode*> hsh;
+		hsh.push(trav);
+
+		while (!hsh.empty()) {
+			TreeNode* node = hsh.top();
+			hsh.pop();
+			this->traversals_.push_back(node->val);
+
+			if (node->right != nullptr) {
+				hsh.push(node->right);
+			}
+			
+			if (node->left != nullptr) {
+				hsh.push(node->left);
+			}
+		}
+	}
+
+	void postOrderTraversal() {
+		if (this->root_ == nullptr) {
+			return;
+		}
+		this->traversals_.clear();
+
+		TreeNode* trav = this->root_;
+		std::stack<TreeNode*> hsh;
+		hsh.push(trav);
+
+		while (!hsh.empty()) {
+			TreeNode* node = hsh.top();
+			hsh.pop();
+			this->traversals_.push_back(node->val);
+
+			if (node->left != nullptr) {
+				hsh.push(node->left);
+			}
+			if (node->right != nullptr) {
+				hsh.push(node->right);
+			}
+		}
+		std::reverse(this->traversals_.begin(), this->traversals_.end());
+	}
+
+	void levelOrderTraversal() {
+		if (this->root_ == nullptr) {
+			return;
+		}
+		this->traversals_.clear();
+
+		TreeNode* trav = this->root_;
+		std::queue<TreeNode*> hsh;
+		hsh.push(trav);
+
+		while (!hsh.empty()) {
+			TreeNode* node = hsh.front();
+			hsh.pop();
+			this->traversals_.push_back(node->val);
+
+			if (node->left != nullptr) {
+				hsh.push(node->left);
+			}
+			if (node->right != nullptr) {
+				hsh.push(node->right);
+			}
+		}
+	}
 };
