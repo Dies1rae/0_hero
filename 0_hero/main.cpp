@@ -162,9 +162,35 @@ int countPrimes(int n) {
 	return ctr;
 }
 
-int main() {
-	cout << countPrimes(10) << endl;
+int knut_1E1(int A, int B) {
+	int ctr = 0;
+	while (A > 0 && B > 0) {
+		ctr++;
+		A = A % B;
+		if (A == 0) {
+			return ctr;
+			//return B;
+		}
+		B = B % A;
+		ctr++;
+		if (B == 0) {
+			return ctr;
+			//return A;
+		}
+	}
+	return 0;
+}
 
+int main() {
+	vector<int>ctr;
+	//cout << knut_1E1(5, 1) << endl;
+	for (size_t ptr = 1; ptr < 6; ptr++) {
+		ctr.push_back(knut_1E1(5, ptr));
+		cout << ctr[ptr - 1] << endl;
+	}
+
+	double average_U = accumulate(ctr.begin(), ctr.end(), 0.0) / ctr.size() * 1.0;
+	cout << average_U << endl;
 	return 0;
 }
 
