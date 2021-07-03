@@ -181,16 +181,54 @@ int knut_1E1(int A, int B) {
 	return 0;
 }
 
-int main() {
-	vector<int>ctr;
-	//cout << knut_1E1(5, 1) << endl;
-	for (size_t ptr = 1; ptr < 6; ptr++) {
-		ctr.push_back(knut_1E1(5, ptr));
-		cout << ctr[ptr - 1] << endl;
+int findLHS(vector<int>& nums) {
+	map<int, int> hsh;
+	int size_max = 0;
+	for (const auto& num : nums) {
+		hsh[num]++;
 	}
+	for (const auto& [num, ctr] : hsh) {
+		if (hsh.count(num+1) > 0) {
+			int tmp_max = ctr + hsh.at(num + 1);
+			if (size_max < tmp_max) {
+				size_max = tmp_max;
+			}
+		}
+	}
+	return size_max;
+}
 
-	double average_U = accumulate(ctr.begin(), ctr.end(), 0.0) / ctr.size() * 1.0;
-	cout << average_U << endl;
+
+bool isPalindrome(const string& x) {
+	int ctr = 0;
+	for (size_t btr = 0, ept = x.size() - 1; btr < ept;) {
+		if (x[btr] != x[ept]) {
+			if(ctr == 0){
+				btr++;
+				ctr = 1;
+				continue;
+			} else if (ctr == 1) {
+				btr--;
+				ept--;
+				ctr++;
+				continue;
+			} else {
+				return false;
+			}
+		}
+		btr++;
+		ept--;
+
+	}
+	return true;
+}
+
+bool validPalindrome(string s) {
+	return isPalindrome(s);
+}
+
+int main() {
+	cout << validPalindrome("abc") << endl;
 	return 0;
 }
 
