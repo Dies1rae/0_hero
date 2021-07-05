@@ -28,6 +28,7 @@
 #include <ctime>
 #include <sstream>
 #include <queue>
+#include <random>
 
 using namespace std;
 
@@ -198,7 +199,6 @@ int findLHS(vector<int>& nums) {
 	return size_max;
 }
 
-
 bool isPalindrome(const string& x) {
 	int ctr = 0;
 	for (size_t btr = 0, ept = x.size() - 1; btr < ept;) {
@@ -225,6 +225,13 @@ bool isPalindrome(const string& x) {
 
 bool validPalindrome(string s) {
 	return isPalindrome(s);
+}
+
+double NormalRandAlgo(const int min, const int max) {
+	random_device some_dev; //seed for rnd
+	mt19937 rng(some_dev()); //Mersenne-Twister normilized rnd
+	uniform_real_distribution<> nrmlzer_min_max(1.0 * min, 1.0 * max); //Gauss normilize
+	return nrmlzer_min_max(rng);
 }
 
 int main() {
