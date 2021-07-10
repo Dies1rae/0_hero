@@ -234,8 +234,67 @@ double NormalRandAlgo(const int min, const int max) {
 	return nrmlzer_min_max(rng);
 }
 
+bool halvesAreAlike(string s) {
+	set <char> word_one{'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+	int ctr_1 = 0;
+	int ctr_2 = 0;
+	for (size_t ptrb = 0, ptre = s.size() - 1; ptrb < s.size() / 2; ptrb++, ptre--) {
+		ctr_1 += word_one.count(s[ptre]);
+		ctr_2 += word_one.count(s[ptrb]);
+	}
+	return ctr_1 == ctr_2;
+}
+
+
+string addStrings(string num1, string num2) {
+	string res_str;
+	int tmp = 0;
+
+	while (!num1.empty() || !num2.empty()) {
+		int num_1 = 0;
+		int num_2 = 0;
+		if (!num1.empty()) {
+			num_1 = num1.back() - 48;
+			num1.pop_back();
+		}
+		if (!num2.empty()) {
+			num_2 = num2.back() - 48;
+			num2.pop_back();
+		}
+
+		tmp += (num_1 + num_2);
+		res_str.push_back((tmp % 10) + 48);
+		tmp /= 10;
+	}
+	if (tmp > 0) {
+		res_str.push_back((tmp % 10) + 48);
+	}
+	std::reverse(res_str.begin(), res_str.end());
+	return res_str;
+}
+
+int firstUniqChar(string s) {
+	size_t pos = INT_MAX;
+	map<char, int> ctr;
+	for (const auto& ch : s) {
+		ctr[ch]++;
+	}
+	for (const auto& [ch, ctr] : ctr) {
+		if (ctr == 1) {
+			size_t pos_tmp = s.find(ch);
+			if (pos > pos_tmp) {
+				pos = pos_tmp;
+			}
+		}
+	}
+	if (pos == INT_MAX) {
+		return -1;
+	}
+	return pos;
+}
+
 int main() {
-	cout << validPalindrome("abc") << endl;
+	cout << firstUniqChar("leetcode") << endl;
 	return 0;
 }
 
