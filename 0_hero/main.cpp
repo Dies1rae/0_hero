@@ -293,8 +293,83 @@ int firstUniqChar(string s) {
 	return pos;
 }
 
+vector<vector<int>> groupThePeople(const vector<int>& groupSizes) {
+	vector<vector<int>> res;
+	unordered_map<size_t, vector<int>> res_hsh;
+	for (size_t ptr = 0; ptr < groupSizes.size(); ptr++) {
+		if (res_hsh.count(groupSizes[ptr]) == 0) {
+			vector<int> tmp;
+			tmp.push_back(ptr);
+			res_hsh[groupSizes[ptr]] = tmp;
+		} else {
+			res_hsh[groupSizes[ptr]].push_back(ptr);
+		}
+	}
+	for (const auto& [sz, vctrs] : res_hsh) {
+		if (sz >= vctrs.size()) {
+			res.push_back(vctrs);
+		} else {
+			vector<int> tmp;
+			for (const auto& elem : vctrs) {
+				if (tmp.size() < sz) {
+					tmp.push_back(elem);
+				} else {
+					res.push_back(tmp);
+					tmp.clear();
+					tmp.push_back(elem);
+				}
+			}
+			if (!tmp.empty()) {
+				res.push_back(tmp);
+				tmp.clear();
+			}
+		}
+		
+	}
+	return res;
+}
+
+int countConsistentStrings(const string& allowed, const vector<string>& words) {
+	int cntr = 0;
+	bool ptr = false;
+	map<char, int> allow;
+	map<char, int> wrdCnt;
+	for (const char& ch : allowed) {
+		allow[ch]++;
+	}
+	for (const auto& word : words) {
+		for (const char& ch : word) {
+			wrdCnt[ch]++;
+			if (allow.count(ch) == 0) {
+				wrdCnt.clear();
+				ptr = false;
+				break;
+			}
+		}
+		if (wrdCnt.size() <= allow.size()) {
+			for (const auto& [ch, cnt] : wrdCnt) {
+				if (cnt >= allow.at(ch)) {
+					ptr = true;
+				} else {
+					ptr = false;
+					break;
+				}
+			}
+		} else {
+			ptr = false;
+		}
+		if (ptr) {
+			cntr++;
+		}
+		wrdCnt.clear();
+	}
+	return cntr;
+}
+
 int main() {
-	cout << firstUniqChar("leetcode") << endl;
+	vector<string> words{ "ad","bd","aaab","baa","badab" };
+	cout << countConsistentStrings("ab", words) << endl;
+	
 	return 0;
 }
 
