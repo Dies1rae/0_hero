@@ -367,8 +367,6 @@ int countConsistentStrings(const string& allowed, const vector<string>& words) {
 }
 
 int main() {
-	vector<string> words{ "ad","bd","aaab","baa","badab" };
-	cout << countConsistentStrings("ab", words) << endl;
 	
 	return 0;
 }
