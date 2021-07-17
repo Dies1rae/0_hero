@@ -24,3 +24,4 @@ public:
 private:
 	std::vector<NumericType> elems_;
 };
+ 
