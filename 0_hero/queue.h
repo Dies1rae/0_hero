@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SingleLinkedLIst.h"
-
 #include <stdexcept>
 
 template <typename T>

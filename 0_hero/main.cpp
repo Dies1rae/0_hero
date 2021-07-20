@@ -7,6 +7,7 @@
 #include "SingleLinkedList_full.h"
 #include "UnionFind.h"
 #include "BST.h"
+#include "FenwickBT.h"
 
 #include <algorithm>
 #include <vector>
@@ -367,7 +368,16 @@ int countConsistentStrings(const string& allowed, const vector<string>& words) {
 }
 
 int main() {
-	
+	IndexedTree<int> FenTest(std::vector{3, 4, -2, 7, 3, 11, 5, -8, -9, 2, 4, -8});
+	cout << FenTest.showLSB(40) << endl;
+	for (const auto& elem : FenTest.getArraySummirized()) {
+		cout << elem << ' ';
+	}
+	cout << endl;
+	for (const auto& elem : FenTest.getArrayBased()) {
+		//cout << elem << ' ';
+	}
+	cout << endl;
 	return 0;
 }
 

@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <stack>
 
-
 template <typename TType>
 class SingleLinkedList {
     //NODE
