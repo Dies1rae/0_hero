@@ -14,8 +14,12 @@ class IndexedTree {
 public:
 	explicit IndexedTree() noexcept = default;
 	IndexedTree(const size_t size) {
+		if (size == 0) {
+			throw std::range_error("Empty value array");
+		}
 		this->elems_.reserve(size);
 	}
+
 	explicit IndexedTree(const std::vector<NumericType>& other) : elems_(other.size(), 0) {
 		if (other.empty()) {
 			throw std::range_error("Empty value array");
