@@ -16,28 +16,13 @@ public:
 	IndexedTree(const size_t size) {
 		this->elems_.reserve(size);
 	}
-	explicit IndexedTree(const std::vector<NumericType>& other) {
+	explicit IndexedTree(const std::vector<NumericType>& other) : elems_(other.size(), 0) {
 		if (other.empty()) {
 			throw std::range_error("Empty value array");
 		}
-		std::copy(other.begin(), other.end(), this->elems_.begin());
-		for (size_t ptr = 1; ptr < this->elems_.size(); ptr++) {
-			int nxt_idx = ptr + this->LSB(ptr);
-			if (nxt_idx < this->elems_.size()) {
-				this->elems_[nxt_idx] += this->elems_[ptr];
-			}
-		}
-	}
-	explicit IndexedTree(std::vector<NumericType>&& other) {
-		if (other.empty()) {
-			throw std::range_error("Empty value array");
-		}
-		std::swap(other, this->elems_);
-		for (size_t ptr = 1; ptr < this->elems_.size(); ptr++) {
-			int nxt_idx = ptr + this->LSB(ptr);
-			if (nxt_idx < this->elems_.size()) {
-				this->elems_[nxt_idx] += this->elems_[ptr];
-			}
+		
+		for (size_t ptr = 0; ptr < this->elems_.size(); ptr++) {
+			this->add(ptr, other[ptr]);
 		}
 	}
 
@@ -53,12 +38,9 @@ public:
 
 	NumericType prefixSum(int idx) {
 		NumericType sum = 0;
-		if (idx == -1) {
-			return this->elems_[0];
-		}
-		while (idx > 0) {
+		while (idx >= 0) {
 			sum += this->elems_[idx];
-			idx -= this->LSB(idx);
+			idx = (idx & (idx + 1)) - 1;
 		}
 		return sum;
 	}
@@ -76,9 +58,10 @@ public:
 			idx = idx | (idx + 1);
 		}
 	}
-	void set(const size_t idx, const NumericType value) {
-		NumericType tmp_valon_idx = this->distanceSum(idx, idx - 1);
-		this->add(idx, value - tmp_valon_idx);
+
+	void set(size_t idx, const NumericType value) {
+		NumericType delta = this->distanceSum(idx, idx);
+		this->add(idx, delta - value);
 	}
 
 	size_t showLSB(const size_t idx) {
@@ -99,7 +82,7 @@ public:
 	}
 private:
 	size_t LSB(const int idx) {
-		return idx & (-1 * idx);
+		return idx & (-1 * idx); ////??????????????????
 	}
 
 	std::vector<NumericType> elems_;

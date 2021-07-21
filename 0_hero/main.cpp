@@ -378,6 +378,8 @@ int main() {
 		//cout << elem << ' ';
 	}
 	cout << endl;
+	cout << FenTest.distanceSum(0, 2) << ' ';
+	cout << endl;
 	return 0;
 }
 
