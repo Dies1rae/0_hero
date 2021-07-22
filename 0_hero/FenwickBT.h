@@ -40,26 +40,30 @@ public:
 		return this->elems_.empty();
 	}
 
-	NumericType prefixSum(int idx) {
+	NumericType prefixSum(int idx) const {
+		int idx_tmp = idx;
 		NumericType sum = 0;
-		while (idx >= 0) {
-			sum += this->elems_[idx];
-			idx = (idx & (idx + 1)) - 1;
+		while (idx_tmp >= 0) {
+			sum += this->elems_[idx_tmp];
+			//idx_tmp = (idx_tmp & (idx_tmp + 1)) - 1;
+			idx_tmp = idx_tmp - this->LSB(idx_tmp + 1);
 		}
 		return sum;
 	}
 
-	NumericType distanceSum(const int first, const int last) {
+	NumericType distanceSum(const int first, const int last) const {
 		if (last < first) {
 			throw std::range_error("Wrong slice");
 		}
 		return this->prefixSum(last) - this->prefixSum(first - 1);
 	}
 
-	void add(size_t idx, const NumericType value) {
-		while (idx < this->elems_.size()) {
-			this->elems_[idx] += value;
-			idx = idx | (idx + 1);
+	void add(const size_t idx, const NumericType value) {
+		int idx_tmp = idx;
+		while (idx_tmp < this->elems_.size()) {
+			this->elems_[idx_tmp] += value;
+			//idx_tmp = idx_tmp | (idx_tmp + 1);
+			idx_tmp = idx_tmp + this->LSB(idx_tmp + 1);
 		}
 	}
 
@@ -76,16 +80,16 @@ public:
 		return this->elems_;
 	}
 
-	std::vector<NumericType> getArrayBased() {
+	std::vector<NumericType> getArrayBased() const {
 		std::vector<NumericType> res;
 		res.resize(this->elems_.size());
-		for (size_t ptr = 0; ptr + 1 < this->elems_.size(); ptr++) {
-			res[ptr] = this->distanceSum(ptr, ptr + 1);
+		for (size_t ptr = 0; ptr < this->elems_.size(); ptr++) {
+			res[ptr] = this->distanceSum(ptr, ptr);
 		}
 		return res;
 	}
 private:
-	size_t LSB(const int idx) {
+	size_t LSB(const int idx) const {
 		return idx & (-1 * idx); ////??????????????????
 	}
 

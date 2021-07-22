@@ -369,16 +369,21 @@ int countConsistentStrings(const string& allowed, const vector<string>& words) {
 
 int main() {
 	IndexedTree<int> FenTest(std::vector{3, 4, -2, 7, 3, 11, 5, -8, -9, 2, 4, -8});
-	cout << FenTest.showLSB(40) << endl;
+	cout << FenTest.showLSB(52) << endl;
 	for (const auto& elem : FenTest.getArraySummirized()) {
 		cout << elem << ' ';
 	}
 	cout << endl;
 	for (const auto& elem : FenTest.getArrayBased()) {
-		//cout << elem << ' ';
+		cout << elem << ' ';
 	}
 	cout << endl;
-	cout << FenTest.distanceSum(0, 2) << ' ';
+	FenTest.add(2, 2);
+	for (const auto& elem : FenTest.getArrayBased()) {
+		cout << elem << ' ';
+	}
+	cout << endl;
+	//cout << FenTest.distanceSum(0, 2) << ' ';
 	cout << endl;
 	return 0;
 }
