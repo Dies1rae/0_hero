@@ -367,24 +367,55 @@ int countConsistentStrings(const string& allowed, const vector<string>& words) {
 	return cntr;
 }
 
+vector<int> getConcatenation(vector<int>& nums) {
+	size_t S = nums.size();
+	vector<int> res(S * 2, 0);
+	for (size_t ptr = 0; ptr < S; ptr++) {
+		res[ptr] = nums[ptr];
+		res[ptr + S] = nums[ptr];
+	}
+	return res;
+}
+
+vector<int> buildArray(vector<int>& nums) {
+	size_t S = nums.size();
+	vector<int> res(S, 0);
+	for (size_t ptr = 0; ptr < S; ptr++) {
+		res[ptr] = nums[nums[ptr]];
+	}
+	return res;
+}
+
+
+int digitsSumProduct(int elem, bool typo) {
+	int res = 0;
+	if (typo) {
+		while (elem) {
+			res += elem % 10;
+			elem /= 10;
+		
+		}
+	} else {
+		res = elem % 10;
+		elem /= 10;
+		while (elem) {
+			res *= elem % 10;
+			elem /= 10;
+
+		}
+	}
+	return res;
+}
+
+
+int subtractProductAndSum(const int n) {
+	return digitsSumProduct(n, 0) - digitsSumProduct(n, 1);
+	 0;
+}
+
 int main() {
-	IndexedTree<int> FenTest(std::vector{3, 4, -2, 7, 3, 11, 5, -8, -9, 2, 4, -8});
-	cout << FenTest.showLSB(52) << endl;
-	for (const auto& elem : FenTest.getArraySummirized()) {
-		cout << elem << ' ';
-	}
-	cout << endl;
-	for (const auto& elem : FenTest.getArrayBased()) {
-		cout << elem << ' ';
-	}
-	cout << endl;
-	FenTest.add(2, 2);
-	for (const auto& elem : FenTest.getArrayBased()) {
-		cout << elem << ' ';
-	}
-	cout << endl;
-	//cout << FenTest.distanceSum(0, 2) << ' ';
-	cout << endl;
+	cout << subtractProductAndSum(234) << endl;
+
 	return 0;
 }
 
