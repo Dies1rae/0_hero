@@ -410,7 +410,6 @@ int digitsSumProduct(int elem, bool typo) {
 
 int subtractProductAndSum(const int n) {
 	return digitsSumProduct(n, 0) - digitsSumProduct(n, 1);
-	 0;
 }
 
 int main() {
