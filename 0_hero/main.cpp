@@ -407,13 +407,52 @@ int digitsSumProduct(int elem, bool typo) {
 	return res;
 }
 
-
 int subtractProductAndSum(const int n) {
 	return digitsSumProduct(n, 0) - digitsSumProduct(n, 1);
 }
 
+
+template <typename T>
+class num_it {
+public:
+	explicit num_it(const T pos = 0) : i_(pos) {}
+	T operator*() const {
+		return this->i_;
+	}
+	num_it& operator++() {
+		this->i_++;
+		return *this;
+	}
+	bool operator==(const num_it& other) const {
+		return this->i_ == other.i_;
+	}
+	bool operator!=(const num_it& other) const {
+		return !(*this == other);
+	}
+private:
+	T i_;
+};
+
+template <typename T>
+class num_range {
+public:
+	num_range(const T from, const T to) : a_(from), b_(to) {}
+	num_it<T> begin() const {
+		return num_it(this->a_);
+	}
+
+	num_it<T> end() const {
+		return num_it(this->b_);
+	}
+private:
+	T a_;
+	T b_;
+};
+
 int main() {
-	cout << subtractProductAndSum(234) << endl;
+	num_range r {1, 11};
+	auto [min_r, max_r](minmax_element(begin(r), end(r)));
+	cout << *min_r << ' ' << *max_r << endl;
 
 	return 0;
 }
