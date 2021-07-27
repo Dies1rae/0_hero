@@ -454,8 +454,13 @@ private:
 using namespace digcnv;
 
 int main() {
-	toDigit test{ "-5.23e-5" };
-	cout << test.AsDouble() << endl;
+	
+	try{
+		toDigit test{ "" };
+		cout << test.AsInt() << endl;
+	} catch (const ParsingError& e) {
+		cout << e.what() << endl;
+	}
 	return 0;
 }
 
