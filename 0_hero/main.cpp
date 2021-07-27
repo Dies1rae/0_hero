@@ -452,6 +452,37 @@ private:
 	T b_;
 };
 
+bool areOccurrencesEqual(string s) {
+	vector<int> chars(26, 0);
+	for (const char& ch : s) {
+		chars[ch - 97]++;
+	}
+
+	int max_char = *max_element(chars.begin(), chars.end());
+	for (size_t ptr = 0; ptr < 26; ptr++) {
+		if (chars[ptr] != max_char) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int countGoodSubstrings(const string& s) {
+	set<string> good;
+	size_t ptrB = 0;
+	while (ptrB < s.size()) {
+		good.insert(s.substr(ptrB, 3));
+		ptrB += 3;
+	}
+	int res = 0;
+	for (const auto& str : good) {
+		if (str.size() == 3) {
+			res++;
+		}
+	}
+	return res;
+}
+
 using namespace digcnv;
 
 int main() {
