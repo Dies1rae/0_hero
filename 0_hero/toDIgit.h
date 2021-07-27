@@ -64,10 +64,10 @@ namespace digcnv {
 
 	private:
 		enum class State {
-			sign = 0, intpart = 1, dot = 2, denominator = 3, power = 4
+			sign = 0, intpart = 1, dot = 2, denominator = 3, power = 4, powerint = 5
 		};
 
-		Data convert() {
+		void convert() {
 			int int_part = 0;
 			double den_part = 0;
 			double delim = 10;
@@ -75,6 +75,8 @@ namespace digcnv {
 			for (auto ptr = base_str_; *ptr != '\0'; ptr++) {
 				if (*ptr == '-' && this->state_ == State::sign) {
 					this->sign_ = true;
+				} else if (*ptr == '+' && this->state_ == State::sign) {
+					continue;
 				} else if (*ptr >= '0' && *ptr <= '9' && this->state_ <= State::intpart) {
 					this->state_ = State::intpart;
 					int_part *= 10;
@@ -90,22 +92,31 @@ namespace digcnv {
 					if (*(ptr + 1) == '-') {
 						this->power_sign_ = true;
 						ptr++;
+					} else if (*(ptr + 1) == '+') {
+						ptr++;
+					} else {
+						throw ParsingError("Convert error - E statement");
 					}
-				} else if (*ptr >= '0' && *ptr <= '9' && this->state_ == State::power) {
+				} else if (*ptr >= '0' && *ptr <= '9' && this->state_ >= State::power) {
+					this->state_ = State::powerint;
 					E *= 10;
 					E += ((*ptr) - 48);
 				} else {
-					throw ParsingError("Convert error");
+					throw ParsingError("Convert error - main statement " + *ptr);
 				}
 			}
 
 			if (this->state_ == State::sign || this->state_ == State::dot) {
-				throw ParsingError("Convert error");
+				throw ParsingError("Convert error - first sign statement");
+			} else if (this->state_ == State::power && E == 0) {
+				throw ParsingError("Convert error - power statement");
 			} else if (this->state_ == State::intpart) {
 				this->sign_ == true ? int_part *= -1 : int_part;
 				this->converted_ = int_part;
 			} else {
 				double res = (double)int_part + den_part;
+				this->sign_ == true ? res *= -1 : res;
+
 				if (E > 0) {
 					if (this->power_sign_) {
 						while (E) {
@@ -119,7 +130,6 @@ namespace digcnv {
 						}
 					}
 				}
-				this->sign_ == true ? res *= -1 : res;
 				this->converted_ = res;
 			}
 		}

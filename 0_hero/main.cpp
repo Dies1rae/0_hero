@@ -456,7 +456,7 @@ using namespace digcnv;
 int main() {
 	
 	try{
-		toDigit test{ "5.01" };
+		toDigit test{ "+5.01" };
 		cout << test.AsDouble() << endl;
 	} catch (const ParsingError& e) {
 		cout << e.what() << endl;
