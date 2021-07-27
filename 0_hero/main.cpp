@@ -9,6 +9,7 @@
 #include "BST.h"
 #include "FenwickBT.h"
 #include "toDIgit.h"
+#include "log_duration.h"
 
 #include <algorithm>
 #include <vector>
@@ -456,8 +457,14 @@ using namespace digcnv;
 int main() {
 	
 	try{
-		toDigit test{ "+5.01" };
-		cout << test.AsDouble() << endl;
+		double res = 0;
+		{
+			LogDuration double_time("string to double");
+			toDigit test{ "+5.01231234124124e-53" };
+			res = test.AsDouble();
+		}
+		cout << res << endl;
+		
 	} catch (const ParsingError& e) {
 		cout << e.what() << endl;
 	}
