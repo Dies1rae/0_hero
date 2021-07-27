@@ -150,6 +150,7 @@
     <ClInclude Include="AvlTree.h" />
     <ClInclude Include="BST.h" />
     <ClInclude Include="FenwickBT.h" />
+    <ClInclude Include="toDIgit.h" />
     <ClInclude Include="Optional.h" />
     <ClInclude Include="SingleLinkedList_full.h" />
     <ClInclude Include="UnionFind.h" />

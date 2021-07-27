@@ -8,6 +8,7 @@
 #include "UnionFind.h"
 #include "BST.h"
 #include "FenwickBT.h"
+#include "toDIgit.h"
 
 #include <algorithm>
 #include <vector>
@@ -30,6 +31,7 @@
 #include <sstream>
 #include <queue>
 #include <random>
+#include <variant>
 
 using namespace std;
 
@@ -449,11 +451,11 @@ private:
 	T b_;
 };
 
-int main() {
-	num_range r {1, 11};
-	auto [min_r, max_r](minmax_element(begin(r), end(r)));
-	cout << *min_r << ' ' << *max_r << endl;
+using namespace digcnv;
 
+int main() {
+	toDigit test{ "-5.23e-5" };
+	cout << test.AsDouble() << endl;
 	return 0;
 }
 
