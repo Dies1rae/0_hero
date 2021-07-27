@@ -51,14 +51,14 @@ namespace digcnv {
 			if (this->IsInt()) {
 				return std::get<int>(this->converted_);
 			} else {
-				throw ParsingError("No INT");
+				throw ParsingError("No INT in " + std::string(this->origin()));
 			}
 		}
 		double AsDouble() const {
 			if (this->IsDouble()) {
 				return std::get<double>(this->converted_);
 			} else {
-				throw ParsingError("No DOUBLE");
+				throw ParsingError("No DOUBLE in " + std::string(this->origin()));
 			}
 		}
 
