@@ -1,3 +1,3 @@
 # 0_hero
-algo shit\n
+algo shit 
 for selfdistruct
