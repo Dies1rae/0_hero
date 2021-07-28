@@ -71,8 +71,8 @@ namespace digcnv {
 			double delim = 10;
 			int E = 0;
 
-			
-			for (auto ptr = this->base_str_; *ptr != '\0'; ptr++) {
+			auto ptr = this->base_str_;
+			while (ptr++ != nullptr) {
 				const char str_char = *ptr;
 				if (str_char == '-' && this->state_ == State::sign) {
 					this->sign_ = true;
@@ -102,6 +102,8 @@ namespace digcnv {
 					this->state_ = State::powerint;
 					E *= 10;
 					E += (str_char - 48);
+				} else if (str_char == '\0') {
+					break;
 				} else {
 					throw ParsingError("Convert error - main statement " + str_char);
 				}
