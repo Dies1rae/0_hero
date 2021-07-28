@@ -62,7 +62,7 @@ namespace digcnv {
 
 	private:
 		enum class State {
-			sign = 0, intpart = 1, dot = 2, denominator = 3, power = 4, powerint = 5
+			sign = 0, intpart = 1, dot = 2, denominator = 3, power = 4, powersign = 5, powerint = 6
 		};
 
 		void convert() {
@@ -72,7 +72,7 @@ namespace digcnv {
 			int E = 0;
 
 			auto ptr = this->base_str_;
-			while (ptr++ != nullptr) {
+			while (ptr++ != nullptr) {				/////NEEED TO REPLASE ALL THIS LOGIC PART WITH SWITCH CASE BY STATE and work with char into it !
 				const char str_char = *ptr;
 				if (str_char == '-' && this->state_ == State::sign) {
 					this->sign_ = true;
@@ -107,7 +107,7 @@ namespace digcnv {
 				} else {
 					throw ParsingError("Convert error - main statement " + str_char);
 				}
-			}
+			}										/////--------
 
 			if (this->state_ == State::sign || this->state_ == State::dot) {
 				throw ParsingError("Convert error - first sign statement");
