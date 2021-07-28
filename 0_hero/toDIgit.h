@@ -72,44 +72,99 @@ namespace digcnv {
 			int E = 0;
 
 			auto ptr = this->base_str_;
-			while (ptr++ != nullptr) {				/////NEEED TO REPLASE ALL THIS LOGIC PART WITH SWITCH CASE BY STATE and work with char into it !
+			while (*ptr != '\0') {
 				const char str_char = *ptr;
-				if (str_char == '-' && this->state_ == State::sign) {
-					this->sign_ = true;
-				} else if (str_char == '+' && this->state_ == State::sign) {
-					continue;
-				} else if (str_char >= '0' && str_char <= '9' && this->state_ <= State::intpart) {
-					this->state_ = State::intpart;
-					int_part *= 10;
-					int_part += (str_char - 48);
-				} else if (str_char == '.' && this->state_ <= State::intpart) {
-					this->state_ = State::dot;
-				} else if (str_char >= '0' && str_char <= '9' && this->state_ >= State::dot && this->state_ <= State::denominator) {
-					this->state_ = State::denominator;
-					den_part += ((str_char - 48) / delim);
-					delim *= 10;
-				} else if (str_char == 'e' && (this->state_ == State::denominator || this->state_ == State::intpart)) {
-					this->state_ = State::power;
-					if (*(ptr + 1) == '-') {
-						this->power_sign_ = true;
-						ptr++;
-					} else if (*(ptr + 1) == '+') {
-						ptr++;
-					} else {
-						throw ParsingError("Convert error - E statement");
-					}
-				} else if (str_char >= '0' && str_char <= '9' && this->state_ >= State::power) {
-					this->state_ = State::powerint;
-					E *= 10;
-					E += (str_char - 48);
-				} else if (str_char == '\0') {
-					break;
-				} else {
-					throw ParsingError("Convert error - main statement " + str_char);
+				switch (this->state_) {
+					case(State::sign):
+						if (str_char == '-') {
+							this->sign_ = true;
+							this->state_ = State::intpart;
+						} else if (str_char == '+') {
+							this->state_ = State::intpart;
+						} else if (str_char >= '0' && str_char <= '9') {
+							int_part *= 10;
+							int_part += (str_char - 48);
+							this->state_ = State::intpart;
+						} else {
+							throw ParsingError("Convert error - sign statement " + str_char);
+						}
+						break;
+					case(State::intpart):
+						if (str_char >= '0' && str_char <= '9') {
+							int_part *= 10;
+							int_part += (str_char - 48);
+						} else if (str_char == '.') {
+							this->state_ = State::dot;
+						} else if (str_char == '\0') {
+							break;
+						} else {
+							throw ParsingError("Convert error - intpart statement " + str_char);
+						}
+						break;
+					case(State::dot):
+						if (str_char >= '0' && str_char <= '9') {
+							this->state_ = State::denominator;
+							den_part += ((str_char - 48) / delim);
+							delim *= 10;
+						} else if (str_char == '\0') {
+							break;
+						} else {
+							throw ParsingError("Convert error - dot statement " + str_char);
+						}
+						break;
+					case(State::denominator):
+						if (str_char >= '0' && str_char <= '9') {
+							den_part += ((str_char - 48) / delim);
+							delim *= 10;
+						} else if (str_char == 'e') {
+							this->state_ = State::power;
+						} else if (str_char == '\0') {
+							break;
+						} else {
+							throw ParsingError("Convert error - denominator statement " + str_char);
+						}
+						break;
+					case(State::power):
+						if (str_char == '-') {
+							this->power_sign_ = true;
+							this->state_ = State::powersign;
+						} else if (str_char == '+') {
+							this->state_ = State::powersign;
+						} else if (str_char >= '0' && str_char <= '9') {
+							this->state_ = State::powerint;
+							E *= 10;
+							E += (str_char - 48);
+						} else {
+							throw ParsingError("Convert error - power statement " + str_char);
+						}
+						break;
+					case(State::powersign):
+						if (str_char >= '0' && str_char <= '9') {
+							E *= 10;
+							E += (str_char - 48);
+							this->state_ = State::powerint;
+						} else {
+							throw ParsingError("Convert error - powersign statement " + str_char);
+						}
+						break;
+					case(State::powerint):
+						if (str_char >= '0' && str_char <= '9') {
+							E *= 10;
+							E += (str_char - 48);
+						} else if (str_char == '\0') {
+							break;
+						} else {
+							throw ParsingError("Convert error - powerint statement " + str_char);
+						}
+						break;
+					default:
+						throw ParsingError("Convert error - main statement " + str_char);
+						break;
 				}
-			}										/////--------
+				ptr++;
+			}
 
-			if (this->state_ == State::sign || this->state_ == State::dot) {
+			if (this->state_ == State::sign) {
 				throw ParsingError("Convert error - first sign statement");
 			} else if (this->state_ == State::power && E == 0) {
 				throw ParsingError("Convert error - power statement");

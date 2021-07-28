@@ -528,30 +528,29 @@ int getLucky(string s, int k) {
 int maxRepeating(string& sequence, string& word) {
 	int res = 0;
 	string tmp = word;
-	while (sequence.find(tmp) != std::string::npos)	{
+	while (sequence.find(tmp) != std::string::npos) {
 		cout << sequence.find(tmp) << endl;
 		res++;
 		tmp += word;
 	}
 	return res;
+}
 
 using namespace digcnv;
 
 int main() {
-	AvlTree<int> test {1};
-	cout << test.Contains(11) << endl;
-	//try{
-	//	double res = 0;
-	//	{
-	//		LogDuration double_time("string to double");
-	//		toDigit test{ "+5.01231234124124e-53" };
-	//		res = test.AsDouble();
-	//	}
-	//	cout << res << endl;
-	//	
-	//} catch (const ParsingError& e) {
-	//	cout << e.what() << endl;
-	//}
+	try{
+		double res = 0;
+		{
+			LogDuration double_time("string to double");
+			toDigit test{ "-5.01e-2" };
+			res = test.AsDouble();
+		}
+		cout << res << endl;
+		
+	} catch (const ParsingError& e) {
+		cout << e.what() << endl;
+	}
 	return 0;
 }
 
