@@ -29,8 +29,6 @@ namespace digcnv {
 
 	class toDigit {
 	public:
-		toDigit() = delete;
-
 		explicit toDigit(const char* str) : base_str_(str) {
 			this->convert();
 		}
