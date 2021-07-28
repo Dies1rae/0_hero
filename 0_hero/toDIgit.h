@@ -66,10 +66,12 @@ namespace digcnv {
 		};
 
 		void convert() {
+			//------- REBUILD this shit into private struct like a parts of digit
 			int int_part = 0;
 			double den_part = 0;
 			double delim = 10;
 			int E = 0;
+			//-------
 
 			auto ptr = this->base_str_;
 			while (*ptr != '\0') {
@@ -164,6 +166,7 @@ namespace digcnv {
 				ptr++;
 			}
 
+			//THIS IS MIGHT BE DELETED, BUT I WHANT TO SLEEEEEEEEP
 			if (this->state_ == State::sign) {
 				throw ParsingError("Convert error - first sign statement");
 			} else if (this->state_ == State::power && E == 0) {
@@ -190,6 +193,7 @@ namespace digcnv {
 				}
 				this->converted_ = res;
 			}
+			//-------
 		}
 
 		bool sign_ = false;
