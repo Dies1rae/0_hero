@@ -483,22 +483,64 @@ int countGoodSubstrings(const string& s) {
 	return res;
 }
 
+void selection_sort_(std::vector<int>& main, std::size_t S) {
+	std::size_t min_indx;
+	for (std::size_t ptr = 0; ptr < S-1; ptr++) {
+		min_indx = ptr;
+		for (std::size_t ptr2 = ptr+1; ptr2 < S; ptr2++) {
+			if (main[ptr2] < main[min_indx]) {
+				min_indx = ptr2;
+			}
+			std::swap(main[min_indx], main[ptr]);
+		}
+	}
+}
+
+double trimMean(vector<int>& arr) {
+	selection_sort_(arr, arr.size());
+	size_t deleted = (arr.size() / 10) / 2;
+	double res = 0;
+	for (size_t ptr = deleted; ptr < arr.size() - deleted; ptr++) {
+		res += arr[ptr];
+	}
+	return res / (arr.size() - (2 * deleted));
+}
+
+int getLucky(string s, int k) {
+	int res = 0;
+	vector<int> data;
+	for (char& ch : s) {
+		data.push_back(ch - 25);
+	}
+	while (k-- > 0) {
+		int data_tmp = accumulate(data.begin(), data.end(), 0);
+		data.clear();
+		while (data_tmp > 0) {
+			int data_tmptmp = data_tmp % 10;
+			data.push_back(data_tmptmp);
+		}
+	}
+	return accumulate(data.begin(), data.end(), 0);
+}
+
+int maxRepeating(string& sequence, string& word) {
+	int res = 0;
+	string tmp = word;
+	while (sequence.find(tmp) != std::string::npos)	{
+		cout << sequence.find(tmp) << endl;
+		res++;
+		tmp += word;
+	}
+	return res;
+}
+
 using namespace digcnv;
 
 int main() {
+	string tmp = "aaabaaaabaaabaaaabaaaabaaaabaaaaba";
+	string tmp1 = "aaaba";
+	cout << maxRepeating(tmp, tmp1) << endl;
 	
-	try{
-		double res = 0;
-		{
-			LogDuration double_time("string to double");
-			toDigit test{ "+5.01231234124124e-53" };
-			res = test.AsDouble();
-		}
-		cout << res << endl;
-		
-	} catch (const ParsingError& e) {
-		cout << e.what() << endl;
-	}
 	return 0;
 }
 
