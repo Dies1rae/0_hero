@@ -1,103 +1,93 @@
 #pragma once
 
-#include "TreeNode.h"
+#include <algorithm>
+#include <stack>
+#include <vector>
+#include <queue>
 
-
+template <typename T>
 class AvlTree {
 public:
 	explicit AvlTree() = default;
-	explicit AvlTree(const int value) {
-		this->root_ = new TreeNode(value);
-		this->size_++;
-		base_.push_back(this->root_);
-	}
-	explicit AvlTree(int&& value) {
-		this->root_ = new TreeNode(std::move(value));
-		this->size_++;
-		base_.push_back(this->root_);
-	}
-	explicit AvlTree(const TreeNode* head) {
-		TreeNode* tmp = new TreeNode(head->val);
-		this->InorderTravAdd(tmp);
-	}
 
-	~AvlTree() {
-		this->root_ = nullptr;
-		this->size_ = NULL;
-		for (auto& node : this->base_) {
-			delete node;
+	explicit AvlTree(T value) : node_count_(1), root_(new TreeNode(value)) {}
+
+	int height() const {
+		if (this->root_ == nullptr) {
+			return 0;
 		}
-	}
-
-	AvlTree& Add(const int value) {
-		TreeNode* new_node = new TreeNode(value);
-		TreeNode* ptr = this->root_;
-		InorderAdd(ptr, new_node);
-		ptr = this->root_;
-		InorderTravBaseFill(ptr);
-		this->size_++;
-		return *this;
+		return this->root_->height;
 	}
 
 	size_t Size() const {
-		return this->size_;
+		return this->node_count_;
 	}
 
-	std::vector<TreeNode*> InorderTrav() const {
-		return this->base_;
+	bool IsEmpty() const {
+		return this->Size() == 0;
 	}
 
-	void Clear() {
-		this->size_ = 0;
-		this->base_.clear();
-		this->root_ == nullptr;
+	bool Contains(const T& elem) {
+		return this->Contains(this->root_, elem);
+	}
+
+	bool Add(const T& elem) {
+		if (this->Contains(elem) || elem == NULL) {
+			return false;
+		}
+
+		this->root_ = this->Add(this->root_, elem);
+		this->node_count_++;
+		return true;
 	}
 
 private:
-	void InorderAdd(TreeNode* ptr_node, const TreeNode* new_node) {
-		if (ptr_node->val <= new_node->val) {
-			if (ptr_node->left) {
-				InorderAdd(ptr_node->left, new_node);
-			} else {
-				ptr_node->left =  new TreeNode(new_node->val);
-			}
-		} else {
-			if (ptr_node->right) {
-				InorderAdd(ptr_node->right, new_node);
-			} else {
-				ptr_node->right =  new TreeNode(new_node->val);
-			}
-		}
-	}
+	struct TreeNode {
+		TreeNode() = default;
+		TreeNode(T data) : val(data) {
+			TreeNode* left = nullptr;
+			TreeNode* right = nullptr;
+		};
+		TreeNode(T x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 
-	void InorderTravAdd(TreeNode* node, int start = 0) {
+		int balanced_factor = 0;
+		int height = 0;
+		T val = NULL;
+		TreeNode* left = nullptr;
+		TreeNode* right = nullptr;
+	};
+
+	bool Contains(TreeNode* node, const T& elem) {
 		if (node == nullptr) {
-			return;
-		} else {
-			InorderTravAdd(node->left, ++start);
-			this->Add(node->val);
-			start--;
+			return false;
 		}
-		InorderTravAdd(node->right);
+		int compliance = elem - node->val;
+		if (compliance < 0) {
+			this->Contains(node->left, elem);
+		} else if (compliance > 0) {
+			this->Contains(node->right, elem);
+		} else {
+			return true;
+		}
 	}
 
-	void InorderTravBaseFill(TreeNode* node, size_t start = 0) {
-		//need to write AVL index checking
+	TreeNode* Add(TreeNode* node, const T& elem) {
 		if (node == nullptr) {
-			return;
+			node = new TreeNode(elem);
 		} else {
-			InorderTravBaseFill(node->left, ++start);
-			this->base_.push_back(node);
-			start--;
+			if (elem < node->val) {
+				node->left = this->Add(node->left, elem);
+			} else {
+				node->right = this->Add(node->right, elem);
+			}
 		}
-		InorderTravBaseFill(node->right);
-	}
 
-	void AVLBubling() {
-		//rebuilding tree by indexes
-	}
+		//NEEED TO DO UPDATE FUNC
 
-	size_t size_ = 0;
-	TreeNode* root_ = new TreeNode();
-	std::vector<TreeNode*> base_;
+		return node; //NEED TO DO AND RETURN BALANCED NODE(balance for all tree)
+	}
+	
+	size_t node_count_ = 0;
+	TreeNode* root_ = nullptr;
+	std::vector<T> traversals_;
 };
