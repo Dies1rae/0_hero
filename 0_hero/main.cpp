@@ -10,6 +10,7 @@
 #include "FenwickBT.h"
 #include "toDIgit.h"
 #include "log_duration.h"
+#include "AvlTree.h"
 
 #include <algorithm>
 #include <vector>
@@ -486,19 +487,20 @@ int countGoodSubstrings(const string& s) {
 using namespace digcnv;
 
 int main() {
-	
-	try{
-		double res = 0;
-		{
-			LogDuration double_time("string to double");
-			toDigit test{ "+5.01231234124124e-53" };
-			res = test.AsDouble();
-		}
-		cout << res << endl;
-		
-	} catch (const ParsingError& e) {
-		cout << e.what() << endl;
-	}
+	AvlTree<int> test {1};
+	cout << test.Contains(11) << endl;
+	//try{
+	//	double res = 0;
+	//	{
+	//		LogDuration double_time("string to double");
+	//		toDigit test{ "+5.01231234124124e-53" };
+	//		res = test.AsDouble();
+	//	}
+	//	cout << res << endl;
+	//	
+	//} catch (const ParsingError& e) {
+	//	cout << e.what() << endl;
+	//}
 	return 0;
 }
 

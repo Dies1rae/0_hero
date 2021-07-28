@@ -16,6 +16,7 @@ public:
 	};
 
 	explicit BinarySearchTree() = default;
+
 	explicit BinarySearchTree(const T& elem) : node_count_(1), root_(new TreeNode(elem)) {}
 
 	size_t Size() const {
@@ -172,10 +173,6 @@ private:
 		return std::max(this->Height(node->left), this->Height(node->right)) + 1;
 	}
 
-	size_t node_count_ = 0;
-	TreeNode * root_ = nullptr;
-	std::vector<T> traversals_;
-
 	void inOrderTraversal() {
 		if (this->root_ == nullptr) {
 			return;
@@ -270,4 +267,8 @@ private:
 			}
 		}
 	}
+
+	size_t node_count_ = 0;
+	TreeNode* root_ = nullptr;
+	std::vector<T> traversals_;
 };
