@@ -70,22 +70,25 @@ namespace digcnv {
 			double den_part = 0;
 			double delim = 10;
 			int E = 0;
-			for (auto ptr = base_str_; *ptr != '\0'; ptr++) {
-				if (*ptr == '-' && this->state_ == State::sign) {
+
+			
+			for (auto ptr = this->base_str_; *ptr != '\0'; ptr++) {
+				const char str_char = *ptr;
+				if (str_char == '-' && this->state_ == State::sign) {
 					this->sign_ = true;
-				} else if (*ptr == '+' && this->state_ == State::sign) {
+				} else if (str_char == '+' && this->state_ == State::sign) {
 					continue;
-				} else if (*ptr >= '0' && *ptr <= '9' && this->state_ <= State::intpart) {
+				} else if (str_char >= '0' && str_char <= '9' && this->state_ <= State::intpart) {
 					this->state_ = State::intpart;
 					int_part *= 10;
-					int_part += ((*ptr) - 48);
-				} else if (*ptr == '.' && this->state_ <= State::intpart) {
+					int_part += (str_char - 48);
+				} else if (str_char == '.' && this->state_ <= State::intpart) {
 					this->state_ = State::dot;
-				} else if (*ptr >= '0' && *ptr <= '9' && this->state_ >= State::dot && this->state_ <= State::denominator) {
+				} else if (str_char >= '0' && str_char <= '9' && this->state_ >= State::dot && this->state_ <= State::denominator) {
 					this->state_ = State::denominator;
-					den_part += (((*ptr) - 48) / delim);
+					den_part += ((str_char - 48) / delim);
 					delim *= 10;
-				} else if (*ptr == 'e' && (this->state_ == State::denominator || this->state_ == State::intpart)) {
+				} else if (str_char == 'e' && (this->state_ == State::denominator || this->state_ == State::intpart)) {
 					this->state_ = State::power;
 					if (*(ptr + 1) == '-') {
 						this->power_sign_ = true;
@@ -95,12 +98,12 @@ namespace digcnv {
 					} else {
 						throw ParsingError("Convert error - E statement");
 					}
-				} else if (*ptr >= '0' && *ptr <= '9' && this->state_ >= State::power) {
+				} else if (str_char >= '0' && str_char <= '9' && this->state_ >= State::power) {
 					this->state_ = State::powerint;
 					E *= 10;
-					E += ((*ptr) - 48);
+					E += (str_char - 48);
 				} else {
-					throw ParsingError("Convert error - main statement " + *ptr);
+					throw ParsingError("Convert error - main statement " + str_char);
 				}
 			}
 
