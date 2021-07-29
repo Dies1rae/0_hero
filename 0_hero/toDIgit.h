@@ -196,6 +196,10 @@ namespace digcnv {
 			//-------
 		}
 
+		void changeSign() {
+			
+		}
+
 		bool sign_ = false;
 		bool power_sign_ = false;
 		State state_{ State::sign };

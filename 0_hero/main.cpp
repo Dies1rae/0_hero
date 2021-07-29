@@ -484,7 +484,6 @@ int countGoodSubstrings(const string& s) {
 	return res;
 }
 
-
 void selection_sort_(std::vector<int>& main, std::size_t S) {
 	std::size_t min_indx;
 	for (std::size_t ptr = 0; ptr < S-1; ptr++) {
