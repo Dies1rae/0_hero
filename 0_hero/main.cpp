@@ -540,11 +540,11 @@ using namespace digcnv;
 int main() {
 	try{
 		double res = 0;
-		{
-			LogDuration double_time("string to double");
-			toDigit test{ "-5.01e-2" };
-			res = test.AsDouble();
-		}
+		
+		LogDuration double_time("string to double");
+		toDigit test{ "5e" };
+		res = test.AsDouble();
+		
 		cout << res << endl;
 		
 	} catch (const ParsingError& e) {

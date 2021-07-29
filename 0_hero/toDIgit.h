@@ -97,8 +97,8 @@ namespace digcnv {
 							int_part += (str_char - 48);
 						} else if (str_char == '.') {
 							this->state_ = State::dot;
-						} else if (str_char == '\0') {
-							break;
+						} else if (str_char == 'e') {
+							this->state_ = State::power;
 						} else {
 							throw ParsingError("Convert error - intpart statement " + str_char);
 						}
@@ -108,8 +108,6 @@ namespace digcnv {
 							this->state_ = State::denominator;
 							den_part += ((str_char - 48) / delim);
 							delim *= 10;
-						} else if (str_char == '\0') {
-							break;
 						} else {
 							throw ParsingError("Convert error - dot statement " + str_char);
 						}
@@ -120,8 +118,6 @@ namespace digcnv {
 							delim *= 10;
 						} else if (str_char == 'e') {
 							this->state_ = State::power;
-						} else if (str_char == '\0') {
-							break;
 						} else {
 							throw ParsingError("Convert error - denominator statement " + str_char);
 						}
@@ -153,8 +149,6 @@ namespace digcnv {
 						if (str_char >= '0' && str_char <= '9') {
 							E *= 10;
 							E += (str_char - 48);
-						} else if (str_char == '\0') {
-							break;
 						} else {
 							throw ParsingError("Convert error - powerint statement " + str_char);
 						}
@@ -166,38 +160,42 @@ namespace digcnv {
 				ptr++;
 			}
 
-			//THIS IS MIGHT BE DELETED, BUT I WHANT TO SLEEEEEEEEP
-			if (this->state_ == State::sign) {
-				throw ParsingError("Convert error - first sign statement");
-			} else if (this->state_ == State::power && E == 0) {
-				throw ParsingError("Convert error - power statement");
-			} else if (this->state_ == State::intpart) {
-				this->sign_ == true ? int_part *= -1 : int_part;
+			if (this->AsInt()) {
 				this->converted_ = int_part;
 			} else {
 				double res = (double)int_part + den_part;
-				this->sign_ == true ? res *= -1 : res;
-
 				if (E > 0) {
-					if (this->power_sign_) {
-						while (E) {
-							res /= 10;
-							E--;
-						}
-					} else {
-						while (E) {
-							res *= 10;
-							E--;
-						}
-					}
+					powEksp(E, res);
 				}
 				this->converted_ = res;
 			}
-			//-------
+			if(this->sign_) {
+				this->changeSign();
+			}
 		}
 
 		void changeSign() {
-			
+			if (this->IsDouble()) {
+				double value_tmp = this->AsDouble();
+				this->converted_ = value_tmp * -1.0;
+			} else {
+				int value_tmp = AsInt();
+				this->converted_ = value_tmp * -1;
+			}
+		}
+
+		void powEksp(int E, double& value) {
+			if (this->power_sign_) {
+				while (E) {
+					value /= 10;
+					E--;
+				}
+			} else {
+				while (E) {
+					value *= 10;
+					E--;
+				}
+			}
 		}
 
 		bool sign_ = false;
