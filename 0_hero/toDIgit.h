@@ -30,7 +30,10 @@ namespace digcnv {
 	class toDigit {
 	public:
 		explicit toDigit(const char* str) : base_str_(str) {
-			this->convert();
+			if (*base_str_ == '\0') {
+				throw ParsingError("Empty string");
+			}
+			this->convertToDigit();
 		}
 		~toDigit(){}
 
@@ -62,17 +65,19 @@ namespace digcnv {
 
 	private:
 		enum class State {
-			sign = 0, intpart = 1, dot = 2, fractional = 3, power = 4, powersign = 5, powerint = 6
+			sign, intpart, dot, fractional, power, powersign, powerint
 		};
 
-		void convert() {
-			//------- REBUILD this shit into private struct like a parts of digit
-			int int_part = 0;
-			double fract_part = 0;
-			double delim = 10;
-			int E = 0;
-			//-------
+		struct DigitPart {
+		public:
+			int int_part_ = 0;
+			double fract_part_ = 0;
+			double delim_part_ = 10;
+			int e_part_ = 0;
+		};
 
+		void convertToDigit() {
+			DigitPart val_parts;
 			auto ptr = this->base_str_;
 			while (*ptr != '\0') {
 				const char str_char = *ptr;
@@ -86,17 +91,16 @@ namespace digcnv {
 						} else if (str_char == '.') {
 							this->state_ = State::dot;
 						} else if (str_char >= '0' && str_char <= '9') {
-							int_part *= 10;
-							int_part += (str_char - 48);
 							this->state_ = State::intpart;
+							continue;
 						} else {
 							throw ParsingError("Convert error - sign statement " + str_char);
 						}
 						break;
 					case(State::intpart):
 						if (str_char >= '0' && str_char <= '9') {
-							int_part *= 10;
-							int_part += (str_char - 48);
+							val_parts.int_part_ *= 10;
+							val_parts.int_part_ += (str_char - 48);
 						} else if (str_char == '.') {
 							this->state_ = State::dot;
 						} else if (str_char == 'e') {
@@ -108,16 +112,15 @@ namespace digcnv {
 					case(State::dot):
 						if (str_char >= '0' && str_char <= '9') {
 							this->state_ = State::fractional;
-							fract_part += ((str_char - 48) / delim);
-							delim *= 10;
+							continue;
 						} else {
 							throw ParsingError("Convert error - dot statement " + str_char);
 						}
 						break;
 					case(State::fractional):
 						if (str_char >= '0' && str_char <= '9') {
-							fract_part += ((str_char - 48) / delim);
-							delim *= 10;
+							val_parts.fract_part_ += ((str_char - 48) / val_parts.delim_part_);
+							val_parts.delim_part_ *= 10;
 						} else if (str_char == 'e') {
 							this->state_ = State::power;
 						} else {
@@ -132,25 +135,23 @@ namespace digcnv {
 							this->state_ = State::powersign;
 						} else if (str_char >= '0' && str_char <= '9') {
 							this->state_ = State::powerint;
-							E *= 10;
-							E += (str_char - 48);
+							continue;
 						} else {
 							throw ParsingError("Convert error - power statement " + str_char);
 						}
 						break;
 					case(State::powersign):
 						if (str_char >= '0' && str_char <= '9') {
-							E *= 10;
-							E += (str_char - 48);
 							this->state_ = State::powerint;
+							continue;
 						} else {
 							throw ParsingError("Convert error - powersign statement " + str_char);
 						}
 						break;
 					case(State::powerint):
 						if (str_char >= '0' && str_char <= '9') {
-							E *= 10;
-							E += (str_char - 48);
+							val_parts.e_part_ *= 10;
+							val_parts.e_part_ += (str_char - 48);
 						} else {
 							throw ParsingError("Convert error - powerint statement " + str_char);
 						}
@@ -163,11 +164,11 @@ namespace digcnv {
 			}
 
 			if (this->AsInt()) {
-				this->converted_ = int_part;
+				this->converted_ = val_parts.int_part_;
 			} else {
-				double res = (double)int_part + fract_part;
-				if (E > 0) {
-					powEksp(E, res);
+				double res = (double)val_parts.int_part_ + val_parts.fract_part_;
+				if (val_parts.e_part_ > 0) {
+					powEksp(val_parts.e_part_, res);
 				}
 				this->converted_ = res;
 			}

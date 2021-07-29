@@ -542,7 +542,7 @@ int main() {
 		double res = 0;
 		
 		LogDuration double_time("string to double");
-		toDigit test{ "-.5e-2" };
+		toDigit test{ "+55.55e-2" };
 		res = test.AsDouble();
 		
 		cout << res << endl;
