@@ -62,13 +62,13 @@ namespace digcnv {
 
 	private:
 		enum class State {
-			sign = 0, intpart = 1, dot = 2, denominator = 3, power = 4, powersign = 5, powerint = 6
+			sign = 0, intpart = 1, dot = 2, fractional = 3, power = 4, powersign = 5, powerint = 6
 		};
 
 		void convert() {
 			//------- REBUILD this shit into private struct like a parts of digit
 			int int_part = 0;
-			double den_part = 0;
+			double fract_part = 0;
 			double delim = 10;
 			int E = 0;
 			//-------
@@ -83,6 +83,8 @@ namespace digcnv {
 							this->state_ = State::intpart;
 						} else if (str_char == '+') {
 							this->state_ = State::intpart;
+						} else if (str_char == '.') {
+							this->state_ = State::dot;
 						} else if (str_char >= '0' && str_char <= '9') {
 							int_part *= 10;
 							int_part += (str_char - 48);
@@ -105,16 +107,16 @@ namespace digcnv {
 						break;
 					case(State::dot):
 						if (str_char >= '0' && str_char <= '9') {
-							this->state_ = State::denominator;
-							den_part += ((str_char - 48) / delim);
+							this->state_ = State::fractional;
+							fract_part += ((str_char - 48) / delim);
 							delim *= 10;
 						} else {
 							throw ParsingError("Convert error - dot statement " + str_char);
 						}
 						break;
-					case(State::denominator):
+					case(State::fractional):
 						if (str_char >= '0' && str_char <= '9') {
-							den_part += ((str_char - 48) / delim);
+							fract_part += ((str_char - 48) / delim);
 							delim *= 10;
 						} else if (str_char == 'e') {
 							this->state_ = State::power;
@@ -163,7 +165,7 @@ namespace digcnv {
 			if (this->AsInt()) {
 				this->converted_ = int_part;
 			} else {
-				double res = (double)int_part + den_part;
+				double res = (double)int_part + fract_part;
 				if (E > 0) {
 					powEksp(E, res);
 				}
