@@ -82,11 +82,58 @@ private:
 			}
 		}
 
-		//NEEED TO DO UPDATE FUNC
-
+		this->update(node);
 		return node; //NEED TO DO AND RETURN BALANCED NODE(balance for all tree)
 	}
+
+	void update(TreeNode* node) {
+		int left_node_h = 0;
+		int right_node_h = 0;
+		node->left == nullptr ? left_node_h = -1 : left_node_h = node->left->height;
+		node->right == nullptr ? right_node_h = -1 : right_node_h = node->right->height;
+
+		node->height = 1 + std::max_element(left_node_h, right_node_h);
+		node->balanced_factor = right_node_h - left_node_h;
+	}
 	
+	void balance(TreeNode* node) {
+		if (node->balanced_factor == -2) {
+			if (node->left->balanced_factor <= 0) {
+				return this->leftLeftCase(node);
+			} else {
+				return this->leftRightCase(node);
+			}
+		} else if (node->balanced_factor == 2) {
+			if (node->right->balanced_factor >= 0) {
+				return this->rightRightCase(node);
+			} else {
+				return this->rightLeftCase(node);
+			}
+		}
+	}
+
+	TreeNode* leftLeftCase(TreeNode* node) {
+		return this->rightRotation(node);
+	}
+	TreeNode* leftRightCase(TreeNode* node) {
+		node->left = this->leftRotation(node->left);
+		return this->leftLeftCase(node);
+	}
+	TreeNode* rightRightCase(TreeNode* node) {
+		return this->leftRotation(node);
+	}
+	TreeNode* rightLeftCase(TreeNode* node) {
+		node->right = this->rightRotation(node->right);
+		return this->rightRightCase(node);
+	}
+
+	TreeNode* leftRotation(TreeNode* node) {
+		//need to do
+	}
+	TreeNode* rightRotation(TreeNode* node) {
+		//need to do
+	}
+
 	size_t node_count_ = 0;
 	TreeNode* root_ = nullptr;
 	std::vector<T> traversals_;
