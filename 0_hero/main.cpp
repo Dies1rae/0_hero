@@ -454,18 +454,18 @@ private:
 };
 
 bool areOccurrencesEqual(string s) {
-	vector<int> chars(26, 0);
-	for (const char& ch : s) {
-		chars[ch - 97]++;
-	}
+vector<int> chars(26, 0);
+for (const char& ch : s) {
+	chars[ch - 97]++;
+}
 
-	int max_char = *max_element(chars.begin(), chars.end());
-	for (size_t ptr = 0; ptr < 26; ptr++) {
-		if (chars[ptr] != max_char) {
-			return false;
-		}
+int max_char = *max_element(chars.begin(), chars.end());
+for (size_t ptr = 0; ptr < 26; ptr++) {
+	if (chars[ptr] != max_char) {
+		return false;
 	}
-	return true;
+}
+return true;
 }
 
 int countGoodSubstrings(const string& s) {
@@ -486,9 +486,9 @@ int countGoodSubstrings(const string& s) {
 
 void selection_sort_(std::vector<int>& main, std::size_t S) {
 	std::size_t min_indx;
-	for (std::size_t ptr = 0; ptr < S-1; ptr++) {
+	for (std::size_t ptr = 0; ptr < S - 1; ptr++) {
 		min_indx = ptr;
-		for (std::size_t ptr2 = ptr+1; ptr2 < S; ptr2++) {
+		for (std::size_t ptr2 = ptr + 1; ptr2 < S; ptr2++) {
 			if (main[ptr2] < main[min_indx]) {
 				min_indx = ptr2;
 			}
@@ -535,36 +535,73 @@ int maxRepeating(string& sequence, string& word) {
 	return res;
 }
 
+vector<int> createTargetArray(vector<int>& nums, vector<int>& index) {
+	vector<int> res;
+	auto splice([&res] (const vector<int>& num, const vector<int>& ind) {
+		for (size_t I = 0; I < ind.size(); I++) {
+			res.insert(res.begin() + ind[I], num[I]);
+		}
+		});
+	splice(nums, index);
+	return res;
+}
+
+bool isSorted(const vector<int>& nums) {
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if (nums[ptr] >= nums[ptr + 1]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+pair<size_t, size_t> minmax(const vector<int>& nums) {
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if (nums[ptr] >= nums[ptr + 1]) {
+			return {ptr, ptr + 1};
+		}
+	}
+	return {-1,-1};
+}
+
+bool canBeIncreasing(vector<int>& nums) {
+	int incr = 0;
+	if (isSorted(nums)) {
+		return true;
+	} else {
+		vector<int> tmp = nums;
+		pair<size_t, size_t> removers = minmax(nums);
+		if (removers.first != -1 && removers.second != -1) {
+			tmp.erase(tmp.begin() + removers.first);
+			if (isSorted(tmp)) {
+				return true;
+			} else {
+				nums.erase(nums.begin() + removers.second);
+				return isSorted(nums);
+			}
+		}
+	}
+	return false;
+}
+
 using namespace digcnv;
 
-int main() {
-	/*try{
-		double res = 0;
-		
-		LogDuration double_time("string to double");
-		toDigit test{ "+55.55e-2" };
-		res = test.AsDouble();
-		
-		cout << res << endl;
-		
-	} catch (const ParsingError& e) {
-		cout << e.what() << endl;
-	}*/
+int uniqueMorseRepresentations(vector<string>& words) {
+	vector<string> morze {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
+	set<string> origin;
+	for (const auto& word : words) {
+		string translated;
+		for (const char ch : word) {
+			translated += morze[ch - 97];
+		}
+		origin.insert(translated);
+	}
+	return origin.size();
+}
 
-	AvlTree<int> test{1};
-	
-	for (size_t ptr = 0; ptr < 10; ptr++) {
-		mt19937 rd(ptr);
-		int tmp = rd();
-		tmp < 0 ? tmp *= -1 : tmp;
-		test.Add(tmp);
-	}
-	
-	cout << test.bstInvariant() << endl;
-	for (const auto el : test.travers(AvlTree<int>::OrderTraversal::inOrderTraversal)) {
-		cout << el << ' ';
-	}
-	cout << endl;
+int main() {
+	vector<int> a{1,1,1};
+	cout << canBeIncreasing(a) << endl;
 
 	return 0;
 }
