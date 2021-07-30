@@ -538,7 +538,7 @@ int maxRepeating(string& sequence, string& word) {
 using namespace digcnv;
 
 int main() {
-	try{
+	/*try{
 		double res = 0;
 		
 		LogDuration double_time("string to double");
@@ -549,7 +549,23 @@ int main() {
 		
 	} catch (const ParsingError& e) {
 		cout << e.what() << endl;
+	}*/
+
+	AvlTree<int> test{1};
+	
+	for (size_t ptr = 0; ptr < 10; ptr++) {
+		mt19937 rd(ptr);
+		int tmp = rd();
+		tmp < 0 ? tmp *= -1 : tmp;
+		test.Add(tmp);
 	}
+	
+	cout << test.bstInvariant() << endl;
+	for (const auto el : test.travers(AvlTree<int>::OrderTraversal::inOrderTraversal)) {
+		cout << el << ' ';
+	}
+	cout << endl;
+
 	return 0;
 }
 
