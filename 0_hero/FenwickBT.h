@@ -90,7 +90,7 @@ public:
 	}
 private:
 	size_t LSB(const int idx) const {
-		return idx & (-1 * idx); ////??????????????????
+		return idx & (-1 * idx);
 	}
 
 	std::vector<NumericType> elems_;

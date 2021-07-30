@@ -600,9 +600,18 @@ int uniqueMorseRepresentations(vector<string>& words) {
 }
 
 int main() {
-	vector<int> a{1,1,1};
-	cout << canBeIncreasing(a) << endl;
-
+	BinarySearchTree<char> test{'F'};
+	test.Add('B');
+	test.Add('G');
+	test.Add('A');
+	test.Add('D');
+	test.Add('I');
+	test.Add('C');
+	test.Add('E');
+	test.Add('H');
+	for (const auto& ch : test.travers(BinarySearchTree<char>::OrderTraversal::levelOrderTraversal)) {
+		cout << ch << ' ';
+	}
 	return 0;
 }
 
