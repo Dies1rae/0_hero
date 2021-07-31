@@ -599,19 +599,21 @@ int uniqueMorseRepresentations(vector<string>& words) {
 	return origin.size();
 }
 
-int main() {
-	BinarySearchTree<char> test{'F'};
-	test.Add('B');
-	test.Add('G');
-	test.Add('A');
-	test.Add('D');
-	test.Add('I');
-	test.Add('C');
-	test.Add('E');
-	test.Add('H');
-	for (const auto& ch : test.travers(BinarySearchTree<char>::OrderTraversal::levelOrderTraversal)) {
-		cout << ch << ' ';
+void simpMathProb(int fV) { //3N + 1 problem\HILLSTONE prob
+	while (fV > 0) {
+		if (fV % 2 != 0) {
+			fV *= 3;
+			fV++;
+		} else {
+			fV /= 2;
+		}
+		cout << fV << endl;
+		system("PAUSE");
 	}
+}
+
+int main() {
+	simpMathProb(27);
 	return 0;
 }
 
