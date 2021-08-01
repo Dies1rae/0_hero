@@ -612,6 +612,11 @@ void simpMathProb(int fV) { //3N + 1 problem\HILLSTONE prob
 	}
 }
 
+bool isPerfectSquare(int num) {
+	size_t sr = sqrt(num);
+	return (sr * sr) == num;
+}
+
 int main() {
 	simpMathProb(27);
 	return 0;
