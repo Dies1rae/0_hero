@@ -58,6 +58,8 @@ namespace digcnv {
 		double AsDouble() const {
 			if (this->IsDouble()) {
 				return std::get<double>(this->converted_);
+			} else if (this->IsInt()) {
+				return (double)std::get<int>(this->converted_);
 			} else {
 				throw ParsingError("No DOUBLE in " + std::string(this->origin()));
 			}

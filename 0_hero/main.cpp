@@ -618,7 +618,8 @@ bool isPerfectSquare(int num) {
 }
 
 int main() {
-	simpMathProb(27);
+	toDigit test("12,0");
+	cout << test.AsDouble() << endl;
 	return 0;
 }
 
