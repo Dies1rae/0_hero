@@ -88,7 +88,7 @@ namespace digcnv {
 							this->state_ = State::intpart;
 						} else if (str_char == '+') {
 							this->state_ = State::intpart;
-						} else if (str_char == '.') {
+						} else if (str_char == '.' || str_char == ',') {
 							this->state_ = State::dot;
 						} else if (str_char >= '0' && str_char <= '9') {
 							this->state_ = State::intpart;
@@ -101,7 +101,7 @@ namespace digcnv {
 						if (str_char >= '0' && str_char <= '9') {
 							val_parts.int_part_ *= 10;
 							val_parts.int_part_ += (str_char - 48);
-						} else if (str_char == '.') {
+						} else if (str_char == '.' || str_char == ',') {
 							this->state_ = State::dot;
 						} else if (str_char == 'e') {
 							this->state_ = State::power;
