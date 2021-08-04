@@ -29,6 +29,13 @@ namespace digcnv {
 
 	class toDigit {
 	public:
+		explicit toDigit(const std::string& str) : base_str_(str.c_str()) {
+			if (*base_str_ == '\0') {
+				throw ParsingError("Empty string");
+			}
+			this->convertToDigit();
+		}
+
 		explicit toDigit(const char* str) : base_str_(str) {
 			if (*base_str_ == '\0') {
 				throw ParsingError("Empty string");
@@ -126,7 +133,7 @@ namespace digcnv {
 						} else if (str_char == 'e') {
 							this->state_ = State::power;
 						} else {
-							throw ParsingError("Convert error - denominator statement " + str_char);
+							throw ParsingError("Convert error - fractional statement " + str_char);
 						}
 						break;
 					case(State::power):
@@ -165,7 +172,7 @@ namespace digcnv {
 				ptr++;
 			}
 
-			if (this->AsInt()) {
+			if (this->IsInt()) {
 				this->converted_ = val_parts.int_part_;
 			} else {
 				double res = (double)val_parts.int_part_ + val_parts.fract_part_;

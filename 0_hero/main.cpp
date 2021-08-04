@@ -618,8 +618,11 @@ bool isPerfectSquare(int num) {
 }
 
 int main() {
-	toDigit test("12,0");
-	cout << test.AsDouble() << endl;
+	vector<string> nums{ "4"};
+	for (const auto& num : nums) {
+		cout << toDigit{num}.AsInt() << endl;
+	}
+	
 	return 0;
 }
 
