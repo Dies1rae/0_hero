@@ -681,6 +681,36 @@ TreeNode* invertTree(TreeNode* root) {
 	return tmp_root;
 }
 
+bool stoneGame(vector<int>& piles) {
+	int stones_all = std::accumulate(piles.begin(), piles.end(), 0);
+	int summ_Ale = 0;
+	int summ_Lee = 0;
+	while (!piles.empty()) {
+		if (piles[0] > piles[piles.size() - 1]) {
+			summ_Ale += piles[0];
+			stones_all -= piles[0];
+			piles.erase(piles.begin());
+		} else {
+			summ_Ale += piles[piles.size() - 1];
+			stones_all -= piles[piles.size() - 1];
+			piles.erase(piles.begin() + piles.size() - 1);
+		}
+		if (piles[0] > piles[piles.size() - 1]) {
+			summ_Lee += piles[0];
+			stones_all -= piles[0];
+			piles.erase(piles.begin());
+		} else {
+			summ_Lee += piles[piles.size() - 1];
+			stones_all -= piles[piles.size() - 1];
+			piles.erase(piles.begin() + piles.size() - 1);
+		}
+		if (summ_Ale > stones_all / 2) {
+			return true;
+		}
+	}
+	return false;
+}
+
 int main() {
 	TreeNode* test = new TreeNode(1);
 	test->left = new TreeNode(2);
