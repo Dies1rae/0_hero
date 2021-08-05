@@ -711,6 +711,51 @@ bool stoneGame(vector<int>& piles) {
 	return false;
 }
 
+int maxProductDifference(vector<int>& nums) {
+	std::sort(nums.begin(), nums.end());
+	auto first = nums.begin();
+	auto last = --nums.end();
+	return ((*(last) * *(--last)) - (*(first) * *(++first)));
+}
+
+bool IsWordContainseBroken(const std::string& word, const std::string brkn) {
+	for (const char ch : brkn) {
+		if (word.find(ch) != std::string::npos) {
+			return true;
+		}
+	}
+	return false;
+}
+
+std::map<std::string, int> SplitIntoWords(const std::string_view& text) {
+	std::map<std::string, int> words;
+	std::string word;
+	for (const char c : text) {
+		if (c == ' ') {
+			if (!word.empty()) {
+				words[word]++;
+				word.clear();
+			}
+		} else {
+			word += c;
+		}
+	}
+	if (!word.empty()) {
+		words[word]++;
+	}
+	return words;
+}
+
+int canBeTypedWords(string text, string brokenLetters) {
+	int word_typed = 0;
+	for (const auto& [word, ctr] : SplitIntoWords(text)) {
+		if (!IsWordContainseBroken(word, brokenLetters)) {
+			word_typed+=ctr;
+		}
+	}
+	return word_typed;
+}
+
 int main() {
 	TreeNode* test = new TreeNode(1);
 	test->left = new TreeNode(2);
