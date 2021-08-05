@@ -617,13 +617,36 @@ bool isPerfectSquare(int num) {
 	return (sr * sr) == num;
 }
 
-int main() {
-	vector<string> nums{ "4"};
-	for (const auto& num : nums) {
-		cout << toDigit{num}.AsInt() << endl;
+string reverseStr(string s, int k) {
+	int len = s.length();
+	string builder = "";
+	int left = 0;
+	bool rev = false;
+	for (int i = 0; i < len; i++) {
+		if (i % k == 0) {
+			string subStr = s.substr(left, i - left);
+			if (rev) {
+				reverse(subStr.begin(), subStr.end());
+			}
+			builder += subStr;
+			left = i;
+			rev = !rev;
+		}
 	}
-	
+	string subStr = s.substr(left, len - left);
+	if (rev) {
+		reverse(subStr.begin(), subStr.end());
+	}
+	builder += subStr;
+	return builder;
+}
+
+int main() {
+	cout << reverseStr("hyzqyljrnigxvdtneasepfahmtyhlohwxmkqcdfehybknvdmfrfvtbsovjbdhevlfxpdaovjgunjqlimjkfnqcqnajmebeddqsgl", 39) << endl;
 	return 0;
 }
+
+
+
 
  
