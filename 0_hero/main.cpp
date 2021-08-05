@@ -641,8 +641,50 @@ string reverseStr(string s, int k) {
 	return builder;
 }
 
+TreeNode* invertTree(TreeNode* root) {
+	if (root == nullptr) {
+		return root;
+	}
+	TreeNode* tmp_root = root;
+	TreeNode* trav = root;
+	std::queue<TreeNode*> hsh;
+	hsh.push(trav);
+
+	while (!hsh.empty()) {
+		TreeNode* node = hsh.front();
+		hsh.pop();
+
+
+		if (node->left != nullptr && node->right == nullptr) {
+			TreeNode* tmp = node->left;
+			node->left = nullptr;
+			node->right = tmp;
+			hsh.push(node->right);
+			continue;
+		}
+		if (node->left == nullptr && node->right != nullptr) {
+			TreeNode* tmp = node->right;
+			node->right = nullptr;
+			node->left = tmp;
+			hsh.push(node->left);
+			continue;
+		}
+		if (node->left != nullptr && node->right != nullptr) {
+			TreeNode* tmp = node->left;
+			node->left = node->right;
+			node->right = tmp;
+			hsh.push(node->left);
+			hsh.push(node->right);
+			continue;
+		}
+	}
+	return tmp_root;
+}
+
 int main() {
-	cout << reverseStr("hyzqyljrnigxvdtneasepfahmtyhlohwxmkqcdfehybknvdmfrfvtbsovjbdhevlfxpdaovjgunjqlimjkfnqcqnajmebeddqsgl", 39) << endl;
+	TreeNode* test = new TreeNode(1);
+	test->left = new TreeNode(2);
+	invertTree(test);
 	return 0;
 }
 
