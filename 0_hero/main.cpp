@@ -756,6 +756,46 @@ int canBeTypedWords(string text, string brokenLetters) {
 	return word_typed;
 }
 
+class Node {
+public:
+	int val;
+	vector<Node*> children;
+
+	Node() {}
+
+	Node(int _val) {
+		val = _val;
+	}
+
+	Node(int _val, vector<Node*> _children) {
+		val = _val;
+		children = _children;
+	}
+};
+
+vector<int> preorder(Node* root) {
+	if (root == nullptr) {
+		return {};
+	}
+	vector<int> res;
+	Node* trav = root;
+	std::stack<Node*> hsh;
+	hsh.push(trav);
+
+	while (!hsh.empty()) {
+		Node* node = hsh.top();
+		hsh.pop();
+		res.push_back(node->val);
+
+		if (!node->children.empty()) {
+			for (auto ptre = --node->children.end(); ptre >= node->children.begin(); ptre--) {
+				hsh.push(*ptre);
+			}
+		}
+	}
+	return res;
+}
+
 int main() {
 	TreeNode* test = new TreeNode(1);
 	test->left = new TreeNode(2);
