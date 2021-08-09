@@ -796,6 +796,36 @@ vector<int> preorder(Node* root) {
 	return res;
 }
 
+vector<vector<int>> levelOrder(Node* root) {
+	if (root == nullptr) {
+		return {};
+	}
+	vector<vector<int>> res;
+	
+	Node* trav = root;
+	std::queue<Node*> hsh;
+	hsh.push(trav);
+
+	while (!hsh.empty()) {
+		vector<int> res_all;
+		size_t level = hsh.size();
+		while (level > 0) {
+			Node* node = hsh.front();
+			hsh.pop();
+			res_all.push_back(node->val);
+
+			if (!node->children.empty()) {
+				for (auto ptre = node->children.begin(); ptre < node->children.end(); ptre++) {
+					hsh.push(*ptre);
+				}
+			}
+			level--;
+		}
+		res.push_back(res_all);
+	}
+	return res;
+}
+
 int main() {
 	TreeNode* test = new TreeNode(1);
 	test->left = new TreeNode(2);
