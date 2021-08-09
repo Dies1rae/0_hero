@@ -826,6 +826,28 @@ vector<vector<int>> levelOrder(Node* root) {
 	return res;
 }
 
+bool isPresent(vector<vector<int>>& ranges, int num) {
+	for (int i = 0; i < ranges.size(); i++) {
+		vector<int> range = ranges[i];
+		int left = range[0];
+		int right = range[1];
+		if (num >= left && num <= right) {
+			return true;
+		}
+	}
+	return false;
+}
+bool isCovered(vector<vector<int>>& ranges, int left, int right) {
+	for (int i = left; i <= right; i++) {
+		if (isPresent(ranges, i)) {
+			continue;
+		} else {
+			return false;
+		}
+	}
+	return true;
+}
+
 int main() {
 	TreeNode* test = new TreeNode(1);
 	test->left = new TreeNode(2);
