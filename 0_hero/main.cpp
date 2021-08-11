@@ -848,6 +848,62 @@ bool isCovered(vector<vector<int>>& ranges, int left, int right) {
 	return true;
 }
 
+string makeFancyString(string s) {
+	string ans;
+	char curr;
+	int cnt = 0;
+
+	curr = s[0];
+	for(int i = 0; i < s.size(); ){
+		while(i < s.size() && s[i] == curr){
+			cnt++;
+			i++;
+		}
+		for(int j = 0; j < cnt && j < 2; ++j){
+			ans.push_back(curr);
+		}
+		if(i < s.size()){
+			curr = s[i];
+			cnt = 0;
+		}
+	}
+
+	return ans;
+}
+
+vector<int> shortestToChar(string s, char c) {
+	vector<int> res (s.size(), 0);
+	int clst = s.find_first_of(c);
+	for(int ptr = 0; ptr < s.size(); ptr ++) {
+		int clst_sec = s.find(c, ptr);
+		if (abs(clst_sec - ptr) < abs(clst - ptr)) {
+			res[ptr] = abs(clst_sec - ptr);
+			clst = clst_sec;
+		} else {
+			res[ptr] = abs(clst - ptr);
+		}
+	}
+	return res;
+}
+
+bool makeEqual(vector<string>& words) {
+	if(words.size() == 1) {
+		return true;
+	}
+	map<char, int> chr_ctr;
+	for(const std::string& word : words) {
+		for(const char& ch : word) {
+			chr_ctr[ch] ++;
+		}
+	}
+	for (const auto& [ch, ctr] : chr_ctr) {
+		if (ctr != words.size() && ctr % words.size() != 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
 int main() {
 	TreeNode* test = new TreeNode(1);
 	test->left = new TreeNode(2);
