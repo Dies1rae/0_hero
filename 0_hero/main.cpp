@@ -904,10 +904,61 @@ bool makeEqual(vector<string>& words) {
 	return true;
 }
 
+struct t {
+	int ctr_ = 0;
+	string name_;
+	bool operator==(const t& lhs) const {
+		return lhs.name_ == this->name_ && lhs.ctr_ == this->ctr_;
+	}
+};
+
+struct tCMP {
+	const bool operator()(const t& lhs, const t& rhs) const {
+		if (lhs.name_ == rhs.name_) {
+			return lhs.ctr_ < rhs.ctr_;
+		}
+		return lhs.name_ < rhs.name_;
+	}
+};
+
+struct tHSH {
+	int operator()(const t& lhs) const {
+		int res = lhs.name_.size();
+		for (size_t ptr = 0; ptr < lhs.name_.size(); ptr++) {
+			res += std::pow(lhs.name_[ptr], ptr);
+		}
+		return res * lhs.ctr_;
+	}
+};
+
 int main() {
-	TreeNode* test = new TreeNode(1);
-	test->left = new TreeNode(2);
-	invertTree(test);
+
+	map<t, int, tCMP> test_t;
+	t one{1, "a"};
+	t two{2, "a"};
+	t three{3, "b"};
+	test_t[one] = 1;
+	test_t[two] = 2;
+	test_t[three] = 3;
+
+	unordered_map<t, int, tHSH> test_t_hsh;
+	test_t_hsh[three] = 3;
+	test_t_hsh[one] = 1;
+	test_t_hsh[two] = 2;
+	
+
+	for (const auto& [ctr, name] : test_t_hsh) {
+		cout << ctr.ctr_ << '-' << ctr.name_ << ' ' << name << endl;
+	}
+
+
+	int a = 1;
+	int* b = &a;
+	const int* c = &a;
+	int* const d = &a;
+	const int* const f = &a;
+
+	cout << *b << ' ' << *c << ' ' << *d << ' ' << *f << endl;
 	return 0;
 }
 
