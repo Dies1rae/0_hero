@@ -931,34 +931,42 @@ struct tHSH {
 	}
 };
 
-int main() {
-
-	map<t, int, tCMP> test_t;
-	t one{1, "a"};
-	t two{2, "a"};
-	t three{3, "b"};
-	test_t[one] = 1;
-	test_t[two] = 2;
-	test_t[three] = 3;
-
-	unordered_map<t, int, tHSH> test_t_hsh;
-	test_t_hsh[three] = 3;
-	test_t_hsh[one] = 1;
-	test_t_hsh[two] = 2;
-	
-
-	for (const auto& [ctr, name] : test_t_hsh) {
-		cout << ctr.ctr_ << '-' << ctr.name_ << ' ' << name << endl;
+int getMaximumGenerated(int n) {
+	if (n == 0) {
+		return 0;
 	}
+	vector<int> max(n + 1, 0);
+	max[0] = 0;
+	max[1] = 1;
+	for (size_t ptr = 1; ptr <= n; ptr++) {
+		if (2 * ptr <= n) {
+			max[2 * ptr] = max[ptr];
+		}
+		if (2 * ptr + 1 <= n) {
+			max[2 * ptr + 1] = max[ptr] + max[ptr + 1];
+		}
+	}
+	return *max_element(max.begin(), max.end());
+}
 
+int balancedStringSplit(string s) {
+	int l_ctr = 0;
+	int res = 0;
+	for (const auto& ch : s) {
+		if (ch == 'L') {
+			l_ctr++;
+		} else if (ch == 'R') {
+			l_ctr--;
+		}
+		if (l_ctr == 0) {
+			res++;
+		}
+	}
+	return res;
+}
 
-	int a = 1;
-	int* b = &a;
-	const int* c = &a;
-	int* const d = &a;
-	const int* const f = &a;
-
-	cout << *b << ' ' << *c << ' ' << *d << ' ' << *f << endl;
+int main() {
+	
 	return 0;
 }
 
