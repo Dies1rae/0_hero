@@ -931,34 +931,38 @@ struct tHSH {
 	}
 };
 
-int main() {
+string largestOddNumber(string num) {
+	int res = num[num.size() - 1] - 48;
+	while (res % 2 == 0) {
+		num.erase(num.begin() + (num.size() - 1));
+		if(num.empty()){
+			return {};
+		}
+		res = num[num.size() - 1] - 48;
 
-	map<t, int, tCMP> test_t;
-	t one{1, "a"};
-	t two{2, "a"};
-	t three{3, "b"};
-	test_t[one] = 1;
-	test_t[two] = 2;
-	test_t[three] = 3;
-
-	unordered_map<t, int, tHSH> test_t_hsh;
-	test_t_hsh[three] = 3;
-	test_t_hsh[one] = 1;
-	test_t_hsh[two] = 2;
-	
-
-	for (const auto& [ctr, name] : test_t_hsh) {
-		cout << ctr.ctr_ << '-' << ctr.name_ << ' ' << name << endl;
 	}
+	return num;
+}
 
+int stringToInt(const std::string& word) {
+	int res = 0;
+	for (const auto& ch : word) {
+		res += (ch - 97);
+		res *= 10;
+	}
+	return res / 10;
+}
 
-	int a = 1;
-	int* b = &a;
-	const int* c = &a;
-	int* const d = &a;
-	const int* const f = &a;
+bool isSumEqual(string firstWord, string secondWord, string targetWord) {
+	int w1 = stringToInt(firstWord);
+	int w2 = stringToInt(secondWord);
+	int w3 = stringToInt(targetWord);
+	cout << w1 << ' ' << w2 << ' ' << w3 << endl;
+	return w1 + w2 == w3 ? 1 : 0;
+}
 
-	cout << *b << ' ' << *c << ' ' << *d << ' ' << *f << endl;
+int main() {
+	cout << largestOddNumber("4206") << endl;
 	return 0;
 }
 
