@@ -948,14 +948,18 @@ int getMaximumGenerated(int n) {
 	}
 	return *max_element(max.begin(), max.end());
 }
+
 string largestOddNumber(string num) {
 	int res = num[num.size() - 1] - 48;
 	while (res % 2 == 0) {
 		num.erase(num.begin() + (num.size() - 1));
-		if(num.empty()){
+		if (num.empty()) {
 			return {};
 		}
 		res = num[num.size() - 1] - 48;
+		return num;
+	}
+}
 
 int balancedStringSplit(string s) {
 	int l_ctr = 0;
@@ -971,9 +975,6 @@ int balancedStringSplit(string s) {
 		}
 	}
 	return res;
-}
-	}
-	return num;
 }
 
 int stringToInt(const std::string& word) {
