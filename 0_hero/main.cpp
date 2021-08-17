@@ -931,6 +931,23 @@ struct tHSH {
 	}
 };
 
+int getMaximumGenerated(int n) {
+	if (n == 0) {
+		return 0;
+	}
+	vector<int> max(n + 1, 0);
+	max[0] = 0;
+	max[1] = 1;
+	for (size_t ptr = 1; ptr <= n; ptr++) {
+		if (2 * ptr <= n) {
+			max[2 * ptr] = max[ptr];
+		}
+		if (2 * ptr + 1 <= n) {
+			max[2 * ptr + 1] = max[ptr] + max[ptr + 1];
+		}
+	}
+	return *max_element(max.begin(), max.end());
+}
 string largestOddNumber(string num) {
 	int res = num[num.size() - 1] - 48;
 	while (res % 2 == 0) {
@@ -940,6 +957,21 @@ string largestOddNumber(string num) {
 		}
 		res = num[num.size() - 1] - 48;
 
+int balancedStringSplit(string s) {
+	int l_ctr = 0;
+	int res = 0;
+	for (const auto& ch : s) {
+		if (ch == 'L') {
+			l_ctr++;
+		} else if (ch == 'R') {
+			l_ctr--;
+		}
+		if (l_ctr == 0) {
+			res++;
+		}
+	}
+	return res;
+}
 	}
 	return num;
 }
