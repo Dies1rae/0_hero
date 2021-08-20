@@ -1044,6 +1044,25 @@ char slowestKey(vector<int>& releaseTimes, string keysPressed) {
 	return (--res.end())->second;
 }
 
+bool checkOnesSegment(string s) {
+	int ctr = 0;
+	auto sugar ([&ctr] (const char& lhs) {
+		if (lhs == '1') {
+			ctr++;
+		}
+		if (lhs == '0') {
+			ctr--;
+		}
+		});
+	for (const auto& ch : s) {
+		sugar(ch);
+		if (ctr > 1) {
+			return true;
+		}
+	}
+	return false;
+}
+
 int main() {
 	cout << largestOddNumber("4206") << endl;
 	return 0;
