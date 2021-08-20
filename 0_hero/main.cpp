@@ -1048,6 +1048,29 @@ bool checkOnesSegment(string s) {
 	return s.find("01") == string::npos;
 }
 
+void solution(TreeNode *root, string current, vector<string>& ans ){
+	if (root == NULL) {
+		return;
+	}
+	current += (std::to_string(root->val) + "->");
+	if (root->left == NULL and root->right == NULL) {
+		ans.push_back(current.substr(0, current.size() - 2));
+	}
+	if (root->left) {
+		solution(root->left, current, ans);
+	}
+	if (root->right) {
+		solution(root->right, current, ans);
+	}
+} 
+
+vector<string> binaryTreePaths(TreeNode* root) {
+	vector<string> ans;
+	std::string current;
+	solution(root, current, ans);
+	return ans;
+}
+
 int main() {
 	cout << largestOddNumber("4206") << endl;
 	return 0;
