@@ -1045,22 +1045,7 @@ char slowestKey(vector<int>& releaseTimes, string keysPressed) {
 }
 
 bool checkOnesSegment(string s) {
-	int ctr = 0;
-	auto sugar ([&ctr] (const char& lhs) {
-		if (lhs == '1') {
-			ctr++;
-		}
-		if (lhs == '0') {
-			ctr--;
-		}
-		});
-	for (const auto& ch : s) {
-		sugar(ch);
-		if (ctr > 1) {
-			return true;
-		}
-	}
-	return false;
+	return s.find("01") == string::npos;
 }
 
 int main() {
