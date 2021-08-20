@@ -1033,6 +1033,17 @@ vector<vector<int>> flipAndInvertImage(vector<vector<int>>& image) {
 	return image;
 }
 
+
+char slowestKey(vector<int>& releaseTimes, string keysPressed) {
+	map<int, char> res;
+	for (size_t ptr = 0; ptr < keysPressed.size(); ptr++) {
+		int time = 0;
+		ptr == 0 ? time = releaseTimes[ptr] - 0 : time = releaseTimes[ptr] -  releaseTimes[ptr - 1];
+		res.count(time) > 0 ? res[time] < keysPressed[ptr] ?  res[time] =  keysPressed[ptr] : res[time] :  res[time] = keysPressed[ptr];
+	}
+	return (--res.end())->second;
+}
+
 int main() {
 	cout << largestOddNumber("4206") << endl;
 	return 0;
