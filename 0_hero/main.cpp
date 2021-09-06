@@ -1072,14 +1072,15 @@ int main() {
 	//@0004040BB8000048*
 	unsigned char buffer[256];
 	uint16_t buf_uint[10];
-	memcpy(buffer, "@0004040BB8000048*", sizeof("@0004040BB8000048*"));
-	for (size_t ptr = 0; buffer[ptr] != '*'; ptr++) {
+	memcpy(buffer, "0004040BB8000048", sizeof("0004040BB8000048"));
+	for (size_t ptr = 0; ptr < 17; ptr++) {
 		cout << buffer[ptr] << ' ';
 	}
 	cout << endl;
-	memcpy(buf_uint, buffer, 19);
+	memcpy(buf_uint, buffer, 17);
 	cout << hex << buf_uint[0] << '-' << buf_uint[1] << '-' <<  buf_uint[2] << '-' << buf_uint[3] << '-'
-		<< buf_uint[4] << '-' << buf_uint[5] << '-' << buf_uint[6] << '-' << buf_uint[7] << '-'
-		<< buf_uint[8] << endl;
+		<< buf_uint[4] << '-' << buf_uint[5] << '-' << buf_uint[6] << '-' << buf_uint[7] << endl;
+
+	cout << ((buf_uint[1] >> 8u) & 0x00FF) << endl;
 	return 0;
 }
