@@ -994,26 +994,23 @@ bool isSumEqual(string firstWord, string secondWord, string targetWord) {
 	return w1 + w2 == w3 ? 1 : 0;
 }
 
-vector<string> fizzBuzz(int n) {
-	std::vector<std::string> res;
-	res.resize(n);
-	auto fizzbuzz ([&res, &n] () {
-		if (n % 3 == 0 && n % 5 == 0) {
-			res[n] = "FizzBuzz";
-		} else if (n % 3 == 0 && n % 5 != 0) {
-			res[n] = "Fizz";
-		}  else if (n % 3 != 0 && n % 5 == 0) {
-			res[n] = "Buzz";
+void fizzBuzz(void) {
+	int n = 1;
+	auto fizzbuzz ([&n] () {
+		if (n % 3 == 0 && n % 7 == 0) {
+			printf("%s\n", "JackieChan");
+		} else if (n % 3 == 0 && n % 7 != 0) {
+			printf("%s\n", "Jackie");
+		}  else if (n % 3 != 0 && n % 7 == 0) {
+			printf("%s\n", "Chan");
 		} else {
-			res[n] = std::to_string(n);
+			printf("%s\n", std::to_string(n));
 		}
 	});
 
-	while (n--) {
+	while (n < 146) {
 		fizzbuzz();
 	}
-
-	return res;
 }
 
 int findCenter(vector<vector<int>>& edges) {
@@ -1072,11 +1069,17 @@ vector<string> binaryTreePaths(TreeNode* root) {
 }
 
 int main() {
-	cout << largestOddNumber("4206") << endl;
+	//@0004040BB8000048*
+	unsigned char buffer[256];
+	uint16_t buf_uint[10];
+	memcpy(buffer, "@0004040BB8000048*", sizeof("@0004040BB8000048*"));
+	for (size_t ptr = 0; buffer[ptr] != '*'; ptr++) {
+		cout << buffer[ptr] << ' ';
+	}
+	cout << endl;
+	memcpy(buf_uint, buffer, 19);
+	cout << hex << buf_uint[0] << '-' << buf_uint[1] << '-' <<  buf_uint[2] << '-' << buf_uint[3] << '-'
+		<< buf_uint[4] << '-' << buf_uint[5] << '-' << buf_uint[6] << '-' << buf_uint[7] << '-'
+		<< buf_uint[8] << endl;
 	return 0;
 }
-
-
-
-
- 
