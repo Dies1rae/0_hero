@@ -37,6 +37,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <cstdlib>
+#include <memory>
 
 using namespace std;
 
@@ -57,25 +58,26 @@ double getData(const char* buffer, size_t size) {
 	return x + z;
 }
 
-int main() {
-	HANDLE serial_dev;
-	DCB dcbSerialParams = {0};
-	serial_dev = CreateFile(TEXT("\\\\.\\COM4"), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (serial_dev == INVALID_HANDLE_VALUE) {
-		cout << "Error open port\n";
-	} else {
-		cout << "Port opened\n";
-	}
-	dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+class A {
+public:
+	A() = default;
+	A(const A&) = delete;
+	A(const A&&) = delete;
+	~A() {};
 
-	DWORD bytes_written;
-	char buf [256];
-	
-	WriteFile(serial_dev, "@00040044*", 10, &bytes_written, NULL);
-	
-	ReadFile(serial_dev, &buf, 18, &bytes_written, NULL);
-	CloseHandle(serial_dev);
-	cout << buf << endl;
-	cout << getData(buf, 18) << endl;
+	int data_ = 50;
+};
+
+int main() {
+	A test1{};
+	A test3{};
+	void* test2 = &test3;
+	test1.data_ = 100;
+
+	memcpy(&test3, &test1, sizeof(A));
+	test1.data_ = 53;
+	cout << test1.data_ << endl;
+	cout << *(int*)test2 << endl;
+
 	return 0;
 }
