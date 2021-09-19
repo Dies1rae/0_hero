@@ -38,6 +38,7 @@
 #include <windows.h>
 #include <cstdlib>
 #include <memory>
+#include <numeric>
 
 using namespace std;
 
@@ -68,16 +69,70 @@ public:
 	int data_ = 50;
 };
 
-int main() {
-	A test1{};
-	A test3{};
-	void* test2 = &test3;
-	test1.data_ = 100;
+//bad
+bool containsNearbyDuplicate(vector<int>& nums, int k) {
+	map<int, vector<int>> hsh;
+	for (int ptr = 0; ptr < nums.size(); ptr++) {
+		hsh[nums[ptr]].push_back(ptr);
+	}
+	for (const auto& [num, position] : hsh) {
+		if (position.size() > 1) {
+			for (int ptr = 0; ptr + 1< position.size(); ptr++) {
+				if (std::abs(position[ptr] - position[ptr + 1]) <= k) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
 
-	memcpy(&test3, &test1, sizeof(A));
-	test1.data_ = 53;
-	cout << test1.data_ << endl;
-	cout << *(int*)test2 << endl;
+//good
+bool containsNearbyDuplicate_1(vector<int>& nums, int k) {
+	unordered_map<int, int> m;
+	int s = nums.size();
+	for(int i = 0; i < s; i++){
+		if(m.find(nums[i]) != m.end() && (i - m[nums[i]] <= k))
+			return true;
+		m[nums[i]] = i;
+	}
+	return false;
+}
+
+struct ListNode {
+	int val;
+	ListNode *next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+int peakIndexInMountainArray(vector<int>& arr) {
+	return  std::find(arr.begin(), arr.end(), *std::max_element(arr.begin(), arr.end())) - arr.begin();
+}
+
+int sizeLinkdLIst(ListNode* head) {
+	int len = 0;
+	while(head != nullptr) {
+		head = head->next;
+		len += 1;
+	}
+	return len;
+}
+
+ListNode* middleNode(ListNode* head) {
+	ListNode* tmp = head;
+	int len = sizeLinkdLIst(tmp);
+	int ptr = 0;
+	while (ptr < (len / 2)) {
+		head = head->next;
+		ptr++;
+	}
+	return head;
+}
+
+int main() {
+	cout << 6 / 2;
 
 	return 0;
 }
