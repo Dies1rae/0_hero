@@ -120,6 +120,17 @@ int sizeLinkdLIst(ListNode* head) {
 	return len;
 }
 
+int trailingZeroes(int n) {
+	if (n > 0) {
+		int ctr = 0;
+		for (int ptr = 5; n / ptr >= 1; ptr *= 5) {
+			ctr += n / ptr;
+		}
+		return ctr;
+	}
+	return 0;
+}
+
 ListNode* middleNode(ListNode* head) {
 	ListNode* tmp = head;
 	int len = sizeLinkdLIst(tmp);
@@ -129,6 +140,30 @@ ListNode* middleNode(ListNode* head) {
 		ptr++;
 	}
 	return head;
+}
+
+int guessNumber(int n) {
+	if(n == 1) {
+		return n;
+	}
+	int middle = n / 2;
+	int guess_num = 0;
+	while ((guess_num = guess(middle)) != 0) {
+		if (guess_num < 0) {
+			if((middle / 2) > 0) {
+				(middle / 2) % 2 == 0 ? middle -= (middle / 2) :  middle -= (middle / 2) - 1;
+			} else {
+				middle --;
+			}
+		} else if (guess_num > 0) {
+			if((middle / 2) > 0) {
+				(middle / 2) % 2 == 0 ? middle += (middle / 2) :  middle += (middle / 2) + 1;
+			} else {
+				middle ++;
+			}
+		}
+	}
+	return middle;
 }
 
 int main() {
