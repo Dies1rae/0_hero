@@ -142,32 +142,83 @@ ListNode* middleNode(ListNode* head) {
 	return head;
 }
 
-int guessNumber(int n) {
-	if(n == 1) {
-		return n;
-	}
-	int middle = n / 2;
-	int guess_num = 0;
-	while ((guess_num = guess(middle)) != 0) {
-		if (guess_num < 0) {
-			if((middle / 2) > 0) {
-				(middle / 2) % 2 == 0 ? middle -= (middle / 2) :  middle -= (middle / 2) - 1;
-			} else {
-				middle --;
-			}
-		} else if (guess_num > 0) {
-			if((middle / 2) > 0) {
-				(middle / 2) % 2 == 0 ? middle += (middle / 2) :  middle += (middle / 2) + 1;
-			} else {
-				middle ++;
-			}
+//int guessNumber(int n) {
+//	if(n == 1) {
+//		return n;
+//	}
+//	int middle = n / 2;
+//	int guess_num = 0;
+//	while ((guess_num = guess(middle)) != 0) {
+//		if (guess_num < 0) {
+//			if((middle / 2) > 0) {
+//				(middle / 2) % 2 == 0 ? middle -= (middle / 2) :  middle -= (middle / 2) - 1;
+//			} else {
+//				middle --;
+//			}
+//		} else if (guess_num > 0) {
+//			if((middle / 2) > 0) {
+//				(middle / 2) % 2 == 0 ? middle += (middle / 2) :  middle += (middle / 2) + 1;
+//			} else {
+//				middle ++;
+//			}
+//		}
+//	}
+//	return middle;
+//}
+
+int findMaxConsecutiveOnes(vector<int>& nums) {
+	int max = 0;
+	int tmp_max = 0;
+	for (const auto& num : nums) {
+		if (num == 1) {
+			tmp_max++;
+		}
+		if (num == 0) {
+			max < tmp_max ? max = tmp_max : max;
+			tmp_max = 0;
 		}
 	}
-	return middle;
+	max < tmp_max ? max = tmp_max : max;
+	return max;
+}
+
+int findGCD(vector<int>& nums) {
+	return std::gcd(*std::min_element(nums.begin(), nums.end()),  *std::max_element(nums.begin(), nums.end()));
+}
+
+static bool cmpFREQ(pair<int, int>& l, pair<int, int>& r) {
+	if (l.second != r.second) {
+		return l.second < r.second;
+	}
+	return l.first > r.first;
+}
+
+vector<int> frequencySort(vector<int>& nums) {
+	map <int, int> cmprs;
+	vector<pair<int, int>> pairs_num_ctr;
+	vector<int> res;
+	for (const int num : nums) {
+		cmprs[num] += 1;
+	}
+	for (const auto& [nums, ctr] : cmprs) {
+		pairs_num_ctr.push_back({nums, ctr});
+	}
+	std::sort(pairs_num_ctr.begin(), pairs_num_ctr.end(), cmpFREQ);
+	for(size_t ptr = 0; ptr < pairs_num_ctr.size(); ptr ++) {
+		size_t ctr_tmp = 0;
+		while (ctr_tmp < pairs_num_ctr[ptr].second) {
+			res.push_back(pairs_num_ctr[ptr].first);
+			ctr_tmp++;
+		}
+	}
+	return res;
 }
 
 int main() {
-	cout << 6 / 2;
-
+	vector<int> v{-1,1,-6,4,5,-6,1,4,1};
+	for (const auto& num : frequencySort(v)) {
+		cout << num << ' ';
+	}
+	cout << '\n';
 	return 0;
 }
