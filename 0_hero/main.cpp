@@ -214,11 +214,46 @@ vector<int> frequencySort(vector<int>& nums) {
 	return res;
 }
 
-int main() {
-	vector<int> v{-1,1,-6,4,5,-6,1,4,1};
-	for (const auto& num : frequencySort(v)) {
-		cout << num << ' ';
+bool strCMP(const string& lhs) {
+	set<char> chtrs;
+	for (char c : lhs) {
+		if (chtrs.count(c)) {
+			return false;
+		}
+		chtrs.insert(c);
 	}
-	cout << '\n';
+	return true;
+}
+
+vector<string> graph(vector<string>& arr, int ind) {
+	if (ind == arr.size()) {
+		return {""};
+	}
+
+	vector<string> tmp = graph(arr, ind + 1);
+
+	vector<string> ret(tmp.begin(),	tmp.end());
+
+	for (auto i : tmp) {
+		string test = i + arr[ind];
+		if (strCMP(test))
+			ret.push_back(test);
+	}
+
+	return ret;
+}
+
+int maxLength(vector<string>& arr) {
+	vector<string> tmpstr = graph(arr, 0);
+	int max = 0;
+	for (const auto& str : tmpstr) {
+		max < str.size() ? max = str.size() : max;
+	}
+	return max;
+}
+
+int main() {
+	vector<string> arr{"a", "abc", "d", "de", "def"};
+	cout << maxLength(arr) << endl;
 	return 0;
 }
