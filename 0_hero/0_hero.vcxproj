@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ansi_c.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="old.cpp" />
   </ItemGroup>

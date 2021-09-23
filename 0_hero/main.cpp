@@ -252,8 +252,79 @@ int maxLength(vector<string>& arr) {
 	return max;
 }
 
+
+int bitcount(unsigned x) {
+	if (x == 0) {
+		return 0;
+	}
+	int b = 1;
+	while(x != 0) {
+		if (x &= (x - 1)) {
+			b++;
+		}
+
+	}
+	return b;
+}
+
+vector<int> countBits(int n) {
+	vector<int> res;
+	for (unsigned int ptr = 1; ptr <= n; ptr++) {
+		res.push_back(bitcount(ptr));
+	}
+	return res;
+}
+
+class MyQueue {
+public:
+	MyQueue(){}
+
+	void push(const int& x) {
+		this->synch(this->root_back, this->root_);
+		this->root_.push(x);
+	}
+
+	int pop() {
+		if(this->empty()) {
+			return 0;
+		}
+		this->synch(this->root_, this->root_back);
+		int elem = this->root_back.top();
+		this->root_back.pop();
+		return elem;
+	}
+
+	int peek() {
+		if(this->empty()) {
+			return 0;
+		}
+		this->synch(this->root_, this->root_back);
+		return this->root_back.top();
+	}
+
+	bool empty() {
+		this->synch(this->root_, this->root_back);
+		return this->root_back.empty();
+	}
+
+private:
+	void synch(stack<int>& lhs, stack<int>& rhs) {
+		while(!lhs.empty()) {
+			rhs.push(lhs.top());
+			lhs.pop();
+		}
+	}
+
+	std::stack<int> root_;
+	std::stack<int> root_back; 
+};
+
 int main() {
-	vector<string> arr{"a", "abc", "d", "de", "def"};
-	cout << maxLength(arr) << endl;
+	std::stack<int> test;
+	test.push(1);
+	test.push(2);
+	cout << test.top() << ' ';
+	test.pop();
+	cout << test.top() << ' ';
 	return 0;
 }

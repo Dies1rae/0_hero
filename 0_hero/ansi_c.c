@@ -39,6 +39,9 @@ const int LSB(const int idx) {
 }
 
 int bitcount(unsigned x) {
+    if (x == 0) {
+        return 0;
+    }
     int b = 1;
     while(x != 0) {
         if (x &= (x - 1)) {
