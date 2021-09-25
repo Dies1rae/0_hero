@@ -314,10 +314,80 @@ private:
 			lhs.pop();
 		}
 	}
-
 	std::stack<int> root_;
 	std::stack<int> root_back; 
 };
+
+
+int longestPalindrome(string s) {
+	int res = 0;
+	int max = 0;
+	map<char, int> hsh;
+	for (const char ch : s) {
+		hsh[ch]++;
+	}
+
+	for (const auto& [ch, ctr] : hsh) {
+		if (ctr % 2 == 0) {
+			res += ctr;
+		} else if (ctr % 2 != 0){
+			if (max < ctr) {
+				if (max > 0) {
+					res -= 1;
+				}
+				res += ctr;
+				max = ctr;
+			} else {
+				res += ctr - 1;
+			}
+		}
+	}
+
+	return res;
+}
+
+bool canBeEqual(vector<int>& target, vector<int>& arr) {
+	map<int, int> hsh;
+	for (const int num : target) {
+		hsh[num] ++;
+	}
+	for (const int num : arr) {
+		if (hsh.count(num) == 0) {
+			return false;
+		} else {
+			hsh.at(num)--;
+		}
+	}
+	for (const auto& [num, ctr] : hsh) {
+		if (ctr != 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+string sortString(string s) {
+	string res;
+	map<char, int> hsh;
+	for(const char ch : s) {
+		hsh[ch]++;
+	}
+	while (res.size() != s.size()) {
+		for (auto ptr = hsh.begin(); ptr != hsh.end(); ptr++) {
+			if (ptr->second > 0) {
+				res += ptr->first;
+				ptr->second--;
+			}
+		}
+		for (auto ptr = hsh.rbegin(); ptr != hsh.rend(); ptr++) {
+			if (ptr->second > 0) {
+				res += ptr->first;
+				ptr->second--;
+			}
+		}
+	}
+	return res;
+}
 
 int main() {
 	std::stack<int> test;
