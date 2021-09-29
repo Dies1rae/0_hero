@@ -52,6 +52,26 @@ int bitcount(unsigned x) {
     return b;
 }
 
+
+//!!!!!!!!!!!!!! need to understand this
+unsigned invert(unsigned x, int p, int n) {
+    unsigned mask = (~0u >> ((sizeof(x) * 8) - n)) << p;
+    return  (x ^ mask);
+}
+
 unsigned setbits(unsigned x, int p, int n, unsigned y) {
     return (x >> (p + 1 - n) | (y & ((1 << n) - 1)));
+}
+
+unsigned rightrot(unsigned x, int n) {
+    int lowbit;
+
+    while (n-- > 0) {
+        lowbit = x & 1;
+        x = (x >> 1) & (~0u >> 1);
+        if (lowbit) {
+            x = x | ~(~0u >> 1);
+        }
+    }
+    return x;
 }
