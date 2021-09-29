@@ -389,12 +389,86 @@ string sortString(string s) {
 	return res;
 }
 
+vector<ListNode*> splitListToParts(ListNode* head, int k) {
+	int res_ctr = 0;
+	int len =  sizeLinkdLIst(head);
+	int big_parts_ctr = 0;
+	int new_len = 1;
+	if(k <= len) {
+		big_parts_ctr = len % k;
+		new_len = len / k;
+	}
+
+	cout << len << ' ' << new_len << ' ' << big_parts_ctr << endl;
+
+	vector<ListNode*> res;
+	res.resize(k);
+	while (big_parts_ctr != 0 && head != nullptr) {
+		int ctr = new_len + 1;
+		ListNode* tmp = new ListNode();
+		res[res_ctr] = tmp;
+		res_ctr++;
+		while (ctr != 0 && head != nullptr) {
+			tmp->val = head->val;
+			head = head->next;
+			ctr--;
+			if (ctr != 0 && head != nullptr) {
+				tmp->next = new ListNode();
+				tmp = tmp->next;
+			}
+		}
+		big_parts_ctr--;
+	}
+
+	while (head != nullptr) {
+		int ctr = new_len;
+		ListNode* tmp = new ListNode();
+		res[res_ctr] = tmp;
+		res_ctr++;
+		while (ctr != 0 && head != nullptr) {
+			tmp->val = head->val;
+			head = head->next;
+			ctr--;
+			if (ctr != 0 && head != nullptr) {
+				tmp->next = new ListNode();
+				tmp = tmp->next;
+			}
+		}
+	}
+	if (res.size() < k - 1) {
+		ListNode* tmp = nullptr;
+		res[res_ctr] = tmp;
+		res_ctr++;
+	}
+	return res;
+}
+
 int main() {
-	std::stack<int> test;
-	test.push(1);
-	test.push(2);
-	cout << test.top() << ' ';
-	test.pop();
-	cout << test.top() << ' ';
+	ListNode * test = new ListNode(1);
+	test->next = new ListNode(2);
+	test->next->next = new ListNode(3);
+	//test->next->next->next = new ListNode(4);
+	//test->next->next->next->next = new ListNode(5);
+	//test->next->next->next->next->next = new ListNode(6);
+	//test->next->next->next->next->next->next = new ListNode(7);
+	//test->next->next->next->next->next->next->next = new ListNode(8);
+	//test->next->next->next->next->next->next->next->next = new ListNode(9);
+	//test->next->next->next->next->next->next->next->next->next = new ListNode(10);
+	//test->next->next = new ListNode(3);
+
+
+	vector<ListNode*> res = splitListToParts(test, 5);
+	for (const ListNode* l : res) {
+		if (l) {
+			while (l != nullptr) {
+				cout << l->val << ' ';
+				l = l->next;
+			}
+		} else {
+			cout << "{}";
+		}
+		cout << endl;
+	}
+	
 	return 0;
 }
