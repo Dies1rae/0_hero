@@ -443,6 +443,43 @@ vector<ListNode*> splitListToParts(ListNode* head, int k) {
 	return res;
 }
 
+bool hasCycle(ListNode *head) {
+	map<ListNode *, int> hsh;
+	while (head) {
+		if (hsh.count(head) >= 1) {
+			return true;
+		} else {
+			hsh[head]++;
+			head = head->next;
+		}
+	}
+	return false;
+}
+
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+	set<ListNode *> hsh;
+	while (headA) {
+		hsh.insert(headA);
+		headA = headA->next;
+	}
+	while (headB) {
+		if (hsh.count(headB)) {
+			return headB;
+		}
+		headB = headB->next;
+	}
+	return nullptr;
+}
+
+int titleToNumber(string columnTitle) {
+	unsigned long res = 0;
+	while (!columnTitle.empty()) {
+		res = (res * 26) + (columnTitle[0] - 64);    
+		columnTitle = columnTitle.substr(1);
+	}
+	return res;
+}
+
 int main() {
 	ListNode * test = new ListNode(1);
 	test->next = new ListNode(2);
@@ -470,5 +507,9 @@ int main() {
 		cout << endl;
 	}
 	
+	string test111 = "lalala";
+	test111 = test111.substr(1);
+	cout << test111 << '\n';
+
 	return 0;
 }
