@@ -480,36 +480,65 @@ int titleToNumber(string columnTitle) {
 	return res;
 }
 
-int main() {
-	ListNode * test = new ListNode(1);
-	test->next = new ListNode(2);
-	test->next->next = new ListNode(3);
-	//test->next->next->next = new ListNode(4);
-	//test->next->next->next->next = new ListNode(5);
-	//test->next->next->next->next->next = new ListNode(6);
-	//test->next->next->next->next->next->next = new ListNode(7);
-	//test->next->next->next->next->next->next->next = new ListNode(8);
-	//test->next->next->next->next->next->next->next->next = new ListNode(9);
-	//test->next->next->next->next->next->next->next->next->next = new ListNode(10);
-	//test->next->next = new ListNode(3);
-
-
-	vector<ListNode*> res = splitListToParts(test, 5);
-	for (const ListNode* l : res) {
-		if (l) {
-			while (l != nullptr) {
-				cout << l->val << ' ';
-				l = l->next;
-			}
+string freqAlphabets(string s) {
+	string res;
+	for (int ptr = s.size() - 1; ptr >= 0; ptr--) {
+		if (s[ptr] == '#') {
+			string tmp;
+			tmp += s[ptr - 2];
+			tmp += s[ptr - 1];
+			res += (std::stoi(tmp) + 96);
+			ptr -= 2;
 		} else {
-			cout << "{}";
+			res += (s[ptr] - 48) + 96;
 		}
-		cout << endl;
 	}
-	
-	string test111 = "lalala";
-	test111 = test111.substr(1);
-	cout << test111 << '\n';
+	std::reverse(res.begin(), res.end());
+	return res;
+}
+
+
+string destCity(vector<vector<string>>& paths) {
+	map<string, std::vector<string>> hsh;
+	for (const auto& cities : paths) {
+		hsh[cities[0]].push_back(cities[1]);
+	}
+	for (const auto& [cityIN, citiesOUT] : hsh) {
+		for (const auto& city : citiesOUT) {
+			if (hsh.count(city) == 0) {
+				return city;
+			}
+		}
+	}
+	return {};
+}
+
+vector<int> finalPrices(vector<int>& prices) {
+	vector<int> res;
+
+	for (size_t ptr = 0; ptr < prices.size(); ptr++) {
+		bool in = false;
+		for (size_t j = ptr + 1; j < prices.size(); j++) {
+			if (prices[j] <= prices[ptr]) {
+				in = true;
+				res.push_back((prices[ptr] - prices[j]));
+				break;
+			}
+		}
+		if (!in) {
+			res.push_back(prices[ptr]);
+		}
+	}
+
+	return res;
+}
+
+int main() {
+	string str{"10#11#12"};
+
+	string res = freqAlphabets(str);
+	cout << res;
+
 
 	return 0;
 }
