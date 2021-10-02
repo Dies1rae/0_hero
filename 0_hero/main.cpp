@@ -533,6 +533,65 @@ vector<int> finalPrices(vector<int>& prices) {
 	return res;
 }
 
+int search(vector<int>& nums, int target) {
+	if(nums.size() == 1) {
+		return nums[0] == target ? 0 : -1;
+	}
+	long long int middle = 0;
+	long long int start = 0;
+	long long int end = nums.size();
+	while (start <= end) {
+		middle = start + ((end - start) / 2);
+		if(nums[middle] == target) {
+			return middle;
+		} else if (nums[middle] < target) {
+			start = middle + 1;
+		} else {
+			end = middle - 1;
+		}
+	}
+	return -1;
+}
+
+int firstBadVersion(int n) {
+	int left = 1, right = n;
+	int mid = (left + (right - left) / 2);
+	if (n == 0) {
+		return 0;
+	} else if (n == 1) {
+		//return isBadVersion(n) ? n : 0;
+	}
+	while (left < right) {
+		//isBadVersion(mid) ? right = mid - 1 : left = mid + 1;
+		mid = (left + (right - left) / 2);
+	}
+	//return isBadVersion(left) ? left : left + 1;
+}
+
+//bad
+int searchInsert(vector<int>& nums, int target) {
+	set<int> res;   
+	for(const auto& a : nums) {
+		res.insert(a);
+		if(res.count(target)) {
+			auto it = res.find(target);
+			return std::distance(res.begin(), it);
+		}
+	}
+	res.insert(target);
+	auto it = res.find(target);
+	return std::distance(res.begin(), it);
+}
+
+//good
+int searchInsert(vector<int>& nums, int target) {
+	return (std::lower_bound(nums.begin(), nums.end(), target)) - nums.begin();
+}
+
+int searchInsert(vector<int>& nums, int target) {
+	return *(std::lower_bound(nums.begin(), nums.end(), target));
+}
+
 int main() {
 	string str{"10#11#12"};
 
