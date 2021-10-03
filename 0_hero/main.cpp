@@ -623,6 +623,39 @@ vector<int> sortedSquares(vector<int>& nums) {
 	return res;
 }
 
+void rotate(vector<int>& nums, int k) {
+	while (k) {
+		int tmpl = *(nums.rbegin());
+		nums.pop_back();
+		nums.insert(nums.begin(), tmpl);
+		k--;
+	}
+}
+
+//1
+void rotate(vector<int>& nums, int k) {
+	vector<int>res;
+	res.resize(nums.size());
+	size_t len = nums.size();
+	for(size_t ptr = 0; ptr < len; ptr++) {
+		res[(ptr + k) % len] = nums[ptr];
+	}
+	nums = res;
+}
+
+//2
+//void rotate(vector<int>& nums, int k) {
+//	while (k) {
+//		int tmpl = *(nums.rbegin());
+//		nums.pop_back();
+//		nums.insert(nums.begin(), tmpl);
+//		k--;
+//	}
+//	for (auto now : nums) {
+//		cout << now << ' ';
+//	}
+//}
+
 int main() {
 	vector<int> res{-4,-1,0,3,10};
 	for (const auto& elem : sortedSquares(res)) {
