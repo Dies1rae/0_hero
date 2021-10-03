@@ -583,21 +583,52 @@ int searchInsert(vector<int>& nums, int target) {
 	return std::distance(res.begin(), it);
 }
 
-//good
-int searchInsert(vector<int>& nums, int target) {
-	return (std::lower_bound(nums.begin(), nums.end(), target)) - nums.begin();
-}
+////good
+//int searchInsert(vector<int>& nums, int target) {
+//	return (std::lower_bound(nums.begin(), nums.end(), target)) - nums.begin();
+//}
 
-int searchInsert(vector<int>& nums, int target) {
-	return *(std::lower_bound(nums.begin(), nums.end(), target));
+
+vector<int> sortedSquares(vector<int>& nums) {
+	vector<int> res;
+	res.resize(nums.size());
+	int ptrMinus = std::distance(nums.begin(), std::lower_bound(nums.begin(), nums.end(), 0)) - 1;
+	int ptrPlus = ptrMinus  + 1;
+	int ptrRes = 0;
+	while (ptrMinus >= 0 && ptrPlus < res.size()) {
+		int elemM = nums[ptrMinus] * nums[ptrMinus];
+		int elemP = nums[ptrPlus] * nums[ptrPlus];
+		if (elemM < elemP) {
+			res[ptrRes] = elemM;
+			ptrMinus--;
+		} else {
+			res[ptrRes] = elemP;
+			ptrPlus++;
+		}
+		ptrRes++;
+	}
+
+	while (ptrMinus >= 0) {
+		res[ptrRes] = nums[ptrMinus] * nums[ptrMinus];
+		ptrMinus--;
+		ptrRes++;
+	}
+
+	while (ptrPlus < res.size()) {
+		res[ptrRes] = nums[ptrPlus] * nums[ptrPlus];
+		ptrPlus++;
+		ptrRes++;
+	}
+
+	return res;
 }
 
 int main() {
-	string str{"10#11#12"};
-
-	string res = freqAlphabets(str);
-	cout << res;
-
+	vector<int> res{-4,-1,0,3,10};
+	for (const auto& elem : sortedSquares(res)) {
+		cout << elem << ' ';
+	}
+	cout << endl;
 
 	return 0;
 }
