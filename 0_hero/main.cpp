@@ -633,15 +633,15 @@ void rotate(vector<int>& nums, int k) {
 }
 
 //1
-void rotate(vector<int>& nums, int k) {
-	vector<int>res;
-	res.resize(nums.size());
-	size_t len = nums.size();
-	for(size_t ptr = 0; ptr < len; ptr++) {
-		res[(ptr + k) % len] = nums[ptr];
-	}
-	nums = res;
-}
+//void rotate(vector<int>& nums, int k) {
+//	vector<int>res;
+//	res.resize(nums.size());
+//	size_t len = nums.size();
+//	for(size_t ptr = 0; ptr < len; ptr++) {
+//		res[(ptr + k) % len] = nums[ptr];
+//	}
+//	nums = res;
+//}
 
 //2
 //void rotate(vector<int>& nums, int k) {
@@ -655,6 +655,42 @@ void rotate(vector<int>& nums, int k) {
 //		cout << now << ' ';
 //	}
 //}
+
+void reverseString(vector<char>& s) {
+	for (size_t beg = 0, end = s.size() - 1; beg < s.size() / 2; beg++, end--) {
+		std::swap(s[beg], s[end]);
+	}
+}
+
+std::vector<std::string> SplitIntoWords(const std::string_view& text) {
+	std::vector<std::string> words;
+	std::string word;
+	for (const char c : text) {
+		if (c == ' ') {
+			if (!word.empty()) {
+				words.push_back(word);
+				word.clear();
+			}
+		} else {
+			word += c;
+		}
+	}
+	if (!word.empty()) {
+		words.push_back(word);
+	}
+	return words;
+}
+
+string reverseWords(string s) {
+	std::vector<std::string> res = SplitIntoWords(s);
+	std::string res_str; 
+	for (std::string strng : res) {
+		std::reverse(strng.begin(), strng.end());
+		res_str += strng + ' ';
+	}
+	res_str.pop_back();
+	return res_str;
+}
 
 int main() {
 	vector<int> res{-4,-1,0,3,10};
