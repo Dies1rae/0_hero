@@ -692,6 +692,39 @@ string reverseWords(string s) {
 	return res_str;
 }
 
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    int len = sizeLinkdLIst(head) - n;
+    ListNode* curr = head;
+    if(len == 0) {
+        return head = head->next;
+    }
+    while(--len) {
+        curr = curr->next;
+    }
+    curr->next = curr->next->next;
+    return head;
+}
+
+int sizeLinkdLIst(ListNode* head) {
+	int len = 0;
+	while(head != nullptr) {
+        head = head->next;
+		len += 1;
+	}
+	return len;
+}
+
+ListNode* middleNode(ListNode* head) {
+	ListNode* tmp = head;
+	int len = sizeLinkdLIst(tmp);
+	int ptr = 0;
+	while (ptr < (len / 2)) {
+		head = head->next;
+		ptr++;
+	}
+	return head;
+}
+
 int main() {
 	vector<int> res{-4,-1,0,3,10};
 	for (const auto& elem : sortedSquares(res)) {
