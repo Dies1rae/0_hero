@@ -705,32 +705,71 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
     return head;
 }
 
-int sizeLinkdLIst(ListNode* head) {
-	int len = 0;
-	while(head != nullptr) {
-        head = head->next;
-		len += 1;
+int lengthOfLongestSubstring(string s) {
+	int longestsubstr = 0;
+	map<char, size_t> hsh;
+	for (size_t ptr = 0; ptr < s.size(); ptr++) {
+		if (hsh.count(s[ptr]) == 0) {
+			hsh[s[ptr]] = ptr;
+			longestsubstr < hsh.size() ? longestsubstr = hsh.size() : longestsubstr;
+		} else {
+			ptr = hsh.at(s[ptr]);
+			hsh.clear();
+		}
 	}
-	return len;
+
+	return longestsubstr;
 }
 
-ListNode* middleNode(ListNode* head) {
-	ListNode* tmp = head;
-	int len = sizeLinkdLIst(tmp);
-	int ptr = 0;
-	while (ptr < (len / 2)) {
-		head = head->next;
-		ptr++;
+bool match(const std::vector<int>& s1, const std::vector<int>& s2) {
+	for (size_t ptr = 0; ptr < 26; ptr++) {
+		if (s1[ptr] != s2[ptr]) {
+			return false;
+		}
 	}
-	return head;
+	return true;
+}
+
+bool checkInclusion(string s1, string s2) {
+	if(s1.size() > s2.size()){
+		return false;
+	}
+	std::vector<int> s_1(26, 0);
+	std::vector<int> s_2(26, 0);
+	for (size_t ptr = 0; ptr < s1.size(); ptr++) {
+		s_1[s1[ptr] - 'a']++;
+		s_2[s2[ptr] - 'a']++;
+	}
+
+	size_t ptrB = 0;
+	size_t ptrE = s1.size();
+
+	while (ptrE < s2.size()) {
+		if (match(s_1, s_2)) {
+			return true;
+		}
+		s_2[s2[ptrE] - 'a']++;
+		s_2[s2[ptrB] - 'a']--;
+		ptrB++;
+		ptrE++;
+	}
+	if (match(s_1, s_2)) {
+		return true;
+	}
+	return false;
 }
 
 int main() {
-	vector<int> res{-4,-1,0,3,10};
-	for (const auto& elem : sortedSquares(res)) {
-		cout << elem << ' ';
+	char buf[19] = "@00040412BA080048*";
+	int xoring;
+	xoring = buf[1] xor buf[2];
+	for (size_t ptr = 3; ptr < 15; ptr++) {
+		xoring ^= buf[ptr];
 	}
-	cout << endl;
+
+
+	xoring = 0x00 xor 0x04;
+	cout << xoring << endl;
 
 	return 0;
 }
