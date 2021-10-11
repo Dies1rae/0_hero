@@ -759,6 +759,52 @@ bool checkInclusion(string s1, string s2) {
 	return false;
 }
 
+void fillNeighboringiPxl(vector<vector<int>>& image, int sr, int sc, int newColor, int tmpColor) {
+    if(sr < 0 || sr > image.size() - 1 || sc < 0 || sc > image[sr].size() - 1) {
+        return;
+    }
+    if(image[sr][sc] != tmpColor) {
+        return;
+    }
+    if(image[sr][sc] == newColor) {
+        return;
+    }
+    image[sr][sc] = newColor;
+    fillNeighboringiPxl(image, sr + 1, sc, newColor, tmpColor);
+    fillNeighboringiPxl(image, sr - 1, sc, newColor, tmpColor);
+    fillNeighboringiPxl(image, sr, sc - 1, newColor, tmpColor);
+    fillNeighboringiPxl(image, sr, sc + 1, newColor, tmpColor);
+}
+
+vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+    int tmp_color = image[sr][sc];
+    fillNeighboringiPxl(image, sr, sc, newColor, tmp_color);
+    return image;
+}
+
+int trav_island(size_t row, size_t column, vector<vector<int>>& grid) {
+    if(row < 0 || row > grid.size() - 1 || column < 0 || column > grid[0].size() - 1 || grid[row][column] == 0) {
+        return 0;
+    }
+    grid[row][column] = 0;
+    return 1 + trav_island(row - 1, column, grid) + trav_island(row + 1, column, grid) + trav_island(row, column - 1, grid) + trav_island(row, column + 1, grid);
+}
+
+int maxAreaOfIsland(vector<vector<int>>& grid) {
+    int max = 0;
+    size_t R = grid.size();
+    size_t C = grid[0].size();
+    for(size_t ptr = 0; ptr < R; ptr++) {
+        for(size_t ptr1 = 0; ptr1 < C; ptr1++) {
+            if(grid[ptr][ptr1] == 1) {
+                max = std::max(max, trav_island(ptr, ptr1, grid));
+            }
+        }
+    }
+    return max;
+}
+
+
 int main() {
 	char buf[19] = "@00040412BA080048*";
 	int xoring;
