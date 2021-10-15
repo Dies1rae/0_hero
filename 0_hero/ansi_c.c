@@ -63,6 +63,14 @@ unsigned setbits(unsigned x, int p, int n, unsigned y) {
     return (x >> (p + 1 - n) | (y & ((1 << n) - 1)));
 }
 
+uint32_t reverseBits(uint32_t b) {
+    uint32_t res = 0;
+    for(size_t ptr = 0; ptr < sizeof(b) * 8; ptr++, b >>= 1) {
+        res = (res << 1) | (b & 0x01);
+    }
+    return res;
+}
+
 unsigned rightrot(unsigned x, int n) {
     int lowbit;
 

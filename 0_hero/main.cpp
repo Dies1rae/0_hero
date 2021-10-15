@@ -791,19 +791,46 @@ int trav_island(size_t row, size_t column, vector<vector<int>>& grid) {
 }
 
 int maxAreaOfIsland(vector<vector<int>>& grid) {
-    int max = 0;
+    int max_ = 0;
     size_t R = grid.size();
     size_t C = grid[0].size();
     for(size_t ptr = 0; ptr < R; ptr++) {
         for(size_t ptr1 = 0; ptr1 < C; ptr1++) {
             if(grid[ptr][ptr1] == 1) {
-                max = std::max(max, trav_island(ptr, ptr1, grid));
+				max_ = max(max_, trav_island(ptr, ptr1, grid));
             }
         }
     }
-    return max;
+    return max_;
 }
 
+int res = 0;
+
+struct bin_comparator {
+	bool operator() (const int lhs, const int rhs) const {
+		
+	}
+};
+
+int singleNumber(vector<int>& nums) {
+	std::sort(nums.begin(), nums.end(), bin_comparator());
+	return res;
+}
+
+int singleNumber(vector<int>& nums) {
+	if(nums.size() == 0) {
+		return nums[0];
+	}
+	std::sort(nums.begin(), nums.end());
+	for(size_t ptr = 0; ptr + 1< nums.size(); ptr++) {
+		if(nums[ptr] == nums[ptr + 1]) {
+			ptr++;
+		} else {
+			return nums[ptr];
+		}
+	}
+	return nums[nums.size() - 1];
+}
 
 int main() {
 	char buf[19] = "@00040412BA080048*";
