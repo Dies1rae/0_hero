@@ -817,32 +817,39 @@ int singleNumber(vector<int>& nums) {
 	return res;
 }
 
-int singleNumber(vector<int>& nums) {
-	if(nums.size() == 0) {
-		return nums[0];
-	}
-	std::sort(nums.begin(), nums.end());
-	for(size_t ptr = 0; ptr + 1< nums.size(); ptr++) {
-		if(nums[ptr] == nums[ptr + 1]) {
-			ptr++;
+//int singleNumber(vector<int>& nums) {
+//	if(nums.size() == 0) {
+//		return nums[0];
+//	}
+//	std::sort(nums.begin(), nums.end());
+//	for(size_t ptr = 0; ptr + 1< nums.size(); ptr++) {
+//		if(nums[ptr] == nums[ptr + 1]) {
+//			ptr++;
+//		} else {
+//			return nums[ptr];
+//		}
+//	}
+//	return nums[nums.size() - 1];
+//}
+
+int binsearch(const int x, const int v[], const int n) {
+	int low = 0;
+	int hight = n - 1;
+	int mid = 0;
+	while (low < hight && x != v[mid]) {
+		mid = (low + hight) / 2;
+		if (x < v[mid]) {
+			hight = mid - 1;
 		} else {
-			return nums[ptr];
+			low = mid + 1;
 		}
 	}
-	return nums[nums.size() - 1];
+	return low == hight ? (x == v[mid + 1] ? mid + 1 : -1) : mid;
 }
 
 int main() {
-	char buf[19] = "@00040412BA080048*";
-	int xoring;
-	xoring = buf[1] xor buf[2];
-	for (size_t ptr = 3; ptr < 15; ptr++) {
-		xoring ^= buf[ptr];
-	}
-
-
-	xoring = 0x00 xor 0x04;
-	cout << xoring << endl;
+	int v[] = {1,2,3,4,5,6,7,8,9,10,100};
+	cout << binsearch(100, v, 11);
 
 	return 0;
 }
