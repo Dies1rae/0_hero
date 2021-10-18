@@ -1,5 +1,5 @@
 #include "TreeNode.h"
-#include "queue.h"
+//#include "queue.h"
 #include "stack.h"
 #include "priority_queue.h"
 #include "vector_full_test.h"
@@ -39,7 +39,7 @@
 #include <cstdlib>
 #include <memory>
 #include <numeric>
-
+#include <queue>
 using namespace std;
 
 
@@ -847,9 +847,50 @@ int binsearch(const int x, const int v[], const int n) {
 	return low == hight ? (x == v[mid + 1] ? mid + 1 : -1) : mid;
 }
 
-int main() {
-	int v[] = {1,2,3,4,5,6,7,8,9,10,100};
-	cout << binsearch(100, v, 11);
+bool isCousins(TreeNode* root, int x, int y) {
+	queue<TreeNode*> queue_;
+	queue_.push(root);
+	queue_.push(nullptr);
+	int found = 0; 
+	while (!queue_.empty())
+	{
+		TreeNode* current = queue_.front();
+		queue_.pop();
+		if (current == nullptr) {
+			if (!queue_.empty()) {
+				queue_.push(nullptr);
+			} 
+			found = 0;
+			continue;
+		}
 
+		if (current->left!=nullptr && (current->left->val == x || current->left->val == y)) {
+			found ++;
+		} else if (current->right!=nullptr && (current->right->val == x || current->right->val == y)) {
+			found ++;
+		}
+
+		if (found == 2) {
+			return true;
+		} 
+
+		if (current->left!=nullptr) {
+			queue_.push(current->left);
+		}
+		if (current->right!=nullptr){
+			queue_.push(current->right);
+		} 
+	}
+
+	return false;
+}
+
+int main() {
+	TreeNode* root = new TreeNode(1);
+	root->left =  new TreeNode(2);
+	root->right =  new TreeNode(3);
+	root->left->left = new TreeNode(4);
+
+	cout << isCousins(root, 3, 4) << endl;
 	return 0;
 }
