@@ -681,12 +681,11 @@ std::vector<std::string> SplitIntoWords(const std::string_view& text) {
 	return words;
 }
 
-string reverseWords(string s) {
+string reverseWords_vec(string s) {
 	std::vector<std::string> res = SplitIntoWords(s);
 	std::string res_str; 
-	for (std::string strng : res) {
-		std::reverse(strng.begin(), strng.end());
-		res_str += strng + ' ';
+	for (int ptr = res.size() - 1; ptr >= 0; ptr--) {
+		res_str += res[ptr] + ' ';
 	}
 	res_str.pop_back();
 	return res_str;
@@ -885,12 +884,51 @@ bool isCousins(TreeNode* root, int x, int y) {
 	return false;
 }
 
-int main() {
-	TreeNode* root = new TreeNode(1);
-	root->left =  new TreeNode(2);
-	root->right =  new TreeNode(3);
-	root->left->left = new TreeNode(4);
+void clean(char s[], char to_delete) {
+	size_t ptrN = 0;
+	size_t ptrB = 0;
+	for (; s[ptrB] != '\0'; ptrB++) {
+		if (s[ptrB] != to_delete) {
+			s[ptrN++] = s[ptrB];
+			if (s[ptrB + 1] == '-') {
+				s[ptrN++] = '-';
+			}
 
-	cout << isCousins(root, 3, 4) << endl;
+		}
+	}
+	s[ptrN - 1] == '-' ? s[ptrN - 1] = '\0' : s[ptrN] = '\0';
+}
+
+void expand(char s1[], char s2[]) {
+	clean(s1, '-');
+	size_t ptrS2 = 0;
+	for (size_t ptr = 0; s1[ptr] != '\0'; ptr++) {
+		if(s1[ptr] == '-') {
+			char begin = s1[ptr - 1];
+			while (begin <= s1[ptr + 1]) {
+				s2[ptrS2++] = begin;
+				begin++;
+			}
+		}
+	}
+	s2[ptrS2] = '\0';
+	printf("%s\n", s2);
+}
+
+template <typename RIter>
+RIter removeMultiplyWhiteSpaces(RIter it, RIter it_end) {
+	return unique(it, it_end, [](const auto& a, const auto& b) {
+		return a == 32 && b == 32;
+		});
+}
+
+string reverseWords(string& s) {
+	s.erase(removeMultiplyWhiteSpaces(begin(s), end(s)), end(s));
+	return reverseWords_vec(s);
+}
+
+int main() {
+	string a = {"a good   example"};
+	cout << reverseWords(a) << endl;
 	return 0;
 }
