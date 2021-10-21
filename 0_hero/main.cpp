@@ -927,6 +927,36 @@ string reverseWords(string& s) {
 	return reverseWords_vec(s);
 }
 
+class RandomizedSet {
+public:
+    RandomizedSet() = default;
+    
+    bool insert(int val) {
+        if(this->base_.count(val)) {
+            return false;
+        }
+        this->base_.insert(val);
+        return true;
+    }
+    
+    bool remove(int val) {
+        if(this->base_.count(val)) {
+            this->base_.erase(this->base_.find(val));
+            return true;
+        }     
+        return false;
+    }
+    
+    int getRandom() {
+        std::random_device rd{};
+        mt19937 mt_rand(rd());
+        std::uniform_int_distribution<int> uni(0, (this->base_.size() - 1));
+        return *(next(this->base_.begin(), uni(mt_rand)));
+    }
+private:
+    set<int> base_;
+};
+
 int main() {
 	string a = {"a good   example"};
 	cout << reverseWords(a) << endl;
