@@ -5,7 +5,7 @@
 #define tab_to_spaces 4
 
 char * detab(char * str) {
-    char * res;
+    char* res = "";
     int ptr = 0;
     int res_ctr = 0;
     for(; str[ptr] != '\0'; ptr++, res_ctr++) {

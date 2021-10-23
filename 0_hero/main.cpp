@@ -803,18 +803,7 @@ int maxAreaOfIsland(vector<vector<int>>& grid) {
     return max_;
 }
 
-int res = 0;
 
-struct bin_comparator {
-	bool operator() (const int lhs, const int rhs) const {
-		
-	}
-};
-
-int singleNumber(vector<int>& nums) {
-	std::sort(nums.begin(), nums.end(), bin_comparator());
-	return res;
-}
 
 //int singleNumber(vector<int>& nums) {
 //	if(nums.size() == 0) {
@@ -957,8 +946,91 @@ private:
     set<int> base_;
 };
 
+//int findMin(vector<int>& nums) {
+//	return *std::min_element(nums.begin(), nums.end());
+//}
+
+string reverseOnlyLetters(string s) {
+	auto itB = s.begin();
+	auto itE = s.end() - 1;
+	for (; itB < itE; ) {
+		if (!std::isalpha(*itB)) {
+			itB++;
+		}
+		if (!std::isalpha(*itE)) {
+			itE--;
+		}
+		if (std::isalpha(*itB) && std::isalpha(*itE)) {
+			std::swap(*itB, *itE);
+			itE--;
+			itB++;
+		}
+	}
+	return s;
+}
+
+vector<int> twoOutOfThree(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3) {
+	map<int, set<int>> hsh;
+	for (size_t ptr = 0; ptr < nums1.size(); ptr++) {
+		hsh[nums1[ptr]].insert(1);
+	}
+	for (size_t ptr = 0; ptr < nums2.size(); ptr++) {
+		hsh[nums2[ptr]].insert(2);
+	}
+	for (size_t ptr = 0; ptr < nums3.size(); ptr++) {
+		hsh[nums3[ptr]].insert(3);
+	}
+	std::vector<int> res;
+	for (const auto& [num, sets] : hsh) {
+		if (sets.size() >= 2) {
+			res.push_back(num);
+		}
+	}
+	return res;
+}
+
+
+int checkPointerPos(int pos, int size) 
+{ 
+	int lastElem = size - 1; 
+	int result = pos; 
+
+	if(pos > lastElem) result = pos - lastElem; 
+	if(pos < 0) result = lastElem - std::abs(pos); 
+	return result; 
+} 
+
+int findMin(vector<int>& nums) { 
+	int result; 
+	int n1 = 0, n2 = 0; 
+	int position = 0; 
+	int n1pos, n2pos; 
+	while(n1 == n2) 
+	{ 
+		n1pos = checkPointerPos(position, nums.size()); 
+		n2pos = checkPointerPos((position + 1), nums.size()); 
+		n1 = nums[n1pos]; 
+		n2 = nums[n2pos]; 
+
+
+		position++; 
+	} 
+
+	while(n2 > n1) 
+	{ 
+		n1pos = checkPointerPos(position, nums.size()); 
+		n2pos = checkPointerPos((position + 1), nums.size()); 
+		n1 = nums[n1pos]; 
+		n2 = nums[n2pos]; 
+		position--; 
+	} 
+
+	return n2;    
+} 
+
+
 int main() {
-	string a = {"a good   example"};
-	cout << reverseWords(a) << endl;
+	vector<int> nums{0,1,4,4,5,6,7};
+	cout << findMin(nums) << endl;
 	return 0;
 }
