@@ -1028,6 +1028,37 @@ int findMin(vector<int>& nums) {
 	return n2;    
 } 
 
+#define MXXXXX 99999
+vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+	int R = mat.size();
+	int C = mat[0].size();
+	vector<vector<int>> res(R, vector<int>(C, MXXXXX));
+	for(int i = 0; i < R; i++){
+		for(int j = 0; j < C; j++){
+			if (mat[i][j] == 0) {
+				res[i][j] = 0;
+			}
+		}
+	}
+
+
+	for (int ptr = 0; ptr < R; ptr++) {
+		for (int ptr1 = 0; ptr1 < C; ptr1++) {
+			if (res[ptr][ptr1] != 0) {
+				int min_dist = MXXXXX;
+				for (int x = 0; x < R; x++) {
+					for (int y = 0; y < C; y++) {
+						if (mat[x][y] == 0) {
+							min_dist = min(min_dist, abs(ptr - x) + abs(ptr1 - y));
+						}
+					}
+				}
+				res[ptr][ptr1] = min_dist;
+			}
+		}
+	}
+	return res;
+} 
 
 int main() {
 	vector<int> nums{0,1,4,4,5,6,7};
