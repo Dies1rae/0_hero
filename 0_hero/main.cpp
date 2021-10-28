@@ -1060,8 +1060,83 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 	return res;
 } 
 
+vector<vector<int>> combine(int n, int k) {
+	vector<vector<int>> res;
+	std::string bitmask(k, 1);
+	bitmask.resize(n, 0);
+	do {
+		vector<int> tmp;
+		for (int i = 0; i < n + 1; ++i) {
+			if (bitmask[i]) {
+				tmp.push_back(i + 1);
+			}
+		}
+		res.push_back(tmp);
+	} while (std::prev_permutation(bitmask.begin(), bitmask.end()));
+	return res;
+}
+
+vector<vector<int>> permute(vector<int>& nums) {
+	std::sort(nums.begin(), nums.end());
+	std::vector<vector<int>> res;
+	do {
+		res.push_back(nums);
+	} while (std::next_permutation(nums.begin(), nums.end()));
+	return res;
+}
+
+vector<string> letterCasePermutation(string s) {
+	set<string> res;
+	int max = 1 << s.size();
+	std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+	for (int ptrm = 0; ptrm < max; ptrm++) {
+		string tmp = s;
+		for (int ptr = 0; ptr < s.size(); ptr++) {
+			if (!std::isdigit(tmp[ptr]) && ((ptrm >> ptr) & 1) == 1) {
+				tmp[ptr] = std::toupper(s.at(ptr));
+			}
+		}
+		res.insert(tmp);
+	}
+	return {res.begin(), res.end()};
+}
+
+vector<vector<int>> threeSum(vector<int>& nums) {
+	vector<vector<int>> result;
+
+	sort(begin(nums), end(nums));
+
+	for (size_t firstIdx = 0; firstIdx < nums.size(); ++firstIdx) {
+		if (firstIdx > 0 && nums[firstIdx] == nums[firstIdx - 1]) {
+			continue;
+		}
+
+		size_t secondIdx = firstIdx + 1;
+		size_t thirdIdx = nums.size() - 1;
+
+		int requiredSum = 0 - nums[firstIdx];
+
+		while (secondIdx < thirdIdx) {
+			int currentSum = nums[secondIdx] + nums[thirdIdx];
+
+			if (currentSum < requiredSum) {
+				++secondIdx;
+			} else if (currentSum > requiredSum) {
+				--thirdIdx;
+			} else {
+				result.push_back(vector<int>{nums[firstIdx], nums[secondIdx], nums[thirdIdx]});
+				++secondIdx;
+				while (secondIdx < thirdIdx && nums[secondIdx] == nums[secondIdx - 1]) {
+					++secondIdx;
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
 int main() {
-	vector<int> nums{0,1,4,4,5,6,7};
-	cout << findMin(nums) << endl;
+	combine(4, 2);
 	return 0;
 }
