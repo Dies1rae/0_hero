@@ -1151,7 +1151,29 @@ int minimumTotal(vector<vector<int>>& triangle) {
     return memo[0];
 }
 
+int rob(vector<int>& nums) {
+	if (nums.size() == 0)
+		return 0;
+	if (nums.size() == 1)
+		return nums[0];
+	if (nums.size() == 2)
+		return max(nums[0], nums[1]);
+
+	vector<int> dp(nums.size(), 0);
+
+	// Initialize the dp[0] and dp[1]
+	dp[0] = nums[0];
+	dp[1] = max(nums[0], nums[1]);
+
+	// Fill remaining positions
+	for (int i = 2; i<nums.size(); i++)
+		dp[i] = max(nums[i]+dp[i-2], dp[i-1]);
+
+	return dp[nums.size()-1];
+}
+
 int main() {
-	combine(4, 2);
+	vector<int> res {2, 1, 1, 2};
+	cout << rob(res) << endl;
 	return 0;
 }
