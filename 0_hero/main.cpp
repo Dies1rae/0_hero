@@ -1136,6 +1136,21 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 	return result;
 }
 
+int minimumTotal(vector<vector<int>>& triangle) {
+    vector<int> memo(triangle.size(), 0);
+    size_t n = triangle.size() - 1;
+ 
+    for (size_t i = 0; i < triangle[n].size(); i++) {
+        memo[i] = triangle[n][i];   
+    }
+ 
+    for (int i = triangle.size() - 2; i >= 0; i--)
+        for (size_t j = 0; j < triangle[i].size(); j++)
+            memo[j] = triangle[i][j] + min(memo[j], memo[j + 1]);
+ 
+    return memo[0];
+}
+
 int main() {
 	combine(4, 2);
 	return 0;
