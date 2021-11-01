@@ -1182,6 +1182,47 @@ int minMovesToSeat(vector<int>& seats, vector<int>& students) {
 	return moves;
 }
 
+void don_t(int i, int j, vector<vector<char>>& board) {
+    if(i < 0 || i >= board.size() || j < 0 || j >= board[0].size() || board[i][j] != 'O') {
+        return;
+    }
+    board[i][j] = '#';
+    don_t(i + 1, j, board);
+    don_t(i - 1, j, board);
+    don_t(i, j + 1, board);
+    don_t(i, j - 1, board);
+}
+
+void solve(vector<vector<char>>& board) {
+    if(board.size() == 0){  
+            return;
+    }
+    for(int i = 0; i < board[0].size(); i++){
+        if(board[0][i] == 'O') {
+            don_t(0, i, board);
+        }
+        if(board[board.size() - 1][i] == 'O')
+            don_t(board.size() - 1, i, board);
+    }
+    for(int i = 0; i < board.size(); i++) {
+        if(board[i][0] == 'O') {
+            don_t(i, 0, board);
+        }
+        if(board[i][board[0].size() - 1] == 'O') {
+            don_t(i, board[0].size() - 1, board);
+        }
+    }
+    for(int i =0; i <board.size(); i++){
+        for(int j =0; j <board[0].size(); j++){
+            if(board[i][j] == '#') {
+                board[i][j] = 'O';
+            } else if(board[i][j] == 'O') {
+                board[i][j] = 'X';
+            }
+        }
+    }
+}
+
 int main() {
 	vector<int> res {2, 1, 1, 2};
 	cout << rob(res) << endl;
