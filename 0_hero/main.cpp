@@ -1223,6 +1223,44 @@ void solve(vector<vector<char>>& board) {
     }
 }
 
+bool isThree(int n) {
+	if (n <= 2) {
+		return false;
+	}
+	int ctr_div = 0;
+	for (int ctr = 1; ctr <= n; ctr++) {
+		if (n % ctr == 0) {
+			ctr_div++;
+		}
+	}
+	return ctr_div == 3 ? true : false;
+}
+
+TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) {
+	if (cloned == nullptr) {
+		return;
+	}
+
+	TreeNode* trav = cloned;
+	std::queue<TreeNode*> hsh;
+	hsh.push(trav);
+
+	while (!hsh.empty()) {
+		TreeNode* node = hsh.front();
+		hsh.pop();
+		if (target->val == node->val) {
+			return node;
+		}
+
+		if (node->left != nullptr) {
+			hsh.push(node->left);
+		}
+		if (node->right != nullptr) {
+			hsh.push(node->right);
+		}
+	}
+}
+
 int main() {
 	vector<int> res {2, 1, 1, 2};
 	cout << rob(res) << endl;
