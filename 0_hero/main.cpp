@@ -1261,6 +1261,34 @@ TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) 
 	}
 }
 
+std::vector<int> leaf_nums {};
+
+void sumLeafNodes(TreeNode *root, int leaf_num) {
+    if (!root) {
+        return;
+    }
+    leaf_num += root->val;
+    if (!root->left && !root->right) {
+        leaf_nums.push_back(leaf_num);
+        leaf_num = 0;
+        return;
+    }
+    leaf_num *= 10;
+    if (root->left) {
+       sumLeafNodes(root->left, leaf_num);
+    }
+    if (root->right) {
+       sumLeafNodes(root->right, leaf_num);
+    }
+}
+
+
+int sumNumbers(TreeNode* root) {
+    int leaf_num = 0;
+    sumLeafNodes(root, leaf_num);
+    return std::accumulate(begin(leaf_nums), end(leaf_nums), 0);
+}
+
 int main() {
 	vector<int> res {2, 1, 1, 2};
 	cout << rob(res) << endl;
