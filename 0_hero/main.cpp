@@ -1238,7 +1238,7 @@ bool isThree(int n) {
 
 TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) {
 	if (cloned == nullptr) {
-		return;
+		return {};
 	}
 
 	TreeNode* trav = cloned;
@@ -1289,8 +1289,101 @@ int sumNumbers(TreeNode* root) {
     return std::accumulate(begin(leaf_nums), end(leaf_nums), 0);
 }
 
+void reverse(char s[]) {
+	int c, i, j;
+	for (i = 0, j = strlen(s) - 1; i < j; i++, j--) {
+		c = s[i];
+		s[i] = s[j];
+		s[j] = c;
+	}
+}
+
+void itoa(int n, char s[]) {
+	int i, sign;
+	if ((sign = n) < 0) {
+		if (sign == MININT) {
+			n += 1;
+		}
+		n = -n;
+	}
+	i = 0;
+	do {
+		s[i++] = n % 10 + '0';
+	} while ((n /= 10) > 0);
+	if (sign < 0) {
+		if (sign == MININT) {
+			s[0] = '8';
+		}
+		s[i++] = '-';
+	}
+	s[i] = '\0';
+	reverse(s);
+}
+
+void itob(int n, char s[], unsigned short base) {
+	int i, sign;
+	if ((sign = n) < 0) {
+		if (sign == MININT) {
+			n += 1;
+		}
+		n = -n;
+	}
+	i = 0;
+	do {
+		int tmp_delim = n % base;
+		int ch = 0;
+		if (tmp_delim >= 0 && tmp_delim <= 9) {
+			ch = tmp_delim + '0';
+		} else {
+			ch = tmp_delim + 55;
+		}
+		s[i++] = ch;
+	} while ((n /= base) > 0);
+	if (sign < 0) {
+		if (sign == MININT) {
+			s[0] = '8';
+		}
+		s[i++] = '-';
+	}
+	s[i] = '\0';
+	reverse(s);
+}
+
+void itoa_s(int n, char s[], unsigned short spaces) {
+	int i, sign;
+	if ((sign = n) < 0) {
+		if (sign == MININT) {
+			n += 1;
+		}
+		n = -n;
+	}
+	i = 0;
+	do {
+		s[i++] = n % 10 + '0';
+	} while ((n /= 10) > 0);
+	if (sign < 0) {
+		if (sign == MININT) {
+			s[0] = '8';
+		}
+		s[i++] = '-';
+	}
+	if (i < spaces) {
+		while (i < spaces) {
+			s[i++] = 32;
+		}
+	} else if (i > spaces) {
+		for (int ptr = 0, ptrb = i - spaces; ptrb <= i; ptr++, ptrb++) {
+			s[ptr] = s[ptrb];
+		}
+	}
+	s[spaces] = '\0';
+	reverse(s);
+}
+
 int main() {
-	vector<int> res {2, 1, 1, 2};
-	cout << rob(res) << endl;
+	int A = 54321;
+	char s[1024];
+	itoa_s(A, s, 0);
+	cout << s << endl;
 	return 0;
 }
