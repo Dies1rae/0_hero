@@ -1400,6 +1400,66 @@ int sumOfLeftLeaves(TreeNode* root) {
 	return sum;
 }
 
+int finalValueAfterOperations(vector<string>& operations) {
+	int res = 0x00;
+	for (const auto& str : operations) {
+		switch (str[0]) {
+		case '+' :
+			++res;
+			break;
+		case '-':
+			--res;
+			break;
+		case 'X':
+			switch (str[1]) {
+			case '+' :
+				res++;
+				break;
+			case '-':
+				res--;
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	return res;
+}
+
+int sumEvenGrandparent(TreeNode* root) {
+	stack<TreeNode*> hsh;
+	hsh.push(root);
+	int sum = 0;
+	while (!hsh.empty()) {
+		TreeNode* tmp = hsh.top();
+		hsh.pop();
+		if (tmp->val % 2 == 0) {
+			if (tmp->left && tmp->left->left) {
+				sum += tmp->left->left->val;
+			}
+			if (tmp->left && tmp->left->right) {
+				sum += tmp->left->right->val;
+			}
+			if (tmp->right && tmp->right->left) {
+				sum += tmp->right->left->val;
+			}
+			if (tmp->right && tmp->right->right) {
+				sum += tmp->right->right->val;
+			}
+		}
+		if (tmp->left) {
+			hsh.push(tmp->left);
+		}
+		if (tmp->right) {
+			hsh.push(tmp->right);
+		}
+	}
+	return sum;
+}
+
 int main() {
 	int A = 54321;
 	char s[1024];
