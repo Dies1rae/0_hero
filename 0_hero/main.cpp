@@ -1380,6 +1380,26 @@ void itoa_s(int n, char s[], unsigned short spaces) {
 	reverse(s);
 }
 
+int sumOfLeftLeaves(TreeNode* root) {
+	stack<TreeNode*> hsh;
+	hsh.push(root);
+	int sum = 0;
+	while (!hsh.empty()) {
+		TreeNode* tmp = hsh.top();
+		hsh.pop();
+		if (tmp->right) {
+			hsh.push(tmp->right);
+		}
+		if (tmp->left) {
+			hsh.push(tmp->left);
+			if (!tmp->left->left && !tmp->left->right) {
+				sum += tmp->left->val;
+			}
+		}
+	}
+	return sum;
+}
+
 int main() {
 	int A = 54321;
 	char s[1024];
