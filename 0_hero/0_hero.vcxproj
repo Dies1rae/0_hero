@@ -152,6 +152,7 @@
     <ClInclude Include="BST.h" />
     <ClInclude Include="FenwickBT.h" />
     <ClInclude Include="log_duration.h" />
+    <ClInclude Include="polish_not.h" />
     <ClInclude Include="toDIgit.h" />
     <ClInclude Include="Optional.h" />
     <ClInclude Include="SingleLinkedList_full.h" />

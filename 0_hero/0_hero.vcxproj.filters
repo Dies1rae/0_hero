@@ -74,5 +74,8 @@
     <ClInclude Include="log_duration.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="polish_not.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

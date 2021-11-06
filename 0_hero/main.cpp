@@ -11,6 +11,7 @@
 #include "toDIgit.h"
 #include "log_duration.h"
 #include "AvlTree.h"
+#include "polish_not.h"
 
 #include <algorithm>
 #include <vector>
@@ -40,8 +41,9 @@
 #include <memory>
 #include <numeric>
 #include <queue>
-using namespace std;
 
+using namespace std;
+using namespace pclc;
 
 
 double getData(const char* buffer, size_t size) {
@@ -1460,10 +1462,22 @@ int sumEvenGrandparent(TreeNode* root) {
 	return sum;
 }
 
+vector<int> singleNumber(vector<int>& nums) {
+	map<int, int> hsh;
+	vector<int> res;
+	for(const auto& num : nums) {
+		hsh[num] ++;
+	}
+	for(const auto& [num, ctr] : hsh) {
+		if (ctr == 1) {
+			res.push_back(num);
+		}
+	}
+	return res;
+}
+
 int main() {
-	int A = 54321;
-	char s[1024];
-	itoa_s(A, s, 0);
-	cout << s << endl;
+	calcMainLoop();
+	cout << endl << -1 + 1 << endl;
 	return 0;
 }
