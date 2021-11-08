@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
 
 namespace pclc {
 	#define BUFSIZE 100
@@ -11,6 +12,7 @@ namespace pclc {
 	#define MAXVAL 100
 	#define ERROR -1
 	#define OK 0
+	# define M_PIl 3.141592653589793238462643383279502884L /* pi */
 
 	int sign = 0;
 	int sp = 0;
@@ -42,10 +44,8 @@ namespace pclc {
 	double pop(void) {
 		if (sp > 0) {
 			return val[--sp];
-		} else {
-			return ERROR;
 		}
-		return 0.0;
+		return ERROR;
 	}
 
 	int getch(void) {
@@ -82,11 +82,21 @@ namespace pclc {
 			}
 			return '-';
 		}
-		if (!isdigit(c) && c != '.') {
+		if (!isdigit(c) && c != '.' && c != 'e') {
 			return c;
 		}
 		if (isdigit(c)) {
 			while (isdigit(s[++i] = c = getch())) {
+				;
+			}
+		}
+		if (c == '.') {
+			while (isdigit(s[++i] = c = getch())) {
+				;
+			}
+		}
+		if (c == 'e') {
+			while (isdigit(s[++i] = c = getch()) || c == '-') {
 				;
 			}
 		}
@@ -98,11 +108,12 @@ namespace pclc {
 	}
 
 	int calcMainLoop(void) {
-
 		int type;
 		double op;
+		double power;
 		char s[MAXOP];
-
+		//size_t bufflen = getline(s, MAXOP);
+		
 		while ((type = getop(s)) != EOF) {
 			switch (type) {
 				case NUMBER:
@@ -136,6 +147,16 @@ namespace pclc {
 						return ERROR;
 					}
 					break;
+				case 'P':
+					power = pop();
+					push(pow(pop(), power));
+					break;
+				case 'E':
+					push(exp(pop()));
+					break;
+				case 'S':
+					push(pop()*M_PIl/180);
+					break;
 				case '\0':
 				case 'EOF':
 				case '\n':
@@ -149,5 +170,46 @@ namespace pclc {
 			}
 		}
 		return OK;
+	}
+
+	double pick() {
+		if (sp > 0) {
+			return val[sp];
+		}
+		return ERROR;
+	}
+
+	int swapTop() {
+		if (sp > 1) {
+			double top_2 = val[sp - 1];
+			val[sp - 1] = val[sp];
+			val[sp] = top_2;
+			return OK;
+			//std::swap(val[sp], val[sp - 1]);
+		}
+		return ERROR;
+	}
+
+	int copyTop() {
+		if (sp >= 1) {
+			val[sp + 1] = val[sp];
+			sp++;
+			return OK;
+		}
+		return ERROR;
+	}
+
+	void clear() {
+		memset(val, 0, sizeof(MAXVAL));
+		memset(_buffer, 0, sizeof(BUFSIZE));
+		sp = 0;
+		_buff_pos = 0;
+		sign = 0;
+	}
+
+	void ungets(char s[]) {
+		for (size_t ptr = 0; s[ptr] != '\0'; ptr++) {
+			ungetch(s[ptr]);
+		}
 	}
 }	//pclc

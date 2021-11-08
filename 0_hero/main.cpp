@@ -1478,6 +1478,6 @@ vector<int> singleNumber(vector<int>& nums) {
 
 int main() {
 	calcMainLoop();
-	cout << endl << -1 + 1 << endl;
+	cout << endl << std::pow(5, 5)<< endl;
 	return 0;
 }
