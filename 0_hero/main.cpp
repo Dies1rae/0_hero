@@ -1492,6 +1492,25 @@ std::string intToRoman(int num) {
     return roman;
 }
 
+int minStartValue(vector<int>& nums) {
+    int min_res = 1;
+    bool YES = false;
+    while(!YES) {
+        int tmp_min_res = min_res;
+        for(size_t ptr = 0; ptr < nums.size(); ptr++ ) {
+            tmp_min_res += nums[ptr];
+            if(tmp_min_res >= 1) {
+                YES = true;
+            } else {
+                YES = false;
+                min_res++;
+                break;
+            }
+        }
+    }
+    return min_res;
+}
+
 int main() {
 	calcMainLoop();
 	cout << endl << std::pow(5, 5)<< endl;
