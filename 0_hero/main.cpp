@@ -1511,6 +1511,20 @@ int minStartValue(vector<int>& nums) {
     return min_res;
 }
 
+vector<int> dailyTemperatures(vector<int>& temperatures) {
+	vector<int> res(temperatures.size(), 0);
+	stack<int> stk;
+	for (int ptr = 0; ptr < temperatures.size(); ptr++) {
+		while (!stk.empty() && temperatures[stk.top()] < temperatures[ptr]) {
+			const auto idx = stk.top();
+			stk.pop();
+			res[idx] = ptr - idx;
+		}
+		stk.emplace(ptr);
+	}
+	return res;
+}
+
 int main() {
 	if (0.2 < 0.5) {
 		cout << "ALINA GOOD\n";
