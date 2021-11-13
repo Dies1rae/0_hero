@@ -1476,6 +1476,41 @@ vector<int> singleNumber(vector<int>& nums) {
 	return res;
 }
 
+std::string intToRoman(int num) {
+    std::map<int, std::string> rom {{1, "I"}, {4, "IV"}, {5, "V"}, {9, "IX"}, {10, "X"},
+     {40, "XL"}, {50, "L"}, {90, "XC"}, {100, "C"}, {400, "CD"}, {500, "D"},
+     {900, "CM"}, {1000, "M"}};
+    std::string roman;
+    int reminder = num;
+    for(auto it = rom.rbegin(); it != rom.rend() || reminder > 0; it++) {
+        int quotient = reminder / it->first;
+        reminder -= (quotient * it->first);
+        while(quotient--) {
+           roman += it->second;     
+        }
+    }
+    return roman;
+}
+
+int minStartValue(vector<int>& nums) {
+    int min_res = 1;
+    bool YES = false;
+    while(!YES) {
+        int tmp_min_res = min_res;
+        for(size_t ptr = 0; ptr < nums.size(); ptr++ ) {
+            tmp_min_res += nums[ptr];
+            if(tmp_min_res >= 1) {
+                YES = true;
+            } else {
+                YES = false;
+                min_res++;
+                break;
+            }
+        }
+    }
+    return min_res;
+}
+
 int main() {
 	if (0.2 < 0.5) {
 		cout << "ALINA GOOD\n";
