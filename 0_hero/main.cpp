@@ -1477,7 +1477,10 @@ vector<int> singleNumber(vector<int>& nums) {
 }
 
 int main() {
-	calcMainLoop();
-	cout << endl << std::pow(5, 5)<< endl;
+	if (0.2 < 0.5) {
+		cout << "ALINA GOOD\n";
+	} else {
+		cout << "PIDOR PRAV\n";
+	}
 	return 0;
 }
