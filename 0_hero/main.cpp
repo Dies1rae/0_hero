@@ -1525,6 +1525,56 @@ vector<int> dailyTemperatures(vector<int>& temperatures) {
 	return res;
 }
 
+int deepestLeavesSum(TreeNode* root) {
+	if (root == nullptr) {
+		return 0;
+	}
+	vector<vector<int>> lvls;
+	TreeNode* trav = root;
+	std::queue<TreeNode*> hsh;
+	hsh.push(trav);
+	while (!hsh.empty()) {
+		vector<int> tmp;
+		size_t level = hsh.size();
+		while (level > 0) {
+			TreeNode* node = hsh.front();
+			hsh.pop();
+			tmp.push_back(node->val);
+			if (node->left) {
+				hsh.push(node->left);
+			}
+			if (node->right) {
+				hsh.push(node->right);
+			}
+			level--;
+		}
+		lvls.push_back(tmp);
+	}
+	int res = 0;
+	for (const auto& val : lvls[lvls.size() - 1]) {
+		res += val;
+	}
+	return res;
+}
+
+TreeNode* nuilder(vector<int>& nums, int start, int end) {
+	if (start < 0 || start >= end || end > nums.size()) {
+		return nullptr;
+	}
+	auto max = max_element(nums.begin() + start,nums.begin() + end);
+	TreeNode* root = new TreeNode(*max);
+	root->left = nuilder(nums, start, std::distance(nums.begin(), max));
+	root->right = nuilder(nums,  std::distance(nums.begin(), max + 1), end);
+	return root;
+}
+
+TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+	if (nums.empty()) {
+		return {};
+	}
+	return nuilder(nums, 0, nums.size() - 1);
+}
+
 int main() {
 	if (0.2 < 0.5) {
 		cout << "ALINA GOOD\n";
