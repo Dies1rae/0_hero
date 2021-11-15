@@ -1575,6 +1575,45 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
 	return nuilder(nums, 0, nums.size() - 1);
 }
 
+vector<int> minOperations(string boxes) {
+    vector<int> res(boxes.size(), 0);
+    for(int ptr = 0; ptr < res.size(); ptr++) {
+        for(int ch = 0; ch < boxes.size(); ch++) {
+            if(ptr != ch && boxes[ch] == '1') {
+                res[ptr] += std::abs(ptr - ch);
+            }
+        }
+    }
+            
+    return res;
+}
+
+vector<int> largestDivisibleSubset(vector<int>& nums) {
+    vector<int> result;
+    sort(nums.begin(),nums.end());
+    vector<int> dp(nums.size(),0);
+    vector<int> parent(nums.size(),0);
+    int mx=0;
+    int mx_idx=0;
+    for(int i=nums.size()-1;i>=0;i--){
+        for(int j=i;j<nums.size();j++){
+            if(nums[j]%nums[i]==0&&dp[i]<dp[j]+1){
+                dp[i]=dp[j]+1;
+                parent[i]=j;
+                if(mx<dp[i]){
+                    mx=dp[i];
+                    mx_idx=i;
+                }
+            }
+        }
+    }
+    for(int i=0;i<mx;i++){
+        result.push_back(nums[mx_idx]);
+        mx_idx=parent[mx_idx];
+    }
+    return result;
+}
+
 int main() {
 	if (0.2 < 0.5) {
 		cout << "ALINA GOOD\n";
