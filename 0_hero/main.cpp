@@ -1614,6 +1614,48 @@ vector<int> largestDivisibleSubset(vector<int>& nums) {
     return result;
 }
 
+string simplifyPath(string path) {
+	std::string path_res;
+	size_t pos = 0;
+	while ((pos = path.find("//", pos)) != std::string::npos) {
+		path.replace(pos, 2, "/");
+	}
+	pos = 0;
+	while ((pos = path.find("/./", pos)) != std::string::npos) {
+		path.replace(pos, 3, "/");
+	}
+	stringstream tok_strem(path);
+	deque<string>buff;
+	string tmp_token;
+	while(getline(tok_strem, tmp_token, '/')) {
+		if(tmp_token == "..") {
+			if(!buff.empty()) {
+				buff.pop_back();
+			} else {
+				continue;
+			}
+		} else if (tmp_token == ".") {
+			continue;    
+		} else {
+			buff.push_back(tmp_token);
+		}
+	}
+
+	for(const auto& elem : buff) {
+		path_res += elem + '/';
+	}
+	path_res.empty() ? path_res += '/' : path_res;
+	path_res[0] == '/'? path_res : path_res.insert(0, 1, '/');
+	if(path_res[path_res.size() - 1] == '/' && path_res.size() > 1) {
+		path_res.pop_back();
+	}
+	return path_res;
+}
+
+bool canWinNim(int n) {
+	return n % 4 != 0; 
+}
+
 int main() {
 	if (0.2 < 0.5) {
 		cout << "ALINA GOOD\n";
