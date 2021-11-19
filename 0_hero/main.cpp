@@ -1656,58 +1656,84 @@ bool canWinNim(int n) {
 	return n % 4 != 0; 
 }
 
-    string Sum(string a, string b) {
-        if(a.size() < b.size()) {
-            swap(a, b);
-        }
-        int j = a.size()-1;
-        for(int i=b.size()-1; i>=0; i--, j--) {
-            a[j]+=(b[i]-'0');
-        }
-        for(int i=a.size()-1; i>0; i--) {
-            if(a[i] > '9') {
-                int d = a[i]-'0';
-                a[i-1] = ((a[i-1]-'0') + d/10) + '0';
-                a[i] = (d%10)+'0';
-            }
-        }
-        if(a[0] > '9') {
-            string k;
-            k+=a[0];
-            a[0] = ((a[0]-'0')%10)+'0';
-            k[0] = ((k[0]-'0')/10)+'0';
-            a = k+a;
-        }
-        return a;
+string Sum(string a, string b) {
+    if(a.size() < b.size()) {
+        swap(a, b);
     }
-    
-    string getNumFromListNode(ListNode* l1) {
-        string num;
-        while(l1 != nullptr) {
-            num.insert(0, 1, '0' + l1->val);
-            l1 = l1->next;
-        }
-        return num;
+    int j = a.size()-1;
+    for(int i=b.size()-1; i>=0; i--, j--) {
+        a[j]+=(b[i]-'0');
     }
+    for(int i=a.size()-1; i>0; i--) {
+        if(a[i] > '9') {
+            int d = a[i]-'0';
+            a[i-1] = ((a[i-1]-'0') + d/10) + '0';
+            a[i] = (d%10)+'0';
+        }
+    }
+    if(a[0] > '9') {
+        string k;
+        k+=a[0];
+        a[0] = ((a[0]-'0')%10)+'0';
+        k[0] = ((k[0]-'0')/10)+'0';
+        a = k+a;
+    }
+    return a;
+}
     
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        string a = this->getNumFromListNode(l1);
-        string b = this->getNumFromListNode(l2);
-        string str_res = Sum(a, b);
+string getNumFromListNode(ListNode* l1) {
+    string num;
+    while(l1 != nullptr) {
+        num.insert(0, 1, '0' + l1->val);
+        l1 = l1->next;
+    }
+    return num;
+}
+    
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    string a = this->getNumFromListNode(l1);
+    string b = this->getNumFromListNode(l2);
+    string str_res = Sum(a, b);
         
-        ListNode * l3 = new ListNode();
-        ListNode * tmp = l3;
-        while(!str_res.empty()) {
-            int tmp_val = str_res.back() - '0';
-            str_res.pop_back();
-            tmp->val = tmp_val;
-            if(!str_res.empty()) {
-                tmp->next = new ListNode();
-            }
-            tmp = tmp->next;
+    ListNode * l3 = new ListNode();
+    ListNode * tmp = l3;
+    while(!str_res.empty()) {
+        int tmp_val = str_res.back() - '0';
+        str_res.pop_back();
+        tmp->val = tmp_val;
+        if(!str_res.empty()) {
+            tmp->next = new ListNode();
         }
-        return l3;
+        tmp = tmp->next;
     }
+    return l3;
+}
+
+int threeSumClosest(vector<int>& nums, int target) {
+    int min_dist = INT_MAX;
+    int min_summ = 0;
+    std::sort(nums.begin(), nums.end());
+    for(int ptr = 0; ptr < nums.size(); ++ptr) {
+        int left = ptr + 1;
+        int right = nums.size() - 1;
+        while(left < right) {
+            int summ = nums[ptr] + nums[left] + nums[right];
+            int dist = std::abs(target - summ);
+            if(dist < min_dist) {
+                min_dist = dist;
+                min_summ = summ;
+            }
+            if(min_summ == target) {
+                return min_summ;
+            } else if(summ > target) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+    }
+    return min_summ;
+}
 
 int main() {
 	if (0.2 < 0.5) {
