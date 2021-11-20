@@ -1691,8 +1691,8 @@ string getNumFromListNode(ListNode* l1) {
 }
     
 ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-    string a = this->getNumFromListNode(l1);
-    string b = this->getNumFromListNode(l2);
+    string a = getNumFromListNode(l1);
+    string b = getNumFromListNode(l2);
     string str_res = Sum(a, b);
         
     ListNode * l3 = new ListNode();
@@ -1735,11 +1735,37 @@ int threeSumClosest(vector<int>& nums, int target) {
     return min_summ;
 }
 
-int main() {
-	if (0.2 < 0.5) {
-		cout << "ALINA GOOD\n";
-	} else {
-		cout << "PIDOR PRAV\n";
+vector<vector<int>> matrixReshape(vector<vector<int>>& mat, int r, int c) {
+	if ((r * c) != (mat.size() * mat[0].size())) {
+		return mat;
 	}
+	size_t rCol = 0;
+	size_t rRow = 0;
+	vector<vector<int>> res(r, vector<int>(c, 0)); 
+	for(size_t ptr = 0; ptr < mat.size(); ptr++) {
+		for(size_t ptr1 = 0; ptr1 < mat[0].size(); ptr1++) {
+			res[rRow][rCol++] = mat[ptr][ptr1];
+			if(rCol >= c) {
+				rRow ++;
+				rCol = 0;
+			}
+		}
+	}
+
+	return res;
+}
+
+int singleNonDuplicate(vector<int>& nums) {
+	for(size_t ptr = 0; ptr + 1 < nums.size(); ptr += 2) {
+		if(nums[ptr] - nums[ptr + 1] != 0) {
+			return nums[ptr];
+		}    
+	}
+	return nums[nums.size() - 1];
+}
+
+int main() {
+	vector <vector<int>> a{{1,2}, {3,4}, {5,6}};
+	matrixReshape(a, 1, 6);
 	return 0;
 }
