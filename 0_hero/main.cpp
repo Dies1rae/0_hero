@@ -1764,6 +1764,104 @@ int singleNonDuplicate(vector<int>& nums) {
 	return nums[nums.size() - 1];
 }
 
+bool searchMatrix(vector<vector<int>>& matrix, int target) {
+	int m = matrix.size();
+	int n = matrix[0].size();
+	for (int ptr = 0; ptr < m; ++ptr) {
+		if (matrix[ptr][n - 1] == target) {
+			return true;
+		} else if (matrix[ptr][n - 1] > target) {
+			auto it = std::find(matrix[ptr].begin(), matrix[ptr].end(), target);
+			return it != matrix[ptr].end();
+		}
+	}
+	return false;
+}
+
+bool checkSudokuColumn(const vector<vector<char>>& board) {
+	for (size_t row = 0; row < 9; ++row) {
+		vector<int> hsh(9, 0);
+		for (size_t col = 0; col < 9; ++col) {
+			if (std::isdigit(board[row][col])) {
+				hsh[(board[row][col] - '0') - 1] += 1;
+			}
+		}
+		for (size_t ctr = 0; ctr < 9; ++ctr) {
+			if (hsh[ctr] > 1) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool checkSudokuRow(const vector<vector<char>>& board) {
+	vector<int> hsh(10, 0);
+	for (size_t row = 0, col = 0; row < 9 && col < 9; ++row) {
+		if (std::isdigit(board[row][col])) {
+			hsh[(board[row][col] - '0')] += 1;
+		}
+		if (row == 8) {
+			row = -1;
+			col++;
+			for (size_t ctr = 0; ctr < 10; ++ctr) {
+				if (hsh[ctr] > 1) {
+					return false;
+				} else {
+					hsh[ctr] = 0;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+bool checkSudoku9x9(const vector<vector<char>>& board, int start, int end) {
+	set<char> hsh;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (board[i + start][j + end] != '.') {
+				if (hsh.find(board[i + start][j + end]) != hsh.end()) {
+					return false;
+				}
+				hsh.insert(board[i + start][j + end]);
+			}
+		}
+	}
+	return true;
+}
+
+bool isValidSudoku(vector<vector<char>>& board) {
+	for (size_t i = 0; i < 9; ++i) {
+		for (size_t j = 0; j < 9; ++j) {
+			if (!checkSudoku9x9(board, i - i % 3, j - j % 3)) {
+				return false;
+			}
+		}
+	}
+	return checkSudokuRow(board) && checkSudokuColumn(board);
+}
+
+bool incr(const vector<int>& nums) {
+	for(size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if(nums[ptr] > nums[ptr + 1]) {
+			return false;
+		}
+	}
+	return true;
+}
+bool decr(const vector<int>& nums) {
+	for(size_t ptr = 0; ptr + 1 < nums.size(); ptr++) {
+		if(nums[ptr] < nums[ptr + 1]) {
+			return false;
+		}
+	}
+	return true;
+}
+bool isMonotonic(vector<int>& nums) {
+	return incr(nums) || decr(nums);
+}
+
 int main() {
 	vector <vector<int>> a{{1,2}, {3,4}, {5,6}};
 	matrixReshape(a, 1, 6);
