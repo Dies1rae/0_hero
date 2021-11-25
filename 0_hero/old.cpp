@@ -2069,7 +2069,7 @@
 //			}
 //		}
 //	}
-//	return 1;
+//		return open_bracers.empty();
 //}
 //
 //int daysBetweenDates(string date1, string date2) {
