@@ -1862,10 +1862,28 @@ bool isMonotonic(vector<int>& nums) {
 	return incr(nums) || decr(nums);
 }
 
+TreeNode * Add(TreeNode * node, int elem) {
+	if (node == nullptr) {
+		node = new TreeNode(elem);
+	} else {
+		if (elem < node->val) {
+			node->left = Add(node->left, elem);
+		} else {
+			node->right = Add(node->right, elem);
+		}
+	}
 
+	return node;
+}
+
+TreeNode* insertIntoBST(TreeNode* root, int val) {
+	return Add(root, val);
+}
 
 int main() {
-	vector <vector<int>> a{{1,2}, {3,4}, {5,6}};
-	matrixReshape(a, 1, 6);
+	int i = 1;
+	cout << ++i+3;
+	//vector <vector<int>> a{{1,2}, {3,4}, {5,6}};
+	//matrixReshape(a, 1, 6);
 	return 0;
 }
