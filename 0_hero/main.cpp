@@ -1880,6 +1880,51 @@ TreeNode* insertIntoBST(TreeNode* root, int val) {
 	return Add(root, val);
 }
 
+    TreeNode* LCARecursive(TreeNode* root, TreeNode* x, TreeNode* y) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+ 
+    if (root->val > max(x->val, y->val)) {
+        return LCARecursive(root->left, x, y);
+    }
+ 
+    else if (root->val < min(x->val, y->val)) {
+        return LCARecursive(root->right, x, y);
+    }
+ 
+    return root;
+}
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        return LCARecursive(root, p, q);
+    }
+
+    bool isValidBST(TreeNode* root) {
+        if (root == nullptr) {
+			return false;
+		}
+
+		TreeNode* trav = root;
+		std::stack<TreeNode*> hsh;
+		std::vector<int> traversals_;
+		while (trav != nullptr || !hsh.empty()) {
+			while (trav != nullptr) {
+				hsh.push(trav);
+				trav = trav->left;
+			}
+			TreeNode* node = hsh.top();
+			hsh.pop();
+			traversals_.push_back(node->val);
+			trav = node->right;
+		}
+        for(size_t ptr = 0; ptr + 1 < traversals_.size(); ptr++) {
+            if(traversals_[ptr] >= traversals_[ptr + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 int main() {
 	int i = 1;
 	cout << ++i+3;
