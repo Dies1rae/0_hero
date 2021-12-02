@@ -1880,50 +1880,85 @@ TreeNode* insertIntoBST(TreeNode* root, int val) {
 	return Add(root, val);
 }
 
-    TreeNode* LCARecursive(TreeNode* root, TreeNode* x, TreeNode* y) {
-    if (root == nullptr) {
-        return nullptr;
-    }
- 
-    if (root->val > max(x->val, y->val)) {
-        return LCARecursive(root->left, x, y);
-    }
- 
-    else if (root->val < min(x->val, y->val)) {
-        return LCARecursive(root->right, x, y);
-    }
- 
-    return root;
+TreeNode* LCARecursive(TreeNode* root, TreeNode* x, TreeNode* y) {
+if (root == nullptr) {
+    return nullptr;
 }
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        return LCARecursive(root, p, q);
-    }
+ 
+if (root->val > max(x->val, y->val)) {
+    return LCARecursive(root->left, x, y);
+}
+ 
+else if (root->val < min(x->val, y->val)) {
+    return LCARecursive(root->right, x, y);
+}
+ 
+return root;
+}
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    return LCARecursive(root, p, q);
+}
 
-    bool isValidBST(TreeNode* root) {
-        if (root == nullptr) {
-			return false;
-		}
+bool isValidBST(TreeNode* root) {
+    if (root == nullptr) {
+		return false;
+	}
 
-		TreeNode* trav = root;
-		std::stack<TreeNode*> hsh;
-		std::vector<int> traversals_;
-		while (trav != nullptr || !hsh.empty()) {
-			while (trav != nullptr) {
-				hsh.push(trav);
-				trav = trav->left;
-			}
-			TreeNode* node = hsh.top();
-			hsh.pop();
-			traversals_.push_back(node->val);
-			trav = node->right;
+	TreeNode* trav = root;
+	std::stack<TreeNode*> hsh;
+	std::vector<int> traversals_;
+	while (trav != nullptr || !hsh.empty()) {
+		while (trav != nullptr) {
+			hsh.push(trav);
+			trav = trav->left;
 		}
-        for(size_t ptr = 0; ptr + 1 < traversals_.size(); ptr++) {
-            if(traversals_[ptr] >= traversals_[ptr + 1]) {
-                return false;
-            }
+		TreeNode* node = hsh.top();
+		hsh.pop();
+		traversals_.push_back(node->val);
+		trav = node->right;
+	}
+    for(size_t ptr = 0; ptr + 1 < traversals_.size(); ptr++) {
+        if(traversals_[ptr] >= traversals_[ptr + 1]) {
+            return false;
         }
-        return true;
     }
+    return true;
+}
+
+ListNode* oddEvenList(ListNode* head) {
+	if (!head || !head->next) {
+		return head;
+	}
+	ListNode* root_ = head;
+	std::vector<ListNode*> hsh;
+	while (root_) {
+		hsh.push_back(root_);
+		root_ = root_->next;
+	}
+	ListNode* odd = head->next;
+	ListNode* even = head;
+	ListNode* tmp_odd = odd;
+	ListNode* tmp_even = even;
+	for(size_t ptr = 2; ptr < hsh.size(); ptr+=2){
+		if(ptr+1 < hsh.size()) {
+			tmp_odd->next = hsh[ptr+1];
+		} else {
+			tmp_odd->next = nullptr;
+		}
+
+		if(ptr < hsh.size() - 2) {
+			tmp_even->next = hsh[ptr];
+		} else {
+			tmp_even->next = hsh[ptr];
+			tmp_even->next->next = nullptr;
+		}
+		tmp_even = tmp_even->next; 
+		tmp_odd = tmp_odd->next;    
+
+	}
+	tmp_even->next = odd;
+	return even;
+}
 
 int main() {
 	int i = 1;
