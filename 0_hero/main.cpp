@@ -837,43 +837,43 @@ int binsearch(const int x, const int v[], const int n) {
 	return low == hight ? (x == v[mid + 1] ? mid + 1 : -1) : mid;
 }
 
-bool isCousins(TreeNode* root, int x, int y) {
-	queue<TreeNode*> queue_;
-	queue_.push(root);
-	queue_.push(nullptr);
-	int found = 0; 
-	while (!queue_.empty())
-	{
-		TreeNode* current = queue_.front();
-		queue_.pop();
-		if (current == nullptr) {
-			if (!queue_.empty()) {
-				queue_.push(nullptr);
-			} 
-			found = 0;
-			continue;
-		}
-
-		if (current->left!=nullptr && (current->left->val == x || current->left->val == y)) {
-			found ++;
-		} else if (current->right!=nullptr && (current->right->val == x || current->right->val == y)) {
-			found ++;
-		}
-
-		if (found == 2) {
-			return true;
-		} 
-
-		if (current->left!=nullptr) {
-			queue_.push(current->left);
-		}
-		if (current->right!=nullptr){
-			queue_.push(current->right);
-		} 
-	}
-
-	return false;
-}
+//bool isCousins(TreeNode* root, int x, int y) {
+//	queue<TreeNode*> queue_;
+//	queue_.push(root);
+//	queue_.push(nullptr);
+//	int found = 0; 
+//	while (!queue_.empty())
+//	{
+//		TreeNode* current = queue_.front();
+//		queue_.pop();
+//		if (current == nullptr) {
+//			if (!queue_.empty()) {
+//				queue_.push(nullptr);
+//			} 
+//			found = 0;
+//			continue;
+//		}
+//
+//		if (current->left!=nullptr && (current->left->val == x || current->left->val == y)) {
+//			found ++;
+//		} else if (current->right!=nullptr && (current->right->val == x || current->right->val == y)) {
+//			found ++;
+//		}
+//
+//		if (found == 2) {
+//			return true;
+//		} 
+//
+//		if (current->left!=nullptr) {
+//			queue_.push(current->left);
+//		}
+//		if (current->right!=nullptr){
+//			queue_.push(current->right);
+//		} 
+//	}
+//
+//	return false;
+//}
 
 void clean(char s[], char to_delete) {
 	size_t ptrN = 0;
@@ -1959,6 +1959,39 @@ ListNode* oddEvenList(ListNode* head) {
 	tmp_even->next = odd;
 	return even;
 }
+
+class MyStack {
+public:
+	MyStack() = default;
+
+	void push(int x) {
+		this->base_.push(x);
+	}
+
+	int pop() {
+		int res = this->base_.back();
+		queue<int> tmp;
+		while (!this->base_.empty()) {
+			int val = this->base_.front();
+			this->base_.pop();
+			if (!this->base_.empty()) {
+				tmp.push(val);
+			}
+		}
+		this->base_ = tmp;
+		return res;
+	}
+
+	int top() {
+		return this->base_.back();
+	}
+
+	bool empty() {
+		return this->base_.empty();
+	}
+private:
+	queue<int> base_;
+};
 
 int main() {
 	int i = 1;
