@@ -2013,6 +2013,24 @@ void AoC() {
 	std::cout << ctr << std::endl;
 }
 
+int maxProduct(vector<int>& nums) {
+	if (nums.size() == 1) {
+		return nums[0];
+	}
+	int max = nums[0];
+	for(size_t ptr = 0; ptr < nums.size(); ++ptr) {
+		int tmp_max = nums[ptr];
+		size_t ptr1 = ptr + 1;
+		max = std::max(max, tmp_max);
+		while(ptr1 < nums.size()) {
+			tmp_max *= nums[ptr1];
+			max = std::max(max, tmp_max);
+			++ptr1;
+		}          
+	}
+	return max;
+}
+
 int main() {
 	int i = 1;
 	cout << ++i+3;
