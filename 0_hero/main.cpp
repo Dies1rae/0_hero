@@ -1993,6 +1993,26 @@ private:
 	queue<int> base_;
 };
 
+void AoC() {
+	ifstream chiferki("./num.txt");
+	std::string tmp;
+	std::vector<int> numbers;
+	std::vector<int> numbers_1;
+	while(std::getline(chiferki, tmp)) {
+	numbers.push_back(std::stoi(tmp));
+	}
+	int ctr = 0;
+	for(size_t ptr = 1; ptr + 1 < numbers.size(); ptr ++) {
+	numbers_1.push_back((numbers[ptr - 1] + numbers[ptr] + numbers[ptr + 1])); 
+	}
+	for(size_t ptr = 1; ptr < numbers_1.size(); ptr ++) {
+	if(numbers_1[ptr] > numbers_1[ptr - 1]) {
+	    ctr++;
+	}
+	}
+	std::cout << ctr << std::endl;
+}
+
 int main() {
 	int i = 1;
 	cout << ++i+3;
