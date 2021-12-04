@@ -78,4 +78,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="nums.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="submarine.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

@@ -2017,24 +2017,50 @@ int maxProduct(vector<int>& nums) {
 	if (nums.size() == 1) {
 		return nums[0];
 	}
-	int max = nums[0];
+	int max1 = nums[0];
 	for(size_t ptr = 0; ptr < nums.size(); ++ptr) {
 		int tmp_max = nums[ptr];
 		size_t ptr1 = ptr + 1;
-		max = std::max(max, tmp_max);
+		max1 = max(max1, tmp_max);
 		while(ptr1 < nums.size()) {
 			tmp_max *= nums[ptr1];
-			max = std::max(max, tmp_max);
+			max1 = max(max1, tmp_max);
 			++ptr1;
 		}          
 	}
-	return max;
+	return max1;
+}
+
+void AoC_2() {
+	ifstream chiferki("./submarine.txt");
+	std::string tmp;
+	int hor_pos = 0;
+	int depth_pos = 0;
+	int aim = 0;
+	while(std::getline(chiferki, tmp)) {
+		std::string number = tmp.substr(tmp.find_last_of(32));
+		cout << tmp << ' ' << number << std::endl;
+		switch (tmp[0]) {
+		case 'f':
+			hor_pos += std::stoi(number);
+			depth_pos += (aim * std::stoi(number));
+			break;
+		case 'u':
+			aim -= std::stoi(number);
+			break;
+		case 'd':
+			aim += std::stoi(number);
+			break;
+		default:
+			break;
+		}
+
+	}
+	std::cout << hor_pos << '|' << depth_pos << std::endl;
+	std::cout << hor_pos*depth_pos << std::endl;
 }
 
 int main() {
-	int i = 1;
-	cout << ++i+3;
-	//vector <vector<int>> a{{1,2}, {3,4}, {5,6}};
-	//matrixReshape(a, 1, 6);
+	AoC_2();
 	return 0;
 }
