@@ -167,6 +167,7 @@
     <ClInclude Include="vector_full_test.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="binAOC.txt" />
     <Text Include="nums.txt" />
     <Text Include="submarine.txt" />
   </ItemGroup>

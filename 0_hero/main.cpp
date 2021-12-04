@@ -2060,7 +2060,41 @@ void AoC_2() {
 	std::cout << hor_pos*depth_pos << std::endl;
 }
 
+void AoC_3() {
+	ifstream chiferki("./binAOC.txt");
+	std::string tmp;
+	std::string hamma_2d;
+	std::string epsilon_2d;
+	vector<int> hsh_1(12, 0);
+	vector<int> hsh_0(12, 0);
+	while(std::getline(chiferki, tmp)) {
+		for (size_t ptr = 0; ptr < tmp.size(); ++ptr) {
+			switch (tmp[ptr]) {
+			case '1':
+				++hsh_1[ptr];
+				break;
+			case '0':
+				++hsh_0[ptr];
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	for (size_t ptr = 0; ptr < 12; ++ptr) {
+		if (hsh_1[ptr] > hsh_0[ptr]) {
+			hamma_2d += '1';
+			epsilon_2d += '0';
+		} else {
+			hamma_2d += '0';
+			epsilon_2d += '1';
+		}
+	}
+
+	std::cout << std::stoi(hamma_2d, nullptr, 2) * std::stoi(epsilon_2d, nullptr, 2) << std::endl;
+}
+
 int main() {
-	AoC_2();
+	AoC_3();
 	return 0;
 }

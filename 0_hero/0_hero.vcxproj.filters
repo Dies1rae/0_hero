@@ -85,5 +85,8 @@
     <Text Include="submarine.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="binAOC.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
   </ItemGroup>
 </Project>
