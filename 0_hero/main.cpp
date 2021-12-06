@@ -2094,7 +2094,79 @@ void AoC_3() {
 	std::cout << std::stoi(hamma_2d, nullptr, 2) * std::stoi(epsilon_2d, nullptr, 2) << std::endl;
 }
 
+void AoC_3_1() {
+	ifstream chiferki("./binAOC.txt");
+	std::string tmp;
+	std::vector<std::string> whole_numbers;
+	while (std::getline(chiferki, tmp)) {
+		whole_numbers.push_back(tmp);
+	}
+	chiferki.close();
+	std::vector<std::string> oxy = whole_numbers;
+	for (size_t ptr = 0; ptr < 12; ++ptr) {
+		if (oxy.size() == 1) {
+			break;
+		}
+		int ctr = 0;
+		std::vector<std::string> oxy_tmp;
+		for (size_t ptr1 = 0; ptr1 < oxy.size(); ++ptr1) {
+			if (oxy[ptr1][ptr] == '1') {
+				ctr++;
+			} else {
+				ctr--;
+			}
+		}
+		if (ctr >= 0) {
+			for (size_t ptr1 = 0; ptr1 < oxy.size(); ++ptr1) {
+				if (oxy[ptr1][ptr] == '1') {
+					oxy_tmp.push_back(oxy[ptr1]);
+				}
+			}
+		} else {
+			for (size_t ptr1 = 0; ptr1 < oxy.size(); ++ptr1) {
+				if (oxy[ptr1][ptr] == '0') {
+					oxy_tmp.push_back(oxy[ptr1]);
+				}
+			}
+		}
+		oxy = oxy_tmp;
+	}
+	std::vector<std::string> CO2 = whole_numbers;
+	for (size_t ptr = 0; ptr < 12; ++ptr) {
+		if (CO2.size() == 1) {
+			break;
+		}
+		int ctr = 0;
+		std::vector<std::string> co2_tmp;
+		for (size_t ptr1 = 0; ptr1 < CO2.size(); ++ptr1) {
+			if (CO2[ptr1][ptr] == '1') {
+				ctr++;
+			} else {
+				ctr--;
+			}
+		}
+		if (ctr >= 0) {
+			for (size_t ptr1 = 0; ptr1 < CO2.size(); ++ptr1) {
+				if (CO2[ptr1][ptr] == '0') {
+					co2_tmp.push_back(CO2[ptr1]);
+				}
+			}
+		} else {
+			for (size_t ptr1 = 0; ptr1 < CO2.size(); ++ptr1) {
+				if (CO2[ptr1][ptr] == '1') {
+					co2_tmp.push_back(CO2[ptr1]);
+				}
+			}
+		}
+		CO2 = co2_tmp;
+	}
+	cout << oxy[0] << ' ' << CO2[0] << endl;
+	if (CO2.size() == 1 && oxy.size() == 1) {
+		std::cout << std::stoi(CO2[0], nullptr, 2) * std::stoi(oxy[0], nullptr, 2) << std::endl;
+	}
+}
+
 int main() {
-	AoC_3();
+	AoC_3_1();
 	return 0;
 }
