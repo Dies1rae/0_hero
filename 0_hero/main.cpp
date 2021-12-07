@@ -2166,7 +2166,54 @@ void AoC_3_1() {
 	}
 }
 
+void AoC_4_1() {
+	ifstream chiferki("./binAOC.txt");
+	vector<int> numbers;
+	vector<vector<vector<int>>> boards;
+	vector<vector<int>> board;
+	std::string tmp;
+	std::getline(chiferki, tmp);
+	std::stringstream ss(tmp);
+	while (std::getline(ss, tmp, ',')) {
+		numbers.push_back(std::stoi(tmp));
+	}
+	std::getline(chiferki, tmp);
+	vector<int> line;
+	while (std::getline(chiferki, tmp)) {
+		if (!tmp.empty()) {
+			line.clear();
+			std::stringstream xx(tmp);
+			while (std::getline(xx, tmp, ' ')) {
+				if (std::isdigit(tmp[0])) {
+					line.push_back(std::stoi(tmp));
+				}
+			}
+			board.push_back(line);
+		} else {
+			if (!board.empty()) {
+				boards.push_back(board);
+				line.clear();
+				board.clear();
+			}
+		}
+	}
+	chiferki.close();
+	boards.push_back(board);
+
+	//for (const auto& board : boards) {
+	//	for (const auto& line : board) {
+	//		for (const auto& num : line) {
+	//			cout << num << ' ';
+	//		}
+	//		cout << endl;
+	//	}
+	//	cout << endl;
+	//}
+
+
+}
+
 int main() {
-	AoC_3_1();
+	AoC_4_1();
 	return 0;
 }
