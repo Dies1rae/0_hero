@@ -2228,7 +2228,23 @@ int numTrees(int n) {
     return dp[n];
 }
 
+
+int minCostClimbingStairs(vector<int>& cost) {
+	if (cost.size() == 2) {
+		return min(cost[0], cost[1]);
+	}
+
+	std::vector<int> floors(cost.size(), 0);
+	floors[0] = cost[0];
+	floors[1] = cost[1];
+	for (int ptr = 2; ptr < cost.size(); ptr++) {
+		floors[ptr] = min(floors[ptr - 1], floors[ptr - 2]) + cost[ptr];
+	}
+	return min(floors[floors.size() - 1], floors[floors.size() - 2]);
+}
+
 int main() {
-	AoC_4_1();
+	std::vector<int> vec{ 0,1,2,2 };
+	std::cout << minCostClimbingStairs(vec) << std::endl;
 	return 0;
 }
