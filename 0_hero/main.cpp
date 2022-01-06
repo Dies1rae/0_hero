@@ -2243,6 +2243,44 @@ int minCostClimbingStairs(vector<int>& cost) {
 	return min(floors[floors.size() - 1], floors[floors.size() - 2]);
 }
 
+int findContentChildren(vector<int>& g, vector<int>& s) {
+	std::sort(g.begin(), g.end());
+	std::sort(s.begin(), s.end());
+	auto g_p = g.begin();
+	auto s_p = s.begin();
+	int res = 0;
+	while (g_p != g.end() && s_p != s.end()) {
+		if (*s_p >= *g_p) {
+			res++;
+		} else {
+			while (s_p != s.end()) {
+				if (*s_p >= *g_p) {
+					res++;
+					break;
+				}
+				s_p++;
+			}
+		}
+		if (g_p != g.end()) {
+			g_p++;
+		}
+		if (s_p != s.end()) {
+			s_p++;
+		}
+	}
+	return res;
+}
+
+int arrayPairSum(vector<int>& nums) {
+	std::sort(std::begin(nums), std::end(nums));
+	int res = 0;
+	auto b_n = std::begin(nums);
+	for (; b_n != std::end(nums); ++b_n) {
+		res += min(*b_n, *(++b_n));
+	}
+	return res;
+}
+
 int main() {
 	std::vector<int> vec{ 0,1,2,2 };
 	std::cout << minCostClimbingStairs(vec) << std::endl;
