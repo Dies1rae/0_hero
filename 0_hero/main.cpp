@@ -2281,6 +2281,40 @@ int arrayPairSum(vector<int>& nums) {
 	return res;
 }
 
+class Solution_listnode {
+public:
+	Solution_listnode(ListNode* head) {
+		while (head != nullptr) {
+			this->base_.push_back(head->val);
+			head = head->next;
+		}
+	}
+
+	int getRandom() {
+		return this->base_[rand() % this->base_.size()];
+	}
+private:
+	std::vector<int> base_;
+};
+
+void hashFill(std::set<int>& hsh, TreeNode* root) {
+	if (!root) {
+		return;
+	}
+	hsh.insert(root->val);
+	hashFill(hsh, root->left);
+	hashFill(hsh, root->right);
+}
+
+bool isUnivalTree(TreeNode* root) {
+	if (!root) {
+		return true;
+	}
+	std::set<int> hsh;
+	hashFill(hsh, root);
+	return hsh.size() == 1 ? 1 : 0;
+}
+
 int main() {
 	std::vector<int> vec{ 0,1,2,2 };
 	std::cout << minCostClimbingStairs(vec) << std::endl;
