@@ -2315,6 +2315,15 @@ bool isUnivalTree(TreeNode* root) {
 	return hsh.size() == 1 ? 1 : 0;
 }
 
+int mostWordsFound(vector<string>& sentences) {
+    int res = 0;
+    for(const auto& sentence : sentences) {
+        int tmp = count(sentence.begin(), sentence.end(), 32) + 1;
+        res < tmp ? res = tmp : res = res;
+    }
+    return res;
+}
+
 int main() {
 	std::vector<int> vec{ 0,1,2,2 };
 	std::cout << minCostClimbingStairs(vec) << std::endl;
