@@ -2324,6 +2324,27 @@ int mostWordsFound(vector<string>& sentences) {
     return res;
 }
 
+bool isPalindrome(const string& x) {
+	if (x.size() == 0) {
+		return true;
+	}
+	for (size_t btr = 0, ept = x.size() - 1; btr < x.size() / 2; btr++, ept--) {
+		if (x[btr] != x[ept]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+string firstPalindrome(vector<string>& words) {
+    for(const auto& word : words) {
+        if(isPalindrome(word)) {
+            return word;
+        }
+    }
+    return {};
+}
+
 int main() {
 	std::vector<int> vec{ 0,1,2,2 };
 	std::cout << minCostClimbingStairs(vec) << std::endl;
