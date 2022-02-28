@@ -2345,8 +2345,35 @@ string firstPalindrome(vector<string>& words) {
     return {};
 }
 
+vector<string> summaryRanges(vector<int>& nums) {
+	vector<string> buff;
+	if (nums.size() == 1) {
+		return { std::to_string(nums[0]) };
+	}
+	for (size_t ptr = 0; ptr + 1 < nums.size(); ++ptr) {
+		std::string tmp_range = std::to_string(nums[ptr]);
+		if (nums[ptr] != (nums[ptr + 1] - 1)) {
+			buff.push_back(tmp_range);
+			if ((ptr + 1) == nums.size() - 1) {
+				buff.push_back(std::to_string(nums[ptr + 1]));
+			}
+		}
+		else if (nums[ptr] == (nums[ptr + 1] - 1)) {
+			tmp_range += "->";
+			while ((ptr + 1 < nums.size()) && (nums[ptr] == (nums[ptr + 1] - 1))) {
+				++ptr;
+			}
+			tmp_range += std::to_string(nums[ptr]);
+			buff.push_back(tmp_range);
+			if ((ptr + 1) == nums.size() - 1) {
+				buff.push_back(std::to_string(nums[ptr + 1]));
+			}
+		}
+	}
+	return buff;
+}
+
 int main() {
-	std::vector<int> vec{ 0,1,2,2 };
-	std::cout << minCostClimbingStairs(vec) << std::endl;
+	std::cout << sizeof(uint8_t);
 	return 0;
 }
