@@ -2382,31 +2382,26 @@ vector<int> countBits_1(int n) {
 	return res;
 }
 
-bool wordPattern(string pattern, string s) {
-	vector<int> hsh1(128);
-	vector<int> hsh2(128);
-	vector<std::string> splited = SplitIntoWords(s);
-	for (int ptr = 0; ptr < pattern.size(); ++ptr) {
-		hsh1[pattern[ptr] - 97] = ptr;
-	}
-	for (int ptr = 0; ptr < splited.size(); ++ptr) {
-		hsh2[splited[ptr][0] - 97] = ptr;
-	}
+int numberOfArithmeticSlices(vector<int>& nums) {
+	int subar = 0;
+	vector<int> hsh(nums.size());
 
-	if (hsh1.size() != hsh2.size()) {
-		return false;
-	}
-	for (size_t hs1 = 0; hs1 < hsh1.size(); ++hs1) {
-		if ((hsh1[hs1] - hsh2[hs1]) != 0) {
-			return false;
+	for (size_t ptr = 2; ptr < nums.size(); ++ptr) {
+		int distance_1 = (nums[ptr] - nums[ptr - 1]);
+		int distance_2 = (nums[ptr - 1] - nums[ptr - 2]);
+		if (distance_1 == distance_2) {
+			hsh[ptr] = hsh[ptr - 1] + 1;
+			subar += hsh[ptr];
 		}
 	}
-	return true;
+	return subar;
 }
 
 int main() {
-	string p = "abba";
-	string s = "dog cat cat dog";
-	std::cout << wordPattern(p, s) << endl;
+	int a = -5;
+	int b = -7;
+	int c = 3;
+	int d = 1;
+	cout << std::abs(a - b) << ' ' << std::abs(d- c) << endl;
 	return 0;
 }
