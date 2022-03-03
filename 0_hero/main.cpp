@@ -2373,7 +2373,40 @@ vector<string> summaryRanges(vector<int>& nums) {
 	return buff;
 }
 
+vector<int> countBits_1(int n) {
+	vector<int> res;
+	res.push_back(0);
+	for (unsigned int ptr = 1; ptr <= n; ptr++) {
+		res.push_back(bitcount(ptr));
+	}
+	return res;
+}
+
+bool wordPattern(string pattern, string s) {
+	vector<int> hsh1(128);
+	vector<int> hsh2(128);
+	vector<std::string> splited = SplitIntoWords(s);
+	for (int ptr = 0; ptr < pattern.size(); ++ptr) {
+		hsh1[pattern[ptr] - 97] = ptr;
+	}
+	for (int ptr = 0; ptr < splited.size(); ++ptr) {
+		hsh2[splited[ptr][0] - 97] = ptr;
+	}
+
+	if (hsh1.size() != hsh2.size()) {
+		return false;
+	}
+	for (size_t hs1 = 0; hs1 < hsh1.size(); ++hs1) {
+		if ((hsh1[hs1] - hsh2[hs1]) != 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
 int main() {
-	std::cout << sizeof(uint8_t);
+	string p = "abba";
+	string s = "dog cat cat dog";
+	std::cout << wordPattern(p, s) << endl;
 	return 0;
 }
