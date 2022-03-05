@@ -2397,6 +2397,34 @@ int numberOfArithmeticSlices(vector<int>& nums) {
 	return subar;
 }
 
+int deleteAndEarn(vector<int>& nums) {
+    map<int, int> hsh;
+    int ctr = 0;
+    int cnt = 0;
+    for(size_t ptr = 0; ptr < nums.size(); ++ptr) {
+        ++hsh[nums[ptr]];
+    }
+
+    auto ptr = hsh.begin();
+    
+    for(; ptr != hsh.end(); ++ptr, ++cnt) {
+        int x = ptr->first;
+        int temp = x * ptr->second;
+        auto it1 = std::prev(ptr);
+        auto it2 = std::prev(it1);
+        
+        if(cnt >= 1 && ((x - it1->first) > 1)) {
+            temp += hsh[it1->first];
+        } else if( cnt >= 2 ) {
+            temp += hsh[it2->first];
+        }
+        hsh[ptr->first] = max(temp, cnt >= 1 ? hsh[it1->first] : 0);
+        ctr = max(ctr, temp);
+    }
+    
+    return ctr;
+}
+
 int main() {
 	int a = -5;
 	int b = -7;
