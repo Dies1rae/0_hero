@@ -2425,6 +2425,35 @@ int deleteAndEarn(vector<int>& nums) {
     return ctr;
 }
 
+ListNode* deleteDuplicates(ListNode* head) {
+	if (!head || !head->next) {
+		return head;
+	}
+	map<int, int> hsh;
+	while (head) {
+		++hsh[head->val];
+		head = head->next;
+	}
+	ListNode* returned = nullptr;
+	for (const auto& [val, ctr] : hsh) {
+		if (ctr == 1) {
+			ListNode* tmp = new ListNode(val, nullptr);
+			ListNode* tmp_ptr = nullptr;
+			if (!returned && tmp) {
+				returned = tmp;
+			}
+			else {
+				tmp_ptr = returned;
+				while (tmp_ptr->next) {
+					tmp_ptr = tmp_ptr->next;
+				}
+				tmp_ptr->next = tmp;
+			}
+		}
+	}
+	return returned;
+}
+
 int main() {
 	int a = -5;
 	int b = -7;
