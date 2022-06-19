@@ -2454,11 +2454,101 @@ ListNode* deleteDuplicates(ListNode* head) {
 	return returned;
 }
 
-int main() {
-	int a = -5;
-	int b = -7;
-	int c = 3;
-	int d = 1;
-	cout << std::abs(a - b) << ' ' << std::abs(d- c) << endl;
+
+class cl {
+public:
+	char c[1024];
+};
+
+double ShannonEntropy(vector<int> data) {
+	double entropy = 0;
+	std::map<int, long> counts;
+	typename std::map<int, long>::iterator it;
+	//
+	for (int dataIndex = 0; dataIndex < data.size(); ++dataIndex) {
+		counts[data[dataIndex]]++;
+	}
+	//
+	it = counts.begin();
+	while (it != counts.end()) {
+		float p_x = (float)it->second / data.size();
+		if (p_x > 0) entropy -= p_x * log(p_x) / log(2);
+		it++;
+	}
+	return entropy;
+}
+
+bool key_prepare(std::string& key, const std::string& plain_text) {
+	size_t tmp_len = key.size();
+	size_t text_length = plain_text.size();
+	if (tmp_len >= text_length) {
+		return true;
+	}
+	for (size_t ptr = 0, ptr1 = 0; ; ++ptr, ++ptr1) {
+		if (plain_text[ptr1] != 32) {
+			if (ptr == tmp_len) {
+				ptr = 0;
+			}
+			if (text_length == key.size()) {
+				return true;
+			}
+			key += key[ptr];
+		} else {
+			key += 32;
+		}
+	}
+	return false;
+}
+
+std::string vegenere_enc(const std::string& plaint_text, const std::string& key) {
+	std::string result;
+	for (size_t ptr = 0; ptr < plaint_text.size(); ++ptr) {
+		if (plaint_text[ptr] != 32) {
+			char tmp = (plaint_text[ptr] + key[ptr]) % 26;
+			tmp += 65;
+			result += tmp;
+		} else {
+			result += 32;
+		}
+	}
+	return result;
+}
+
+std::string vegenere_dec(const std::string& cipher_text, const std::string& key) {
+	std::string result;
+	for (size_t ptr = 0; ptr < cipher_text.size(); ++ptr) {
+		if (cipher_text[ptr] != 32) {
+			char tmp = (cipher_text[ptr] - key[ptr] + 26) % 26;
+			tmp += 65;
+			result += tmp;
+		} else {
+			result += 32;
+		}
+	}
+	return result;
+}
+
+void veg_text_prep(std::string& text) {
+	for (auto& ch : text) {
+		ch = std::toupper(ch);
+	}
+}
+
+int main(int argc, char* argv[]) {
+	std::string PT = "CIPHER TEXT";
+	std::string key = "XO";
+	veg_text_prep(key);
+	veg_text_prep(PT);
+	if (!key_prepare(key, PT)) {
+		std::cout << "something wrong with key\n";
+		return -1;
+	}
+	std::cout << "Prepeared in UPPER CASE PT: " << PT << std::endl;
+	std::cout << "Prepeared in UPPER CASE KEY: " << key << std::endl;
+
+	std::string CT = vegenere_enc(PT, key);
+	std::cout << "Prepeared CT: " << CT << std::endl;
+	std::cout << "DECRIPTION CT RESULT: " << vegenere_dec(CT, key) << std::endl;
 	return 0;
 }
+
