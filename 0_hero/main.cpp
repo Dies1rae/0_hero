@@ -2534,6 +2534,51 @@ void veg_text_prep(std::string& text) {
 	}
 }
 
+    template <typename T>
+    void swap_(T& a, T& b) {
+        T tmp_ = a;
+        a = b;
+        b = tmp_;
+    }
+    template <typename T>
+    void merge(std::vector<T>& main, size_t B, size_t S, size_t Q) {
+        std::size_t b1 = B, e1 = Q, b2 = e1;
+        std::vector<T> tmp_array;
+        while (tmp_array.size() < S - B) {
+            if (b1 >= e1 || (b2 < S && main[b2] <= main[b1])) {
+                tmp_array.push_back(main[b2]);
+                ++b2;
+            }
+            else {
+                tmp_array.push_back(main[b1]);
+                ++b1;
+            }
+        }
+        for (size_t ptr = B; ptr < S; ++ptr) {
+            main[ptr] = tmp_array[ptr-B];
+        }
+    }
+    void merge_sort_(std::vector<int>& main, size_t B, size_t S) {
+        if (S - B < 2) {
+            return;
+        }
+        if (S - B == 2) {
+            if (main[B] > main[B+1]) {
+                swap_(main[B], main[B+1]);
+            }
+            return;
+        }
+
+        merge_sort_(main, B, B + (S - B ) / 2);
+        merge_sort_(main, B + (S - B) / 2, S);
+        merge(main, B, S, B + (S - B) / 2);
+    }
+    
+    int findKthLargest(vector<int>& nums, int k) {
+        merge_sort_(nums, 0, nums.size());
+        return nums[nums.size() - k];
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
