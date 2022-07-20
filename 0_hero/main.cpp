@@ -2579,6 +2579,40 @@ void veg_text_prep(std::string& text) {
         return nums[nums.size() - k];
     }
 
+    string convert(string s, int numRows) {
+        string result;
+        vector<vector<char>> matrix;
+        matrix.resize(numRows);
+        bool direction = false;
+        int fact_row = 0;
+        int len = s.size();
+        while (len > 0) {
+            matrix[fact_row].push_back(s[s.size() - len]);
+            
+            direction ? fact_row-- : fact_row++;    
+    
+            if(fact_row == numRows) {
+                fact_row -= 2;
+                direction = true;  
+            } else if(fact_row == -1) {
+                fact_row += 2;
+                direction = false;
+            }
+            if(numRows == 1) {
+                fact_row = 0;
+            }
+            --len;
+        }
+        
+        for(const auto& vec : matrix) {
+            for(const auto& ch : vec) {
+                result += ch;
+            }   
+        }
+        
+        return result;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
