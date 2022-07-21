@@ -2613,6 +2613,65 @@ void veg_text_prep(std::string& text) {
         return result;
     }
 
+
+ListNode* reverseLL(ListNode* head) {
+        if(!head || !head->next) {
+            return head;
+        }
+        ListNode* result = reverseLL(head->next);
+        head->next->next = head;
+        head->next = nullptr;
+        return result;
+    }
+    size_t lenLL(ListNode* head) {
+        if(!head) {
+            return 0;
+        }
+        size_t res = 0;
+        while(head) {
+            res++;
+            head = head->next;
+        }
+        return res;
+    }
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if(!head || !head->next || right == 1 || left == right) {
+            return head;
+        }
+        int ll_len = lenLL(head);
+        
+        ListNode* curr = head;
+        ListNode* prev = nullptr;
+        
+        size_t ptr = 1;
+        while(ptr < left && curr) {
+            prev = curr;
+            curr = curr->next;
+            ptr++;
+        }
+        
+        ListNode* END = curr;
+        ListNode* BEGIN = nullptr;
+        
+        while(ptr <= right && curr) {
+            ListNode* next_1 = curr->next;
+            curr->next = BEGIN;
+            BEGIN = curr;
+            curr = next_1;
+            ++ptr;
+        }
+        if(prev != nullptr) {
+            prev->next = BEGIN;
+        } else {
+            head = BEGIN;
+        }
+        if(END) {
+            END->next = curr;
+        }
+        
+        return head;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
