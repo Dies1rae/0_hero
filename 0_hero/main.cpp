@@ -2672,6 +2672,27 @@ ListNode* reverseLL(ListNode* head) {
         return head;
     }
 
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if(k == 1) {
+            return head;
+        }
+        int len = lenLL(head);
+        if (len / k == 1) {
+            return reverseBetween(head, 1, k);
+        }
+        int left = 1;
+        int right = 1;
+        while(right < len) {
+            right++;
+            if(right % k == 0 && left <= right) {
+                head =  reverseBetween(head, left, right);
+                right++;
+                left = right;
+            }
+        }
+        return head;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
