@@ -2693,6 +2693,25 @@ ListNode* reverseLL(ListNode* head) {
         return head;
     }
 
+//BAD DESIGN(NEED logN complx.)
+    bool searchMatrix(vector<vector<int>>& arr, int target) {
+        int row = 0;
+        int col = arr[row].size() - 1;
+        while (row < arr.size() && col >= 0) {
+            if (arr[row][col] == target) {
+               return true;
+            }     
+            if (arr[row][col] < target) {
+                row++;
+            }
+        
+            else {
+                col--;
+            }
+        }
+        return false;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
