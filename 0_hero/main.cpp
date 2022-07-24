@@ -2712,6 +2712,17 @@ ListNode* reverseLL(ListNode* head) {
         return false;
     }
 
+    int countNegatives(vector<vector<int>>& grid) {
+        int neg = 0;
+        for(const auto& arr : grid) {
+            auto iter_neg = find_if(arr.begin(), arr.end(), [](const int& elem) {return elem < 0;});
+            if(iter_neg != arr.end()) {
+                neg += arr.size() - (iter_neg - arr.begin());
+            }
+        }
+        return neg;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
