@@ -2723,6 +2723,20 @@ ListNode* reverseLL(ListNode* head) {
         return neg;
     }
 
+    ListNode* swapPairs(ListNode* head) {
+        if(!head || !head->next) {
+            return head;
+        }
+        
+        ListNode* curr = head;
+        ListNode* prev = curr->next;
+        
+        curr->next = swapPairs(curr->next->next);
+        prev->next = curr;
+       
+        return prev;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
