@@ -2737,6 +2737,21 @@ ListNode* reverseLL(ListNode* head) {
         return prev;
     }
 
+    ListNode *detectCycle(ListNode *head) {
+        if(!head || !head->next) {
+            return nullptr;
+        }
+        unordered_set<ListNode*> hsh;
+        while(head) {
+            if(hsh.count(head)) {
+                return *hsh.find(head);
+            }
+            hsh.insert(head);
+            head = head->next;
+        }
+        return nullptr;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
