@@ -2752,6 +2752,35 @@ ListNode* reverseLL(ListNode* head) {
         return nullptr;
     }
 
+    int minSetSize(vector<int>& arr) {
+        size_t ctr_ = 0;
+        int res = 0;
+        map<int, int> hsh;
+        vector<pair<int, int>> hsh_1;
+        
+        for(const auto& el : arr) {
+            hsh[el]++;
+        }
+        for(const auto& [el, ctr] : hsh) {
+            hsh_1.push_back({el, ctr});
+        }
+        
+        auto cmp  = [] (const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) {
+            return lhs.second > rhs.second;
+        };
+        std::sort(hsh_1.begin(), hsh_1.end(), cmp);
+        
+        for(const auto& [el, ctr] : hsh_1) {
+            ctr_ +=  ctr;
+            res++;
+            if(ctr_ >= arr.size() / 2) {
+                return res;
+            }
+        }
+        
+        return res;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
