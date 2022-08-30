@@ -2826,6 +2826,41 @@ ListNode* reverseLL(ListNode* head) {
         return s == t;
     }
 
+    string decodeString(string s) {
+        std::string res;
+        std::stack<char> hsh;
+        for(size_t ptr = 0; ptr < s.size(); ++ptr) {
+            if(s[ptr] == ']') {
+                std::string tmp_str;
+                while(!hsh.empty() && hsh.top() != '[') {
+                    tmp_str = hsh.top() + tmp_str;
+                    hsh.pop();
+                }
+                hsh.pop();
+                std::string numstr;
+                while(!hsh.empty() && std::isdigit(hsh.top())) {
+                    numstr = hsh.top() + numstr;
+                    hsh.pop();
+                }
+                int rep = std::stoi(numstr);
+                std::string repeat;
+                while(rep-- > 0) {
+                    repeat += tmp_str;
+                }
+                for(const auto& ch : repeat) {
+                    hsh.push(ch);
+                }
+            } else {
+                hsh.push(s[ptr]);
+            }
+        }
+        while(!hsh.empty()) {
+            res = hsh.top() + res;
+            hsh.pop();
+        }
+        return res;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
