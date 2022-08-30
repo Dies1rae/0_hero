@@ -2781,6 +2781,28 @@ ListNode* reverseLL(ListNode* head) {
         return res;
     }
 
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        vector<string> res;
+        map<string, int> hsh_word;
+        map<int, set<string>> hsh_freq;
+        for(const auto& word : words) {
+            hsh_word[word]++;
+        }
+        for(const auto& [w, c] : hsh_word) {
+            hsh_freq[c].insert(w);
+        }
+        for(auto ptr = hsh_freq.rbegin(); ptr != hsh_freq.rend(); ++ptr) {
+            if(res.size() < k) {
+                for(const auto& word : ptr->second) {
+                    if(res.size() < k) {
+                        res.push_back(word);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
