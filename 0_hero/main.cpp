@@ -2803,6 +2803,29 @@ ListNode* reverseLL(ListNode* head) {
         return res;
     }
 
+    static constexpr auto convertBackspaces = [] (std::string& str) {
+        std::string::iterator iter = str.begin();
+        std::string::iterator end = str.end();
+        while (iter != end){
+            iter = std::find(iter, end, '#');
+            if (iter == end) {
+                break;
+            }
+            if (iter == str.begin()) {
+                iter = str.erase(iter);
+            } else {
+                iter = str.erase(iter-1, iter+1);
+            }
+            end = str.end();
+        }
+    };
+    
+    bool backspaceCompare(string s, string t) {
+        convertBackspaces(s);
+        convertBackspaces(t);
+        return s == t;
+    }
+
 int main(int argc, char* argv[]) {
 	std::string PT = "CIPHER TEXT";
 	std::string key = "XO";
