@@ -1,0 +1,119 @@
+#include <iostream>
+#include <malloc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdexcept>
+#include <string>
+#include <set>
+#include <stack>
+#include <vector>
+
+
+// Binary search tree (BST) is a binary tree where the value of each node is larger or equal
+// to the values in all the nodes in that node's left subtree and is smaller than the values in all the nodes in that node's right subtree.
+// Write a function that checks if a given binary search tree contains a given value.
+
+// For example, for the following tree:
+// n1 (Value: 1, Left: null, Right: null)
+// n2 (Value: 2, Left: n1, Right: n3)
+// n3 (Value: 3, Left: null, Right: null)
+// Call to contains(n2, 3) should return true since a tree with root at n2 contains number 3.
+// https://www.testdome.com/questions/cpp/binary-search-tree/17108?visibility=1
+
+class Node
+{
+public:
+    Node(int value, Node* left, Node* right)
+    {
+        this->value = value;
+        this->left = left;
+        this->right = right;
+    }
+
+    int getValue() const
+    {
+        return value;
+    }
+
+    Node* getLeft() const
+    {
+        return left;
+    }
+
+    Node* getRight() const
+    {
+        return right;
+    }
+
+private:
+    int value;
+    Node* left;
+    Node* right;
+};
+
+class BinarySearchTree
+{
+public:
+    static bool containsConstCast(const Node& root, int value)
+    {
+        Node root_tmp = const_cast<Node&>(root);
+        std::stack<Node*> hsh;
+        hsh.push(&root_tmp);
+        while(!hsh.empty()) {
+            Node* ndtmp = hsh.top();
+            hsh.pop();
+            if(ndtmp && ndtmp->getValue() == value) {
+                return true;
+            }
+            if(ndtmp->getLeft()){
+                hsh.push(ndtmp->getLeft());
+            }
+            if(ndtmp->getRight()){
+                hsh.push(ndtmp->getRight());
+            }
+        }
+        return false;
+    }
+
+    static bool contains(const Node& root, int value)
+    {
+        if(root.getValue() == value) {
+            return true;
+        }
+        std::stack<Node*> hsh;
+        hsh.push(root.getLeft());
+        hsh.push(root.getRight());
+        while(!hsh.empty()) {
+            Node* ndtmp = hsh.top();
+            hsh.pop();
+            if(ndtmp && ndtmp->getValue() == value) {
+                return true;
+            }
+            if(ndtmp->getLeft()){
+                hsh.push(ndtmp->getLeft());
+            }
+            if(ndtmp->getRight()){
+                hsh.push(ndtmp->getRight());
+            }
+        }
+        return false;
+    }
+};
+
+
+// Implement the unique_names method. When passed two vectors of names, it will return a vector
+// containing the names that appear in either or both vectors. The returned vector should have no duplicates.
+// For example, calling MergeNames::unique_names(std::vector<std::string>{"Ava", "Emma", "Olivia"},
+// std::vector<std::string>{"Olivia", "Sophia", "Emma"}) should return a vector containing Ava, Emma, Olivia, and Sophia in any order.
+// https://www.testdome.com/questions/cpp/merge-names/21511
+
+class MergeNames
+{
+public:
+    static std::vector<std::string> unique_names(const std::vector<std::string>& names1, const std::vector<std::string>& names2)
+    {
+        std::set<std::string> uniquenames(names1.begin(), names1.end());
+        uniquenames.insert(std::begin(names2), std::end(names2));
+        return {uniquenames.begin(), uniquenames.end()};
+    }
+};
