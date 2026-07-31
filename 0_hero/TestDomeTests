@@ -7,6 +7,120 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <cctype>
+#include <algorithm>
+#include <functional>
+#include <unordered_map>
+#include <map>
+
+// Binary search tree (BST) is a binary tree where the value of each node is larger or equal
+// to the values in all the nodes in that node's left subtree and is smaller than the values in all the nodes in that node's right subtree.
+// Write a function that checks if a given binary search tree contains a given value.
+
+// For example, for the following tree:
+// n1 (Value: 1, Left: null, Right: null)
+// n2 (Value: 2, Left: n1, Right: n3)
+// n3 (Value: 3, Left: null, Right: null)
+// Call to contains(n2, 3) should return true since a tree with root at n2 contains number 3.
+// https://www.testdome.com/questions/cpp/binary-search-tree/17108?visibility=1
+
+class Node
+{
+public:
+    Node(int value, Node* left, Node* right)
+    {
+        this->value = value;
+        this->left = left;
+        this->right = right;
+    }
+
+    int getValue() const
+    {
+        return value;
+    }
+
+    Node* getLeft() const
+    {
+        return left;
+    }
+
+    Node* getRight() const
+    {
+        return right;
+    }
+
+private:
+    int value;
+    Node* left;
+    Node* right;
+};
+
+class BinarySearchTree
+{
+public:
+    static bool containsConstCast(const Node& root, int value)
+    {
+        Node root_tmp = const_cast<Node&>(root);
+        std::stack<Node*> hsh;
+        hsh.push(&root_tmp);
+        while(!hsh.empty()) {
+            Node* ndtmp = hsh.top();
+            hsh.pop();
+            if(ndtmp && ndtmp->getValue() == value) {
+                return true;
+            }
+            if(ndtmp->getLeft()){
+                hsh.push(ndtmp->getLeft());
+            }
+            if(ndtmp->getRight()){
+                hsh.push(ndtmp->getRight());
+            }
+        }
+        return false;
+    }
+
+    static bool contains(const Node& root, int value)
+    {
+        if(root.getValue() == value) {
+            return true;
+        }
+        std::stack<Node*> hsh;
+        hsh.push(root.getLeft());
+        hsh.push(root.getRight());
+        while(!hsh.empty()) {
+            Node* ndtmp = hsh.top();
+            hsh.pop();
+            if(ndtmp && ndtmp->getValue() == value) {
+                return true;
+            }
+            if(ndtmp->getLeft()){
+                hsh.push(ndtmp->getLeft());
+            }
+            if(ndtmp->getRight()){
+                hsh.push(ndtmp->getRight());
+            }
+        }
+        return false;
+    }
+};
+
+
+// Implement the unique_names method. When passed two vectors of names, it will return a vector
+// containing the names that appear in either or both vectors. The returned vector should have no duplicates.
+// For example, calling MergeNames::unique_names(std::vector<std::string>{"Ava", "Emma", "Olivia"},
+// std::vector<std::string>{"Olivia", "Sophia", "Emma"}) should return a vector containing Ava, Emma, Olivia, and Sophia in any order.
+// https://www.testdome.com/questions/cpp/merge-names/21511
+
+class MergeNames
+{
+public:
+    static std::vector<std::string> unique_names(const std::vector<std::string>& names1, const std::vector<std::string>& names2)
+    {
+        std::set<std::string> uniquenames(names1.begin(), names1.end());
+        uniquenames.insert(std::begin(names2), std::end(names2));
+        return {uniquenames.begin(), uniquenames.end()};
+    }
+};
 
 
 // Binary search tree (BST) is a binary tree where the value of each node is larger or equal
@@ -116,4 +230,244 @@ public:
         uniquenames.insert(std::begin(names2), std::end(names2));
         return {uniquenames.begin(), uniquenames.end()};
     }
+};
+
+
+// Anonymous
+// Write a function that checks if a given sentence is a palindrome. A palindrome is a word, phrase,
+// verse, or sentence that reads the same backward or forward. Only the order of English alphabet
+// letters (A-Z and a-z) should be considered, other characters should be ignored.
+// For example, isPalindrome("Noel sees Leon.") should return true as spaces, period,
+// and case should be ignored resulting with "noelseesleon" which is a palindrome since it reads same backward and forward.
+// https://www.testdome.com/questions/cpp/palindrome/2316
+
+class Palindrome
+{
+public:
+    static bool isPalindrome(std::string str)
+    {
+        if(str.empty()) {
+            return false;
+        }
+        str.erase(std::remove_if(str.begin(), str.end(), [](char c){return !std::isalpha(c);}), str.end());
+        std::for_each(str.begin(), str.end(), [](char& c){c = std::tolower(c);});
+        return str == std::string(str.rbegin(), str.rend());
+    }
+
+    static bool isPalindromeMy(const std::string& str)
+    {
+        if(str.empty()) {
+            return false;
+        }
+
+        int weight_palindrome = 0;
+        size_t ptr_b = 0;
+        size_t ptr_e = str.size() - 1;
+        for(; ptr_b <= ptr_e; ++ptr_b, --ptr_e) {
+            while(!std::isalpha(str[ptr_b])){
+                ptr_b++;
+            }
+            while(!std::isalpha(str[ptr_e])){
+                ptr_e--;
+            }
+            weight_palindrome += std::tolower(str[ptr_b]) - std::tolower(str[ptr_e]);
+        }
+        return weight_palindrome == 0;
+    }
+};
+
+
+// As part of a data processing pipeline, complete the implementation of the makePipeline method:
+// The method should accept a vector of functions, and it should return a new function that accepts one parameter arg.
+// The returned function should call the first function in the makePipeline with the parameter arg, and call the second function with the result of the first function.
+// The returned function should continue calling each function in the makePipeline in order, following the same pattern, and return the value from the last function.
+// For example,
+// std::vector<std::function<int (int)>> functions;
+// functions.push_back([] (int x) -> int { return x * 3; });
+// functions.push_back([] (int x) -> int { return x + 1; });
+// functions.push_back([] (int x) -> int { return x / 2; });
+// std::function<int (int)> func = makePipeline(functions);
+// calling the func(3) should return 5.
+// https://www.testdome.com/questions/cpp/pipeline/20306?visibility=1
+
+template<class T>
+std::function<T (T)> makePipeline(const std::vector<std::function<T (T)>>& funcs) {
+    return [&funcs] (const T& arg) {
+      T arg_tmp = arg;
+      for(const auto& fnc : funcs) {
+          arg_tmp = fnc(arg_tmp);
+      }
+      return arg_tmp;
+    };
+}
+
+
+// A playlist is considered a repeating playlist if any of the songs contain a pointer
+// to a previous song in the playlist. Otherwise, the playlist will end with the last song which points to NULL.
+// Implement a function isRepeatingPlaylist that returns true if a playlist is repeating or false if it is not.
+// For example, the following code prints "true" as both songs point to each other.
+// Song* first = new Song("Hello");
+// Song* second = new Song("Eye of the tiger");
+// first->next(second);
+// second->next(first);
+// std::cout << std::boolalpha << first->isRepeatingPlaylist();
+// https://www.testdome.com/questions/cpp/playlist/18029?visibility=1
+
+class Song
+{
+public:
+    Song(std::string name): name(name), nextSong(NULL) {}
+
+    void next(Song* song)
+    {
+        this->nextSong = song;
+    }
+
+    bool isRepeatingPlaylist()
+    {
+        if(!this->nextSong) {
+            return false;
+        }
+
+        std::unordered_map<std::string, int> hsh;
+        hsh[this->name]++;
+        Song* tmp = this->nextSong;
+        while(tmp) {
+            hsh[tmp->name]++;
+            if(hsh.count(tmp->name) && hsh.at(tmp->name) > 1) {
+                return true;
+            }
+            tmp = tmp->nextSong;
+        }
+        return false;
+    }
+
+private:
+    const std::string name;
+    Song* nextSong;
+};
+
+
+// Implement function countNumbers that accepts a sorted vector of integers and counts the number of vector elements that are less than the parameter lessThan.
+// For example, for vector v containing { 1, 3, 5, 7 }, SortedSearch::countNumbers(v, 4) should return 2 because there are two vector elements less than 4.
+// https://www.testdome.com/questions/cpp/sorted-search/9880?visibility=1
+
+class SortedSearch
+{
+public:
+    static int countNumbers(const std::vector<int>& sortedVector, int lessThan)
+    {
+        auto Lb = std::lower_bound(sortedVector.begin(), sortedVector.end(), lessThan);
+        return Lb == sortedVector.end() ? sortedVector.size() : std::distance(sortedVector.begin(), Lb);
+    }
+};
+
+
+// A TrainComposition is built by attaching and detaching wagons from the left and the right sides.
+// For example, if we start by attaching wagon 7 from the left followed by attaching wagon 13,
+// again from the left, we get a composition of two wagons (13 and 7 from left to right).
+// Now the first wagon that can be detached from the right is 7 and the first that can be detached from the left is 13.
+// Implement a TrainComposition that models this problem.
+// https://www.testdome.com/questions/cpp/train-composition/18036?visibility=1
+
+class TrainComposition
+{
+private:
+
+    std::deque<int> train;
+
+public:
+
+    void attachWagonFromLeft(int wagonId)
+    {
+        this->train.push_front(wagonId);
+
+    }
+
+    void attachWagonFromRight(int wagonId)
+    {
+        this->train.push_back(wagonId);
+    }
+
+    int detachWagonFromLeft()
+    {
+        if(this->train.empty()) {
+            //log err
+            return 0;
+        }
+        int res = this->train.front();
+        this->train.pop_front();
+        return res;
+    }
+
+    int detachWagonFromRight()
+    {
+        if(this->train.empty()) {
+            //log err
+            return 0;
+        }
+        int res = this->train.back();
+        this->train.pop_back();
+        return res;
+    }
+};
+
+
+//TWO SUMM CLASSIC
+
+class TwoSum
+{
+public:
+    static std::pair<int, int> findTwoSum(const std::vector<int>& list, int sum)
+    {
+        std::unordered_map<int, int> sumMap;
+        for (std::size_t i = 0; i < list.size(); ++i) {
+            auto sumMapit = sumMap.find(sum - list[i]);
+            if (sumMapit != sumMap.end()) {
+                return {(int)i, sumMapit->second};
+            }
+            sumMap[list[i]] = i;
+        }
+
+        return {-1, -1};
+    }
+};
+
+
+// User interface contains two types of user input controls: TextInput, which accepts all characters and NumericInput, which accepts only digits.
+// Implement the following methods:
+// add on class TextInput - adds the given character to the current value
+// getValue on class TextInput - returns the current value
+// add on class NumericInput - overrides the base class method so that each non-numeric character is ignored
+// For example, the following code should output "10":
+
+// TextInput* input = new NumericInput();
+// input->add('1');
+// input->add('a');
+// input->add('0');
+// std::cout << input->getValue();
+// https://www.testdome.com/questions/cpp/user-input/11966
+
+
+class TextInput
+{
+private:
+    std::string value;
+public:
+    virtual void add(char c) {
+        this->value.push_back(c);
+    }
+
+    std::string getValue() {
+        return this->value;
+    }
+};
+
+class NumericInput : public TextInput {
+    public:
+        void add(char c) {
+            if(std::isdigit(c)){
+                TextInput::add(c);
+            }
+        }
 };
